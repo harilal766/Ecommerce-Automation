@@ -1,0 +1,9 @@
+sqlalchemy
+pandas
+openpyxl
+psycopg2-binary
+ShopifyAPI
+pdfplumber
+better-exceptions
+loguru
+colorama

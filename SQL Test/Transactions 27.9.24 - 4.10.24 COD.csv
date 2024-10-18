@@ -1,0 +1,271 @@
+﻿Date,Transaction type,Order ID,Product Details,Total product charges,Total promotional rebates,Amazon fees,Other,Total (INR)
+4.10.24,Unavailable balance,---,Current Reserve Amount ,0,0,0,-132697.99,-132697.99
+3.10.24,Order Payment,404-9425309-0393904,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+3.10.24,Order Payment,406-4133016-1081956,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+3.10.24,Order Payment,406-6839396-4635561,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+3.10.24,Order Payment,405-7362050-3835511,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+3.10.24,Order Payment,405-8322051-4384349,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+3.10.24,Order Payment,407-8357362-5614760,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+3.10.24,Order Payment,404-1408543-0542731,KAR Mark Kudampuli Dried Lehyam (500 Gm),1083.92,0,-246.41,204.32,1041.83
+3.10.24,Order Payment,404-6541612-1657951,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+3.10.24,Order Payment,408-4796750-0066752,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+3.10.24,Order Payment,408-3823329-7276354,KAR Mark Kudampuli Dried Lehyam For Weig...,848.21,0,-183.49,197.1,861.82
+3.10.24,Order Payment,171-8001175-1422767,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+3.10.24,Order Payment,403-7521428-9309927,KAR Mark Kudampuli Dried Lehyam For Weig...,848.21,0,-181.37,177.19,844.03
+3.10.24,Order Payment,171-2620368-0074752,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+3.10.24,Amazon Easy Ship Charges,404-6541612-1657951,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,405-8322051-4384349,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,404-9425309-0393904,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,406-6839396-4635561,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,407-8357362-5614760,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,406-4133016-1081956,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,171-2620368-0074752,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,171-8001175-1422767,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,405-7362050-3835511,Billing,0,0,-66.08,0,-66.08
+3.10.24,Amazon Easy Ship Charges,404-1408543-0542731,Billing,0,0,-86.14,0,-86.14
+3.10.24,Amazon Easy Ship Charges,408-3823329-7276354,Billing,0,0,-120.36,0,-120.36
+3.10.24,Amazon Easy Ship Charges,403-7521428-9309927,Billing,0,0,-86.14,0,-86.14
+3.10.24,Amazon Easy Ship Charges,408-4796750-0066752,Billing,0,0,-66.08,0,-66.08
+3.10.24,Refund,408-6569283-1437953,KAR Mark Kudampuli Dried Lehyam (500 Gm),-541.96,0,128.64,-141.98,-555.3
+3.10.24,Amazon Easy Ship Charges,408-6569283-1437953,Weight Handling Fees Reversal,0,0,86.14,0,86.14
+3.10.24,Refund,171-0813393-7231555,KAR Mark Kudampuli Dried Lehyam (500 Gm),-571.43,0,133.11,-145.35,-583.67
+3.10.24,Amazon Easy Ship Charges,171-0813393-7231555,Weight Handling Fees Reversal,0,0,66.08,0,66.08
+2.10.24,Refund,407-1602444-3009944,KAR Mark Kudampuli Dried Lehyam (500 Gm),-541.96,0,128.64,-141.98,-555.3
+2.10.24,Amazon Easy Ship Charges,407-1602444-3009944,Weight Handling Fees Reversal,0,0,66.08,0,66.08
+2.10.24,Refund,408-3493624-9680302,KAR Mark Kudampuli Dried Lehyam (500 Gm),-571.42,0,133.11,-145.36,-583.67
+2.10.24,Amazon Easy Ship Charges,408-3493624-9680302,Weight Handling Fees Reversal,0,0,57.82,0,57.82
+1.10.24,Refund,405-0792279-4142769,KAR Mark Kudampuli Dried Lehyam (500 Gm),-571.42,0,133.11,-145.36,-583.67
+1.10.24,Amazon Easy Ship Charges,405-0792279-4142769,Weight Handling Fees Reversal,0,0,66.08,0,66.08
+1.10.24,Order Payment,408-9476834-8784341,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,408-8746433-6269948,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.47,1051.74
+1.10.24,Order Payment,406-4547024-9519549,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,406-3184345-2485131,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,407-9359621-4495504,KAR Mark kumkumadi oil (10 ml),180,0,-32.79,107.62,254.83
+1.10.24,Order Payment,407-2578153-7563524,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+1.10.24,Order Payment,407-5973509-0884347,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,171-7919131-2603559,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+1.10.24,Order Payment,404-8984010-9115541,KAR Mark kumkumadi oil (10 ml),180,0,-31.26,87.72,236.46
+1.10.24,Order Payment,406-4619247-2126716,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+1.10.24,Order Payment,406-2126117-5788366,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,406-6631431-1054704,KAR Mark kumkumadi oil (10 ml),180,0,-31.26,87.72,236.46
+1.10.24,Order Payment,402-7319904-8816346,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,408-6569283-1437953,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,408-6590382-2425142,KAR Mark Kudampuli Dried Lehyam For Weig...,848.22,0,-181.37,177.18,844.03
+1.10.24,Order Payment,403-5107768-6840332,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,408-3875396-1226730,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+1.10.24,Order Payment,406-5968396-8154712,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,405-0927576-7839525,KAR Mark Kudampuli Dried Lehyam (500 Gm),1083.92,0,-246.41,204.3,1041.81
+1.10.24,Order Payment,405-7686696-0404353,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.47,1051.74
+1.10.24,Order Payment,404-4195910-3665161,KAR Mark kumkumadi oil (10 ml),180,0,-31.26,87.72,236.46
+1.10.24,Order Payment,405-9876404-3885919,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+1.10.24,Order Payment,404-9862771-5157966,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+1.10.24,Order Payment,407-4840311-4551529,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+1.10.24,Order Payment,404-2467100-7539527,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+1.10.24,Order Payment,407-9755901-5201959,KAR Mark Kudampuli Dried Lehyam (500 Gm),1083.92,0,-246.41,204.3,1041.81
+1.10.24,Order Payment,406-4640157-8925162,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,407-8935829-0629157,KAR MARK kudampuli lehyam 1KG,2083.92,0,-371.84,319.32,2031.4
+1.10.24,Order Payment,404-9122441-8223505,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Order Payment,405-3281447-5859525,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+1.10.24,Order Payment,402-6082292-2664319,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+1.10.24,Order Payment,408-1311437-6582722,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+1.10.24,Amazon Easy Ship Charges,408-3875396-1226730,Billing,0,0,-118,0,-118
+1.10.24,Amazon Easy Ship Charges,404-8984010-9115541,Billing,0,0,-66.08,0,-66.08
+1.10.24,Amazon Easy Ship Charges,405-0927576-7839525,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,406-4640157-8925162,Billing,0,0,-73.16,0,-73.16
+1.10.24,Amazon Easy Ship Charges,405-9876404-3885919,Billing,0,0,-97.94,0,-97.94
+1.10.24,Amazon Easy Ship Charges,407-2578153-7563524,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,408-1311437-6582722,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,402-7319904-8816346,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,404-2467100-7539527,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,405-3281447-5859525,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,406-4547024-9519549,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,406-2126117-5788366,Billing,0,0,-73.16,0,-73.16
+1.10.24,Amazon Easy Ship Charges,405-7686696-0404353,Billing,0,0,-118,0,-118
+1.10.24,Amazon Easy Ship Charges,402-6082292-2664319,Billing,0,0,-97.94,0,-97.94
+1.10.24,Amazon Easy Ship Charges,407-8935829-0629157,Billing,0,0,-149.86,0,-149.86
+1.10.24,Amazon Easy Ship Charges,403-5107768-6840332,Billing,0,0,-73.16,0,-73.16
+1.10.24,Amazon Easy Ship Charges,408-8746433-6269948,Billing,0,0,-118,0,-118
+1.10.24,Amazon Easy Ship Charges,404-9122441-8223505,Billing,0,0,-73.16,0,-73.16
+1.10.24,Amazon Easy Ship Charges,407-5973509-0884347,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,404-9862771-5157966,Billing,0,0,-118,0,-118
+1.10.24,Amazon Easy Ship Charges,406-6631431-1054704,Billing,0,0,-57.82,0,-57.82
+1.10.24,Amazon Easy Ship Charges,406-3184345-2485131,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,407-9755901-5201959,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,406-5968396-8154712,Billing,0,0,-73.16,0,-73.16
+1.10.24,Amazon Easy Ship Charges,404-4195910-3665161,Billing,0,0,-66.08,0,-66.08
+1.10.24,Amazon Easy Ship Charges,171-7919131-2603559,Billing,0,0,-118,0,-118
+1.10.24,Amazon Easy Ship Charges,407-9359621-4495504,Billing,0,0,-90.86,0,-90.86
+1.10.24,Amazon Easy Ship Charges,408-6569283-1437953,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,408-6590382-2425142,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,406-4619247-2126716,Billing,0,0,-86.14,0,-86.14
+1.10.24,Amazon Easy Ship Charges,408-9476834-8784341,Billing,0,0,-73.16,0,-73.16
+1.10.24,Amazon Easy Ship Charges,407-4840311-4551529,Billing,0,0,-118,0,-118
+1.10.24,Refund,407-3921116-6503533,KAR MARK kudampuli lehyam 1KG,-1041.96,0,189.69,-199.48,-1051.75
+1.10.24,Amazon Easy Ship Charges,407-3921116-6503533,Weight Handling Fees Reversal,0,0,118,0,118
+1.10.24,Refund,404-8926908-7757127,KAR MARK kudampuli lehyam 1KG,-1041.96,0,189.69,-199.48,-1051.75
+1.10.24,Amazon Easy Ship Charges,404-8926908-7757127,Weight Handling Fees Reversal,0,0,118,0,118
+1.10.24,Refund,408-6552011-1769959,KAR Mark Kudampuli Dried Lehyam (500 Gm),-571.43,0,133.11,-145.35,-583.67
+1.10.24,Amazon Easy Ship Charges,408-6552011-1769959,Weight Handling Fees Reversal,0,0,66.08,0,66.08
+1.10.24,Refund,407-5936043-0313154,KAR MARK kudampuli lehyam 1KG,-2196.44,0,383.73,-332.2,-2144.91
+1.10.24,Amazon Easy Ship Charges,407-5936043-0313154,Weight Handling Fees Reversal,0,0,122.72,0,122.72
+30.9.24,Order Payment,403-6928752-0597128,KAR MARK kudampuli lehyam 1KG,1041.96,0,-191.58,219.38,1069.76
+30.9.24,Order Payment,403-2103420-9331541,KAR Mark Kudampuli Dried Lehyam (500 Gm),1083.92,0,-246.41,204.32,1041.83
+30.9.24,Order Payment,405-6194459-6356355,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,405-1094524-6289153,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,403-0314461-2424304,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-131.35,161.88,572.49
+30.9.24,Order Payment,407-3524462-6509966,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,407-1670655-6305929,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+30.9.24,Order Payment,171-2949516-9627506,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+30.9.24,Order Payment,407-8664920-5315559,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,171-0990233-8495565,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+30.9.24,Order Payment,402-4227598-3721919,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+30.9.24,Order Payment,406-8637019-5815547,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+30.9.24,Order Payment,402-1447386-6586722,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,402-0824845-1961158,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+30.9.24,Order Payment,404-6723446-2124303,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+30.9.24,Order Payment,404-1540558-4757944,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,403-9082904-1017928,KAR MARK kudampuli lehyam 1KG,1041.96,0,-191.58,219.38,1069.76
+30.9.24,Order Payment,406-8574371-6424319,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+30.9.24,Order Payment,407-0405189-9186747,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,405-0718858-1633137,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,403-0725392-8856306,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,171-9124766-6769125,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-131.35,161.88,572.49
+30.9.24,Order Payment,408-8854356-2382738,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,408-7082351-8214747,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.47,1051.74
+30.9.24,Order Payment,408-2899105-7768349,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,171-4977977-6630705,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,405-4507274-9065139,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+30.9.24,Order Payment,404-6158477-4559560,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+30.9.24,Order Payment,407-3921116-6503533,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+30.9.24,Amazon Easy Ship Charges,407-1670655-6305929,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,402-4227598-3721919,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,403-0725392-8856306,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,407-8664920-5315559,Billing,0,0,-57.82,0,-57.82
+30.9.24,Amazon Easy Ship Charges,408-2899105-7768349,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,402-1447386-6586722,Billing,0,0,-57.82,0,-57.82
+30.9.24,Amazon Easy Ship Charges,171-4977977-6630705,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,171-0990233-8495565,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,171-9124766-6769125,Billing,0,0,-90.86,0,-90.86
+30.9.24,Amazon Easy Ship Charges,404-1540558-4757944,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,408-7082351-8214747,Billing,0,0,-118,0,-118
+30.9.24,Amazon Easy Ship Charges,404-6723446-2124303,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,403-0314461-2424304,Billing,0,0,-90.86,0,-90.86
+30.9.24,Amazon Easy Ship Charges,407-3524462-6509966,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,403-2103420-9331541,Billing,0,0,-118,0,-118
+30.9.24,Amazon Easy Ship Charges,403-6928752-0597128,Billing,0,0,-159.3,0,-159.3
+30.9.24,Amazon Easy Ship Charges,405-1094524-6289153,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,407-3921116-6503533,Billing,0,0,-118,0,-118
+30.9.24,Amazon Easy Ship Charges,407-0405189-9186747,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,404-6158477-4559560,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,406-8637019-5815547,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,402-0824845-1961158,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,405-4507274-9065139,Billing,0,0,-57.82,0,-57.82
+30.9.24,Amazon Easy Ship Charges,171-2949516-9627506,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,408-8854356-2382738,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,406-8574371-6424319,Billing,0,0,-118,0,-118
+30.9.24,Amazon Easy Ship Charges,405-6194459-6356355,Billing,0,0,-66.08,0,-66.08
+30.9.24,Amazon Easy Ship Charges,405-0718858-1633137,Billing,0,0,-57.82,0,-57.82
+30.9.24,Amazon Easy Ship Charges,403-9082904-1017928,Billing,0,0,-159.3,0,-159.3
+30.9.24,Refund,405-8740584-5157150,KAR Mark Kudampuli Dried Lehyam (500 Gm),-571.43,0,130.39,-125.44,-566.48
+30.9.24,Amazon Easy Ship Charges,405-8740584-5157150,Weight Handling Fees Reversal,0,0,66.08,0,66.08
+30.9.24,Refund,408-3616794-6099555,KAR MARK kudampuli lehyam 1KG,-3294.66,0,571.81,-458.48,-3181.33
+30.9.24,Amazon Easy Ship Charges,408-3616794-6099555,Weight Handling Fees Reversal,0,0,181.72,0,181.72
+28.9.24,Order Payment,406-1597984-8423536,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+28.9.24,Order Payment,405-8573972-4569149,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.47,1051.74
+28.9.24,Order Payment,407-1602444-3009944,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,407-1282579-3584329,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.47,1051.74
+28.9.24,Order Payment,404-1163065-0759562,KAR Mark Kudampuli Dried Lehyam For Weig...,1809.52,0,-283.2,180.96,1707.28
+28.9.24,Order Payment,406-9953984-6512354,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,403-6264664-0693919,KAR Mark Kudampuli Dried Lehyam For Weig...,904.76,0,-181.37,120.34,843.73
+28.9.24,Order Payment,171-1010637-0805951,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+28.9.24,Order Payment,403-1579835-5609118,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,403-1618297-3347515,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,404-9867947-9525908,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+28.9.24,Order Payment,406-4671984-4412326,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,408-1580496-4677127,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+28.9.24,Order Payment,406-7001707-7049969,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,402-3551399-1499562,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+28.9.24,Order Payment,402-6228619-0209902,KAR Mark Kudampuli Dried Lehyam (500 Gm),1083.92,0,-246.41,204.32,1041.83
+28.9.24,Order Payment,406-4029231-1365123,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+28.9.24,Order Payment,408-5729911-4154716,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+28.9.24,Order Payment,404-7219962-5115536,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,403-2021347-3410704,KAR Mark Kudampuli Dried Lehyam (500 Gm),1083.92,0,-246.41,204.32,1041.83
+28.9.24,Order Payment,171-1109873-7034764,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,404-8926908-7757127,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+28.9.24,Order Payment,407-5970121-1281110,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,407-2443840-2090742,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Order Payment,404-7916371-7626748,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+28.9.24,Order Payment,404-5019066-1709955,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+28.9.24,Order Payment,407-2722057-9556369,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+28.9.24,Order Payment,408-8105667-2524324,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+28.9.24,Order Payment,402-3372357-1825958,KAR MARK kudampuli lehyam 1KG,1041.96,0,-189.69,199.48,1051.75
+28.9.24,Order Payment,404-7196440-8548313,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.97,555.29
+28.9.24,Order Payment,403-3300444-5871537,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-131.35,161.88,572.49
+28.9.24,Order Payment,402-1627219-0927500,KAR Mark Kudampuli Dried Lehyam (500 Gm),541.96,0,-128.64,141.98,555.3
+28.9.24,Amazon Easy Ship Charges,404-1163065-0759562,Billing,0,0,-159.3,0,-159.3
+28.9.24,Amazon Easy Ship Charges,407-2722057-9556369,Billing,0,0,-118,0,-118
+28.9.24,Amazon Easy Ship Charges,404-5019066-1709955,Billing,0,0,-118,0,-118
+28.9.24,Amazon Easy Ship Charges,405-8573972-4569149,Billing,0,0,-118,0,-118
+28.9.24,Amazon Easy Ship Charges,403-6264664-0693919,Billing,0,0,-86.14,0,-86.14
+28.9.24,Amazon Easy Ship Charges,408-5729911-4154716,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,406-1597984-8423536,Billing,0,0,-118,0,-118
+28.9.24,Amazon Easy Ship Charges,171-1010637-0805951,Billing,0,0,-97.94,0,-97.94
+28.9.24,Amazon Easy Ship Charges,404-8926908-7757127,Billing,0,0,-118,0,-118
+28.9.24,Amazon Easy Ship Charges,406-9953984-6512354,Billing,0,0,-57.82,0,-57.82
+28.9.24,Amazon Easy Ship Charges,402-6228619-0209902,Billing,0,0,-86.14,0,-86.14
+28.9.24,Amazon Easy Ship Charges,402-3551399-1499562,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,406-4029231-1365123,Billing,0,0,-118,0,-118
+28.9.24,Amazon Easy Ship Charges,403-1579835-5609118,Billing,0,0,-57.82,0,-57.82
+28.9.24,Amazon Easy Ship Charges,408-1580496-4677127,Billing,0,0,-97.94,0,-97.94
+28.9.24,Amazon Easy Ship Charges,406-4671984-4412326,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,403-1618297-3347515,Billing,0,0,-57.82,0,-57.82
+28.9.24,Amazon Easy Ship Charges,402-3372357-1825958,Billing,0,0,-118,0,-118
+28.9.24,Amazon Easy Ship Charges,407-2443840-2090742,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,407-1602444-3009944,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,404-7916371-7626748,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,407-5970121-1281110,Billing,0,0,-57.82,0,-57.82
+28.9.24,Amazon Easy Ship Charges,403-2021347-3410704,Billing,0,0,-86.14,0,-86.14
+28.9.24,Amazon Easy Ship Charges,404-9867947-9525908,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,407-1282579-3584329,Billing,0,0,-118,0,-118
+28.9.24,Amazon Easy Ship Charges,402-1627219-0927500,Billing,0,0,-57.82,0,-57.82
+28.9.24,Amazon Easy Ship Charges,404-7219962-5115536,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,171-1109873-7034764,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,403-3300444-5871537,Billing,0,0,-90.86,0,-90.86
+28.9.24,Amazon Easy Ship Charges,404-7196440-8548313,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,406-7001707-7049969,Billing,0,0,-66.08,0,-66.08
+28.9.24,Amazon Easy Ship Charges,408-8105667-2524324,Billing,0,0,-66.08,0,-66.08
+28.9.24,Refund,402-1618426-2900343,KAR Mark Kudampuli Dried Lehyam (500 Gm),-571.42,0,133.11,-145.36,-583.67
+28.9.24,Amazon Easy Ship Charges,402-1618426-2900343,Weight Handling Fees Reversal,0,0,57.82,0,57.82
+28.9.24,Refund,402-7974274-4659557,KAR MARK kudampuli lehyam 1KG,-1098.22,0,195.64,-205.92,-1108.5
+28.9.24,Amazon Easy Ship Charges,402-7974274-4659557,Weight Handling Fees Reversal,0,0,97.94,0,97.94
+27.9.24,Amazon Easy Ship Charges,171-5957800-4156355,Billing,0,0,-57.82,0,-57.82
+27.9.24,Amazon Easy Ship Charges,407-7165924-1965938,Billing,0,0,-66.08,0,-66.08
+27.9.24,Amazon Easy Ship Charges,406-8919576-5949138,Billing,0,0,-66.08,0,-66.08
+27.9.24,Amazon Easy Ship Charges,402-1204393-5819557,Billing,0,0,-86.14,0,-86.14
+27.9.24,Amazon Easy Ship Charges,402-6970219-3332302,Billing,0,0,-118,0,-118
+27.9.24,Amazon Easy Ship Charges,406-6479261-6454762,Billing,0,0,-66.08,0,-66.08
+27.9.24,Amazon Easy Ship Charges,406-9076326-5117901,Billing,0,0,-57.82,0,-57.82
+27.9.24,Amazon Easy Ship Charges,402-5907088-5095540,Billing,0,0,-66.08,0,-66.08
+27.9.24,Amazon Easy Ship Charges,403-6272015-8405958,Billing,0,0,-66.08,0,-66.08
+27.9.24,Amazon Easy Ship Charges,404-9740702-2642755,Billing,0,0,-66.08,0,-66.08
+27.9.24,Amazon Easy Ship Charges,406-4355233-0737165,Billing,0,0,-66.08,0,-66.08
+27.9.24,Amazon Easy Ship Charges,408-2916079-6633903,Billing,0,0,-118,0,-118
+27.9.24,Amazon Easy Ship Charges,408-3493624-9680302,Billing,0,0,-57.82,0,-57.82
+27.9.24,Amazon Easy Ship Charges,408-3839273-2750748,Billing,0,0,-66.08,0,-66.08
+27.9.24,Amazon Easy Ship Charges,404-7225106-8542742,Billing,0,0,-118,0,-118
+27.9.24,Order Payment,406-8919576-5949138,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.43,0,-133.11,145.35,583.67
+27.9.24,Order Payment,171-5957800-4156355,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.42,0,-133.11,145.36,583.67
+27.9.24,Order Payment,402-6970219-3332302,KAR MARK kudampuli lehyam 1KG,1098.22,0,-195.64,205.92,1108.5
+27.9.24,Order Payment,408-3839273-2750748,Sholly's Kar mark kumkumadi oil 25% extr...,323.8,0,-42.84,94.2,375.16
+27.9.24,Order Payment,407-7165924-1965938,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.42,0,-133.11,145.36,583.67
+27.9.24,Order Payment,406-9076326-5117901,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.42,0,-133.11,145.36,583.67
+27.9.24,Order Payment,406-4355233-0737165,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.43,0,-133.11,145.35,583.67
+27.9.24,Order Payment,403-6272015-8405958,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.42,0,-133.11,145.36,583.67
+27.9.24,Order Payment,406-6479261-6454762,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.43,0,-133.11,145.35,583.67
+27.9.24,Order Payment,402-1204393-5819557,KAR Mark Kudampuli Dried Lehyam (500 Gm),1142.84,0,-255.36,211.08,1098.56
+27.9.24,Order Payment,408-2916079-6633903,KAR MARK kudampuli lehyam 1KG,1098.21,0,-195.64,205.94,1108.51
+27.9.24,Order Payment,404-7225106-8542742,KAR MARK kudampuli lehyam 1KG,1098.22,0,-195.64,205.92,1108.5
+27.9.24,Order Payment,408-3493624-9680302,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.42,0,-133.11,145.36,583.67
+27.9.24,Order Payment,402-5907088-5095540,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.42,0,-133.11,145.36,583.67
+27.9.24,Order Payment,404-9740702-2642755,KAR Mark Kudampuli Dried Lehyam (500 Gm),571.43,0,-133.11,145.35,583.67
+27.9.24,Previous statement's unavailable balance,---,Previous Reserve Amount Balance ,0,0,0,87045.09,87045.09
