@@ -36,5 +36,5 @@ def create_table(sql_table_name,file_path):
 
 
 # Shopify orders -> sql
-#create_table(table_name="sh_orders",file_route="D:/6.SPEED POST/28.9.24.xlsx")
-create_table(sql_table_name="sh_orders",file_path="/home/hari/Desktop/Automation/Test documents/post orders sheet/1.10.24.xlsx")
+#create_table(sql_table_name="sh_orders",file_path="D:/6.SPEED POST/28.9.24.xlsx")
+#create_table(sql_table_name="sh_orders",file_path="/home/hari/Desktop/Automation/Test documents/post orders sheet/1.10.24.xlsx")

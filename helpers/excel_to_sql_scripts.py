@@ -4,7 +4,7 @@ def datatype_finder(column):
     types = {
         # There should be atlest 2 strings on the tuple
         ("phone","mobile"): "VARCHAR(15)",
-        ("id","name","location","status"): "VARCHAR(20)",
+        ("id","status"): "VARCHAR(20)",
         ("is","will","accepts"): "BOOLEAN NOT NULL",
         ("date","at"): "TIMESTAMP",
         ("quantity", "subtotal", "number"): "INTEGER",
