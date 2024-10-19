@@ -1,7 +1,8 @@
 import pdfplumber
 import re
 import os
-
+from messages import better_error_msg,success_status_msg
+from dir_switcher import dir_switch
 
 def pdf_pattern_finder(filepath,pattern):
     try:
@@ -32,23 +33,25 @@ def post_pdf_pattern_finder(filepath,pattern):
             for page in pdf.pages:
                 page_text = page.extract_text()
                 if page_text:
-                    order_ids = re.findall(pattern,page_text)
+                    result = re.findall(pattern,page_text)
                     # a single page can have one pattern or more than one pattern, so.............
-                    if type(order_ids) == type([]):
-                        for id in order_ids:
+                    if type(result) == list:
+                        for id in result:
                             pattern_list.append(id)
-                    elif type(order_ids) == int:
+                    elif type(result) == int:
                         pass
 
                 else:
                     print(f"No text found at {filename}.pdf")
 
     except Exception as e:
-        print(f"Error Occured: \n{e}")
+        better_error_msg(e)
     finally:
-        print(f"{len(pattern_list)} Patterns Found in the file : {filename}.pdf")
+        success_status_msg(f"{len(pattern_list)} Patterns Found in the file : {filename}.pdf\n{pattern_list}")
+        return pattern_list
 
 
 
+#post_pdf_pattern_finder(filepath="/home/hari/Desktop/Automation/Test documents/post shipping labes", pattern='#\d{5}')
 #pdf_pattern_finder(filepath=r"D:\5.Amazon\Mathew global\INvoice",pattern='\d{3}-\d{7}-\d{7}')
 #post_pdf_pattern_finder(filepath=r"D:\6.SPEED POST\1.Shipping labels",pattern='#\d{5}')

@@ -78,6 +78,6 @@
 	Payment_ID VARCHAR(20),
 	Payment_Terms_Name VARCHAR(20),
 	Next_Payment_Due_At TIMESTAMP,
-	Payment_References VARCHAR(50),
+	Payment_References VARCHAR(50)
             );
         

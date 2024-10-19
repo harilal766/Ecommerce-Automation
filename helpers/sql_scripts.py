@@ -53,5 +53,5 @@ def sql_to_excel(query,dbname):
 
 
 
-test_query = "select * from orders;"
-sql_to_excel(test_query,"Amazon")
+#test_query = "select * from orders;"
+#sql_to_excel(test_query,"Amazon")

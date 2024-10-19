@@ -19,16 +19,9 @@ def datatype_finder(column):
             col_last_word = column.split("_")[-1]
             col_first_word = column.split("_")[0]
             key_last_word = key.split("_")[-1]
-            print(col_last_word, key_last_word)
             # if last word of column = key, return the associated value
-            if (col_last_word == key):
+            if (key == col_last_word) or (column == col_last_word) and (col_first_word == key) or (key_last_word in col_last_word):
                 return value
-            # if column contain only one word and first word of the column = key
-            elif (column == col_last_word) and (col_first_word == key):
-                return value
-            elif (key_last_word in col_last_word):
-                return value
-
             
     # Default type if no match is found
     return "VARCHAR(50)"

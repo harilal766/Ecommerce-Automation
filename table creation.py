@@ -16,7 +16,7 @@ def create_table(sql_table_name,file_path):
         last_column = list(excel_header)[-1]
         for column in excel_header:
             if column == last_column:
-                col_with_type += f"\t{column.replace(' ', '_')} {datatype_finder(column)},"
+                col_with_type += f"\t{column.replace(' ', '_')} {datatype_finder(column)}"
             else:
                 col_with_type += f"\t{column.replace(' ', '_')} {datatype_finder(column)},\n"
         
