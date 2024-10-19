@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd
 import os
-from helpers.messages import better_error_msg
+from helpers.messages import better_error_handling
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
 """

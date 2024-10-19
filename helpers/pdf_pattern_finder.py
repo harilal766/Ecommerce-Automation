@@ -1,11 +1,8 @@
 import pdfplumber
 import re
 import os
-from messages import better_error_msg,success_status_msg
-from dir_switcher import dir_switch
-
-
-
+from .messages import better_error_handling,success_status_msg
+from .dir_switcher import dir_switch
 
 
 def pdf_pattern_finder(filepath,pattern):
@@ -13,6 +10,7 @@ def pdf_pattern_finder(filepath,pattern):
         pattern_list = []
         filename = input("Enter pdf filename : ")
         file_path = os.path.join(filepath, f"{filename}.pdf")
+
         with pdfplumber.open(file_path) as pdf:
             for page in pdf.pages:
                 page_text = page.extract_text()
@@ -21,16 +19,16 @@ def pdf_pattern_finder(filepath,pattern):
                     # a single page can have one pattern or more than one pattern, so.............
                     # amazon label have 1 pattern per page and post lable have 4 patterns per page
                     if type(result) == list:
-                        print(result)
+                        print(f"patterns found on page : {result}")
                         for id in result:
                             pattern_list.append(id)
                     elif type(result) == int:
                         print("Non List pattern Found")
 
     except Exception as e:
-        better_error_msg(e)
+        better_error_handling(e)
     finally:
-        success_status_msg(f"{len(pattern_list)} Patterns Found in the file : {filename}.pdf\n{pattern_list}")
+        success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}.pdf\n{pattern_list}")
         return pattern_list
 
 

@@ -1,6 +1,6 @@
 from helpers.excel_to_sql_scripts import datatype_finder
 import pandas as pd
-from helpers.messages import better_error_msg,success_status_msg
+from helpers.messages import better_error_handling,success_status_msg
 from helpers.sql_scripts import query_backup
 
 def create_table(sql_table_name,file_path):
@@ -28,7 +28,7 @@ def create_table(sql_table_name,file_path):
         query_backup(filename="post order table creation",query=table_creation_query)
 
     except Exception as e:
-        better_error_msg(e)
+        better_error_handling(e)
     finally:
         pass
         success_status_msg(table_creation_query)

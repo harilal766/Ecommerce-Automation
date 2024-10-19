@@ -1,15 +1,19 @@
 from loguru import logger
 from colorama import Fore,Style,init
-
+import shutil
 
 init()
-
-hyphen = "-"*90
+terminal_width = shutil.get_terminal_size()
+print(terminal_width)
+hyphen = "-"* 90
 red_boundary = ""
 
 
 green_boundary = f"{Fore.GREEN}{hyphen}{Style.RESET_ALL}"
-def better_error_msg(error):
+def better_error_handling(error):
+    exc_and_clarifications = {
+        FileNotFoundError : "File/Directory Not Found"
+    }
     """
     Establish a boundary
     Error heading
@@ -18,7 +22,7 @@ def better_error_msg(error):
         """
     boundary = f"\033[31m {hyphen} \033[0m"
     print(boundary)
-    logger.exception(error)
+    logger.exception(exc_and_clarifications[error])
     print(boundary)
 
 
