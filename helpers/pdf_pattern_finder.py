@@ -8,9 +8,7 @@ from .dir_switcher import dir_switch
 def pdf_pattern_finder(filepath,pattern):
     try:
         pattern_list = []
-
         
-
         filename = input("Enter pdf filename : ")
         file_path = os.path.join(filepath, f"{filename}.pdf")
 

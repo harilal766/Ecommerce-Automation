@@ -18,13 +18,19 @@ def datatype_finder(column):
         for key in keys:
             col_last_word = column.split("_")[-1]
             col_first_word = column.split("_")[0]
-            key_last_word = key.split("_")[-1]
-            # if last word of column = key, return the associated value
-            if (key == col_last_word) or (column == col_last_word) and (col_first_word == key) or (key_last_word in col_last_word):
+            #print(column.split("_"))
+            if (key == col_last_word):
+                print(f"{key} == {col_last_word}")
                 return value
-            
+            elif key == col_first_word:
+                print(f"{key} == {col_first_word}")
+                return value
+            elif (key in column):
+                print(f"{key} == {value}")
+                return value
     # Default type if no match is found
-    return "VARCHAR(50)"
+    #return "VARCHAR(50)"
+    return "---------"
 
 # Test the function
 print(datatype_finder("price_subtotal"))  # Should return INTEGER

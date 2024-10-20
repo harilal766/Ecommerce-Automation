@@ -5,8 +5,9 @@ from helpers.terminal_scripts import clear_terminal
 feature_menu = {
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
-    3:("Post Tracking",postal_track),
-    4:("Delete duplicate csv files","")
+    3:("SQL table creation from excel sheet",""),
+    4:("Post Tracking",postal_track),
+    5:("Delete duplicate csv files","")
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
