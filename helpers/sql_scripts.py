@@ -22,6 +22,9 @@ def psql_connector(dbname):
     return connection
     
 
+def column_underscore(column):
+    return column.replace(" ","_")
+
 def query_backup(filename,query):
     with open(f"{filename}.sql",'w') as query_backup:
         query_backup.write(query)
@@ -62,5 +65,3 @@ def sql_to_excel(query,dbname):
 
 
 
-#test_query = "select * from orders;"
-#sql_to_excel(test_query,"Amazon")

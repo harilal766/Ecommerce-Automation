@@ -34,6 +34,3 @@ def pdf_pattern_finder(filepath,pattern):
 
 
 
-#pdf_pattern_finder(filepath="/home/hari/Desktop/Automation/Test documents/post shipping labes", pattern='#\d{5}')
-#pdf_pattern_finder(filepath=r"D:\5.Amazon\Mathew global\INvoice",pattern='\d{3}-\d{7}-\d{7}')
-#pdf_pattern_finder(filepath=r"D:\6.SPEED POST\1.Shipping labels",pattern='#\d{5}')

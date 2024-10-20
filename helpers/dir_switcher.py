@@ -22,5 +22,4 @@ def dir_switch(win_dir):
         return directory
 
 
-print(dir_switch(win_dir=r"D:\6.SPEED POST\1.Shipping labels"))
-print(dir_switch(win_dir=r"D:\5.Amazon\Mathew global\INvoice"))
+

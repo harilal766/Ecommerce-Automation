@@ -29,11 +29,10 @@ def datatype_finder(column):
                 print(f"{key} == {value}")
                 return value
     # Default type if no match is found
-    #return "VARCHAR(50)"
-    return "---------"
+    return "VARCHAR(50)"
+    #return "---------"
 
-# Test the function
-print(datatype_finder("price_subtotal"))  # Should return INTEGER
+
 
 
 

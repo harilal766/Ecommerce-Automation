@@ -1,7 +1,7 @@
 from helpers.excel_to_sql_scripts import datatype_finder
 import pandas as pd
 from helpers.messages import better_error_handling,success_status_msg
-from helpers.sql_scripts import query_backup,psql_connector,line_limit_checker
+from helpers.sql_scripts import query_backup,psql_connector,line_limit_checker,column_underscore
 
 def create_table(sql_table_name,file_path):
     try:
@@ -17,14 +17,28 @@ def create_table(sql_table_name,file_path):
         column_count = 0
         for column in excel_header:
             column_count +=1
+            """
+            optimisation
+                comma removed column as the basic form
+                column with comma
+                comma and line break
+            """
+            """
+            col_with_type += f"\t{column_underscore(column)} {datatype_finder(column)}"
             if line_limit_checker(word_count=column_count,line_limit=4):
-                col_with_type += f"\t{column.replace(' ', '_')} {datatype_finder(column)},\n"
+                col_with_type + ",\n"
+            elif not line_limit_checker(word_count=column_count,line_limit=4):
+                col_with_type + ","
+            """
+            if line_limit_checker(word_count=column_count,line_limit=4):
+                col_with_type += f"\t{column_underscore(column)} {datatype_finder(column)},\n"
             # avoiding comman at the last column addition
             if column == last_column:
-                col_with_type += f"\t{column.replace(' ', '_')} {datatype_finder(column)}"
+                col_with_type += f"\t{column_underscore(column)} {datatype_finder(column)}"
             else:
-                col_with_type += f"\t{column.replace(' ', '_')} {datatype_finder(column)},"
-        
+                col_with_type += f"\t{column_underscore(column)} {datatype_finder(column)},"
+            
+
         table_creation_query = f"""
             CREATE TABLE {sql_table_name} (
                 {col_with_type}
@@ -44,6 +58,3 @@ def create_table(sql_table_name,file_path):
 
 
 
-# Shopify orders -> sql
-#create_table(sql_table_name="sh_orders",file_path="D:/6.SPEED POST/28.9.24.xlsx")
-create_table(sql_table_name="sh_orders",file_path="/home/hari/Desktop/Automation/Test documents/post orders sheet/1.10.24.xlsx")
