@@ -4,7 +4,7 @@ from helpers.terminal_scripts import clear_terminal
 # Menu
 feature_menu = {
     1:("Amazon shipment report", report_driver),
-    2:("Shopify shipment report",""),
+    2:("Shopify shipment report",report_driver),
     3:("Post Tracking",postal_track),
     4:("Delete duplicate csv files","")
 }
@@ -39,17 +39,15 @@ def main():
                 break
             else:
                 print(f"You have selected {menu[selection][0]}")
-                argument = menu[selection][0]
+                argument = menu[selection][0].lower()
 
-                if "amazon" in argument.lower() or "shopify" in argument.lower():
+                if "amazon" in argument or "shopify" in argument:
                     menu[selection][1](argument)
                 else:
                     menu[selection][1]()
-                    
-                                
         else:
             print("Invalid Selection,Try again.")
-
+    print("Press Ctrl + L to clear the terminal.")
 
 
 if __name__ == "__main__":
