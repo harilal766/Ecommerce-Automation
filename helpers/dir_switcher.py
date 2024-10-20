@@ -1,5 +1,5 @@
 import platform
-from messages import better_error_msg
+from .messages import better_error_handling
 
 def dir_switch(win_dir):
     alternate_dirs = {
@@ -15,12 +15,11 @@ def dir_switch(win_dir):
         elif platform.system() == 'Linux':
             directory = alternate_dirs[win_dir]
     except KeyError as e:
-        better_error_msg(f"Directory '{win_dir}' not found in alternate_dirs: {e}")
+        better_error_handling(f"Directory '{win_dir}' not found in alternate_dirs: {e}")
     except Exception as e:
-        better_error_msg(e)
+        better_error_handling(e)
     finally:
         return directory
 
 
-print(dir_switch(win_dir=r"D:\6.SPEED POST\1.Shipping labels"))
-print(dir_switch(win_dir=r"D:\5.Amazon\Mathew global\INvoice"))
+

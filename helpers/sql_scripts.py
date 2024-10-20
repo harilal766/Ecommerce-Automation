@@ -1,28 +1,40 @@
 import psycopg2
 import pandas as pd
 import os
-from helpers.messages import better_error_msg
+from helpers.messages import better_error_handling,success_status_msg
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
 """
 
 def psql_connector(dbname):
-    connection = psycopg2.connect(
-        user = "postgres",
-        password = "1234",
-        host = "localhost",
-        port = "5432",
-        database = dbname
-    )
-    print("Connected to database.")
+    try:
+        connection = psycopg2.connect(
+            user = "postgres",
+            password = "1234",
+            host = "localhost",
+            port = "5432",
+            database = dbname
+        )
+        if connection:
+            success_status_msg("Connected to database.")
+    except Exception as e:
+        better_error_handling(e)
     return connection
     
+
+def column_underscore(column):
+    return column.replace(" ","_")
 
 def query_backup(filename,query):
     with open(f"{filename}.sql",'w') as query_backup:
         query_backup.write(query)
         print("Query Backed Up.")
 
+
+def line_limit_checker(word_count,line_limit):
+    if word_count%line_limit == 0:
+        return True
+    return False
 
 def sql_to_excel(query,dbname):
     """
@@ -53,5 +65,3 @@ def sql_to_excel(query,dbname):
 
 
 
-#test_query = "select * from orders;"
-#sql_to_excel(test_query,"Amazon")

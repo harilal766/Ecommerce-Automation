@@ -1,10 +1,16 @@
 
             SELECT DISTINCT
-            amazon_order_id,purchase_date,last_updated_date,order_status,product_name, quantity,item_price,item_tax,shipping_price,shipping_tax 
-            FROM sh_orders 
+            name,paid_at,fulfillment_status,subtotal,shipping,taxes,total,lineitem_quantity,lineitem_name,lineitem_price,lineitem_compare_at_price 
+            FROM Orders 
             WHERE amazon_order_id IN (
-                	
+                	'408-0317641-3456362','407-5375761-1801962','171-2711809-4263508',
+'402-8575336-6540309','406-6617198-1307535','406-3761054-1826726',
+'406-3128877-0892306','404-7213090-9310747','402-3088979-1144330',
+'407-4672751-0647526','405-9197040-4147517','406-4720003-4973922',
+'402-9457458-1602701','405-7370801-5569155','407-8802087-3188323',
+'408-3923115-1110768','402-6987282-5478751','405-1438434-2558734',
+'403-4404631-2691554','406-9626760-0833134','403-9699154-0077105',
+'403-9699154-0077105'
             )
-            ORDER BY product_name ASC, item_price ASC
-            ;
+            ORDER BY amazon_order_id ASC, purchase_date ASC;
         
