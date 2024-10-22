@@ -4,15 +4,11 @@ from scripts.postal_tracking import postal_track
 feature_menu = {
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
-    3:("SQL table creation from excel sheet",""),
-    4:("Post Tracking",postal_track),
-    5:("Delete duplicate csv files","")
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
 exit_menu = {
-    feat_last_key+1:("Exit",postal_track),
-    feat_last_key+2:("Developer Settings","")
+
     }
 
 menu = {**feature_menu, **exit_menu}
@@ -28,7 +24,10 @@ def main():
         try:
             selection = int(input("Select an option : "))
         except ValueError:
-            print("Please enter a number")
+            print("Please enter a number\n")
+            continue
+        except KeyboardInterrupt:
+            print("No option selected.\n")
             continue
 
         # Processing the selected input

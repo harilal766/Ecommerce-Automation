@@ -39,6 +39,7 @@ def datatype_finder(column):
 
 
 
+
 def gdatatype_finder(column_data):
     if pd.api.types.is_integer_dtype(column_data):
         return 'INTEGER'  # You can use BIGINT for larger integers

@@ -50,7 +50,7 @@ def report_driver(report_type):
             pattern=amazon_order_id_pattern,
             fields="""amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax""",
             table="Orders", id = "amazon_order_id",
-            order_by_clause="amazon_order_id ASC, purchase_date ASC",
+            order_by_clause="product_name asc,quantity asc",
             sql_filename="amzn_shipment_query"
         )
     elif "shopify" in report_type:
@@ -59,7 +59,7 @@ def report_driver(report_type):
             pdf_path=r"D:\6.SPEED POST\1.Shipping labels",
             pattern=post_order_id_pattern,
             fields=""" Name, Financial_Status, Paid_at, Fulfillment_Status, Fulfilled_at, Subtotal, Shipping, Total, Lineitem_quantity, Lineitem_name,
-                Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name,""",
+                    Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name,""",
             table="sh_orders",id="name",
             order_by_clause="lineitem_name ASC, lineitem_price ASC",
             sql_filename="post shipment report"
