@@ -1,6 +1,5 @@
 from report_generator import report_driver
 from scripts.postal_tracking import postal_track
-from helpers.terminal_scripts import clear_terminal
 # Menu
 feature_menu = {
     1:("Amazon shipment report", report_driver),
@@ -13,8 +12,7 @@ feature_menu = {
 feat_last_key = list(feature_menu.keys())[-1]
 exit_menu = {
     feat_last_key+1:("Exit",postal_track),
-    feat_last_key+2:("Developer Settings",""),
-    feat_last_key+3:("Clear Terminal History",clear_terminal)
+    feat_last_key+2:("Developer Settings","")
     }
 
 menu = {**feature_menu, **exit_menu}
