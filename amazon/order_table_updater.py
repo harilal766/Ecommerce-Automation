@@ -17,4 +17,6 @@ confirmation = f"""
 """
 
 
+
+
 print(f"Delete Query :\n{delete_query}\nConfirmation Query :\n{confirmation}")

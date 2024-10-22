@@ -48,7 +48,7 @@ def report_driver(report_type):
             #pdf_path="/home/hari/Desktop/Automation/Test documents/amazon shipping label",
             pdf_path=r"D:\5.Amazon\Mathew global\INvoice",
             pattern=amazon_order_id_pattern,
-            fields="name,paid_at,fulfillment_status,subtotal,shipping,taxes,total,lineitem_quantity,lineitem_name,lineitem_price,lineitem_compare_at_price",
+            fields="""amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax""",
             table="Orders", id = "amazon_order_id",
             order_by_clause="amazon_order_id ASC, purchase_date ASC",
             sql_filename="amzn_shipment_query"
@@ -58,7 +58,8 @@ def report_driver(report_type):
             #pdf_path="/home/hari/Desktop/Automation/Test documents/post shipping labes",
             pdf_path=r"D:\6.SPEED POST\1.Shipping labels",
             pattern=post_order_id_pattern,
-            fields="Name, Email, Financial_Status, Paid_at, Fulfillment_Status, Fulfilled_at, Subtotal, Shipping, Total, Lineitem_quantity, Lineitem_name, Lineitem_price, Lineitem_compare_at_price, Billing_Name, Billing_Street, Billing_Address1, Billing_Address2, Billing_Company, Billing_City, Billing_Zip, Billing_Province, Billing_Country, Billing_Phone, Shipping_Name, Shipping_Street, Shipping_Address1, Shipping_Address2, Shipping_Company, Shipping_City, Shipping_Zip, Shipping_Province, Shipping_Country, Shipping_Phone, Location, Device_ID, Id, Tags, Lineitem_discount, Shipping_Province_Name,",
+            fields=""" Name, Financial_Status, Paid_at, Fulfillment_Status, Fulfilled_at, Subtotal, Shipping, Total, Lineitem_quantity, Lineitem_name,
+                Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name,""",
             table="sh_orders",id="name",
             order_by_clause="lineitem_name ASC, lineitem_price ASC",
             sql_filename="post shipment report"

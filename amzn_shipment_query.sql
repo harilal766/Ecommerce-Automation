@@ -1,6 +1,6 @@
 
             SELECT DISTINCT
-            name,paid_at,fulfillment_status,subtotal,shipping,taxes,total,lineitem_quantity,lineitem_name,lineitem_price,lineitem_compare_at_price 
+            amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax 
             FROM Orders 
             WHERE amazon_order_id IN (
                 	'402-4510896-0849161','407-6301560-7385124','405-1183290-4135513',
@@ -19,5 +19,5 @@
 '404-2406260-1868336','403-3743639-7908347','408-4025459-7101941',
 '171-4106931-8913101',
             )
-            ORDER BY amazon_order_id ASC, purchase_date ASC;
+            ORDER BY amazon_order_id ASC, ;
         
