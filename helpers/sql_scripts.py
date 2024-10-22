@@ -61,7 +61,10 @@ def sql_to_excel(query,dbname):
     except Exception as e:
         print(e)
     finally:
-        print(f"Report saved to {out_excel_path}")
+        if excel_out:
+            print(f"Report saved to {out_excel_path}")
+        else:
+            print("excel not saved...")
 
 
 

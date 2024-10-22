@@ -1,5 +1,6 @@
 from report_generator import report_driver
 from scripts.postal_tracking import postal_track
+from helpers.terminal_scripts import clear_terminal
 # Menu
 feature_menu = {
     1:("Amazon shipment report", report_driver),
@@ -8,7 +9,7 @@ feature_menu = {
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
 exit_menu = {
-
+    feat_last_key+1:("Clear Terminal",clear_terminal)
     }
 
 menu = {**feature_menu, **exit_menu}
@@ -32,20 +33,14 @@ def main():
 
         # Processing the selected input
         if (selection in menu):
-            if selection == 5:
-                print("Exiting The Program")
-                break
+            print(f"You have selected : {menu[selection][0]}")
+            argument = menu[selection][0].lower()
+            if "report" in argument :
+                menu[selection][1](argument)
             else:
-                print(f"You have selected {menu[selection][0]}")
-                argument = menu[selection][0].lower()
-
-                if "amazon" in argument or "shopify" in argument:
-                    menu[selection][1](argument)
-                else:
-                    menu[selection][1]()
+                menu[selection][1]()
         else:
             print("Invalid Selection,Try again.")
-    print("Press Ctrl + L to clear the terminal.")
 
 
 if __name__ == "__main__":
