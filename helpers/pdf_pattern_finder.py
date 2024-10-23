@@ -27,7 +27,7 @@ def pdf_pattern_finder(filepath,pattern):
                 page_text = page.extract_text()
                 page_count+=1
                 if page_text:
-                    print(f"Opening page {page_count}.")
+                    print(f"Opening page {page_count}.",end=" - ")
                     result = re.findall(pattern,page_text)
                     # a single page can have one pattern or more than one pattern, so.............
                     # amazon label have 1 pattern per page and post lable have 4 patterns per page
