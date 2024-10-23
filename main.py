@@ -9,7 +9,8 @@ feature_menu = {
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
 exit_menu = {
-    feat_last_key+1:("Clear Terminal",clear_terminal)
+    feat_last_key+1:("Clear Terminal",clear_terminal),
+    feat_last_key+2:("Recompile",clear_terminal)
     }
 
 menu = {**feature_menu, **exit_menu}

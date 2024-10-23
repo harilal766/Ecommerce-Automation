@@ -7,8 +7,6 @@ from helpers.regex_patterns import *
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
 """
-        
-
 def shipment_report(pdf_path,pattern,fields,table,id,order_by_clause,sql_filename):
     out_excel_path = None
     order_ids = None
@@ -39,6 +37,7 @@ def shipment_report(pdf_path,pattern,fields,table,id,order_by_clause,sql_filenam
         better_error_handling(e)
     finally:
         print(shipment_report_query)
+        print(f"--------{order_ids[-1]}")
 
 # Driver code for report generator
 def report_driver(report_type): 

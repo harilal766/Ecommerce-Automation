@@ -6,10 +6,6 @@ from .dir_switcher import dir_switch
 from .regex_patterns import amazon_order_id_pattern
 
 
-
-def file_selection(filepath,filenanme,extension):
-    pass
-
 # need Seperate function for file selection
 def pdf_pattern_finder(filepath,pattern):
     try:
