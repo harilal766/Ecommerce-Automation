@@ -14,3 +14,5 @@ filepath = dir_switch(directory="post_label")
 print(f" filepath :{filepath}")
 files = os.listdir(fr"{filepath}")
 print(files)
+
+
