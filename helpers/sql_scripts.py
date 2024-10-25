@@ -1,4 +1,4 @@
-import psycopg2
+#$import psycopg2
 import pandas as pd
 import os
 from helpers.messages import better_error_handling,success_status_msg

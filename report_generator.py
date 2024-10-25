@@ -1,8 +1,7 @@
 from helpers.pdf_pattern_finder import *
-from helpers.sql_scripts import psql_connector,query_backup,line_limit_checker
+from helpers.sql_scripts import query_backup,line_limit_checker
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
-import psycopg2
 
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
