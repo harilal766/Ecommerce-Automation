@@ -10,7 +10,7 @@ def datatype_finder(column):
         ("is","will","accepts"): "BOOLEAN NOT NULL",
         ("date","at"): "TIMESTAMP",
         ("quantity", "subtotal", "number"): "INTEGER",
-        ("price","taxes", "discount", "amount","total"): "NUMERIC(10,2)",
+        ("price","taxes", "discount", "amount","total","fees"): "NUMERIC(10,2)",
         ("city","state","address"): "VARCHAR(100)",
         ("zip","postal"): "CHAR(6)"
     }
