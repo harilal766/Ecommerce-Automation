@@ -1,4 +1,6 @@
 import pandas as pd
+from helpers.messages import better_error_handling,success_status_msg
+from helpers.sql_scripts import query_backup,line_limit_checker,column_underscore
 
 def datatype_finder(column):
     types = {
@@ -20,25 +22,14 @@ def datatype_finder(column):
             col_first_word = column.split("_")[0]
             #print(column.split("_"))
             if (key == col_last_word):
-                print(f"{key} == {col_last_word}")
                 return value
             elif key == col_first_word:
-                print(f"{key} == {col_first_word}")
                 return value
             elif (key in column):
-                print(f"{key} == {value}")
                 return value
     # Default type if no match is found
     return "VARCHAR(50)"
     #return "---------"
-
-
-
-
-
-
-
-
 
 def gdatatype_finder(column_data):
     if pd.api.types.is_integer_dtype(column_data):
@@ -51,34 +42,41 @@ def gdatatype_finder(column_data):
         return 'TEXT'
 
 
+def create_table(sql_table_name,file_path):
+    try:
+        # open the file 
+        excel = pd.read_excel(file_path,header=0)
+        excel_first_row = excel.iloc[0]
+        excel_header = excel.columns
+        success_status_msg("Filepath read successfully")
+        
+        #loop columns and replace " " with "_"
+        col_with_type = ""
+        last_column = list(excel_header)[-1]
+        column_count = 0
+        for column in excel_header:
+            column_count +=1
+            if line_limit_checker(word_count=column_count,line_limit=4):
+                col_with_type += f"\t{column_underscore(column)} {datatype_finder(column)},\n"
+            # avoiding comman at the last column addition
+            elif column == last_column:
+                col_with_type += f"\t{column_underscore(column)} {datatype_finder(column)}"
+            else:
+                col_with_type += f"\t{column_underscore(column)} {datatype_finder(column)},"
+            
 
+        table_creation_query = f"""
+            CREATE TABLE {sql_table_name} (
+                {col_with_type}
+            );
+        """
+        query_backup(filename="post order table creation",query=table_creation_query)
 
-
-
-
-def sql_file_creator(table_name,query):
-    filename = f'{table_name.capitalize()}-table creation query.txt'
-    with open(filename,'w') as query_file:
-        query_file.write(query)
-        print("File created")
-
-
-def null_populator():
-    pass
-
-
-def file_route():
-    try :
-        route = f'D:/Automation/SQL Test/{filename}'
-        with open(filename,'r') as input_file:
-            print(input_file.read())
-    except FileNotFoundError:
-        route = f'/run/media/hari/HARI/Python Fullstack/Automation/SQL Test/{filename}'
-        if os.path.exists(route):
-            input_file = pandas.read_excel(route)
-        else:
-            print("Excel file not found")
+        # connect the db , execute the query, try adding the sample data
+        #psql_connector(sql_table_name)
+    except Exception as e:
+        better_error_handling(e)
     finally:
-        headers = input_file[0]
-    # changing null ineger values to zero
-    print(headers)
+        pass
+        success_status_msg(table_creation_query)
+
