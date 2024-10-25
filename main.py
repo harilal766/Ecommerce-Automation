@@ -1,10 +1,12 @@
 from report_generator import report_driver
 from scripts.postal_tracking import postal_track
 from helpers.terminal_scripts import clear_terminal,recompile
+from helpers.sql_scripts import order_table_updation
 # Menu
 feature_menu = {
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
+    3:("Order table updation",order_table_updation),
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]

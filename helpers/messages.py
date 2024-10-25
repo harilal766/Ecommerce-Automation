@@ -31,9 +31,9 @@ def better_error_handling(error):
 
 
 def success_status_msg(status):
-    print(green_boundary)
+    #print(green_boundary)
     print(f"{Fore.GREEN}{status}{Style.RESET_ALL}")
-    print(green_boundary)
+    #print(green_boundary)
     
 
         
