@@ -11,7 +11,6 @@ def recompile():
     compile_status = os.system("python main.py")
     if compile_status == 0:
         print("Compiled Successfully.")
-        clear_terminal()
     else:
         print(f"Compiling failed with Error code : {compile_status}.")
         

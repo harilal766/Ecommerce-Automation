@@ -2,6 +2,7 @@ from helpers.pdf_pattern_finder import *
 from helpers.sql_scripts import query_backup,line_limit_checker
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
+import pg8000
 
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
@@ -31,22 +32,31 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         """
         #loading_animation(len(order_ids)), ask for the loading value and execute the loading animation only while it is not executed. 
 
-        """
-        db_connection = psycopg2.connect(host="localhost", 
-                                         user= "postgres", password="1234",
-                                         port="5432",
-                                         database=database)
-        cursor = db_connection.cursor()
-        executed_out = cursor.execute(shipment_report_query)
-        print(executed_out)
-        """
+        conn = pg8000.connect(
+            user='postgres',
+            password='1234',
+            host='localhost',      
+            port=5432,            
+            database='Amazon'
+        )
+
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM orders;")
+        results = cursor.fetchall()
+
+        # Print the results
+        for row in results:
+            print(row)
+
+        
+        
         # Backing up the query
         query_backup(f"{sql_filename}",shipment_report_query)
     except Exception as e:
         better_error_handling(e)
     finally:
         print(shipment_report_query)
-        print(f"Order Ids last char : {order_ids.split[-1]}")
+        print(f"Order Ids last char : {order_ids.split(",")}")
 
 # Driver code for report generator
 def report_driver(report_type): 

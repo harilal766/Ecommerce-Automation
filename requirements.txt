@@ -1,7 +1,7 @@
 sqlalchemy
 pandas
 openpyxl
-psycopg2-binary
+pg8000
 ShopifyAPI
 pdfplumber
 better-exceptions
