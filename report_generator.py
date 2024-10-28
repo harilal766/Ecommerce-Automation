@@ -3,6 +3,7 @@ from helpers.sql_scripts import query_backup,line_limit_checker
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
 import pg8000
+import pandas as pd
 
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
@@ -21,6 +22,7 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
             else:
                 order_ids+= f"'{order_id}',"
             # avoiding the comma from the last column
+        # Strip comma from last order id by identifying it using the pattern
         shipment_report_query = f"""
             SELECT DISTINCT
             {fields} 
@@ -41,13 +43,13 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         )
 
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM orders;")
+        cursor.execute(shipment_report_query)
         results = cursor.fetchall()
-
+        print(results)
         # Print the results
         for row in results:
             print(row)
-
+        # excel conversion
         
         
         # Backing up the query
@@ -57,6 +59,21 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
     finally:
         print(shipment_report_query)
         print(f"Order Ids last char : {order_ids.split(",")}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Driver code for report generator
 def report_driver(report_type): 
