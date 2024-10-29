@@ -58,3 +58,20 @@ def order_table_updation():
     """
     
     
+def sql_to_excel(sql_cursor,query_result,out_excel_path,index):
+    try:  
+        # excel conversion
+        column_list = [desc[0] for desc in sql_cursor.description]
+        excel_sheet = pd.DataFrame(query_result,columns=column_list)
+        # if the excel file already exists, a sheet should be created inside the file and the output should be stored there.
+        out_excel_file = input("Enter the name for excel file : ")
+        if out_excel_file:
+            # re initialization of the file path after getting the filename
+            out_excel_path = os.path.join(out_excel_path,out_excel_file+".xlsx")
+            excel_sheet.to_excel(out_excel_path,index=index,engine='openpyxl')
+            success_status_msg("Excel output created.")
+        else:
+            print("Please enter the filename..")
+    except Exception as e:
+        better_error_handling(e)
+        

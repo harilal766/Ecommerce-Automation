@@ -1,5 +1,5 @@
 from helpers.pdf_pattern_finder import *
-from helpers.sql_scripts import query_backup,line_limit_checker
+from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
 import pg8000
@@ -52,19 +52,9 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         else:
             better_error_handling("Database connection failed..")
 
+        sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path,index="False")
         
-        # excel conversion
-        column_list = [desc[0] for desc in cursor.description]
-        excel_sheet = pd.DataFrame(results,columns=column_list)
-        # if the excel file already exists, a sheet should be created inside the file and the output should be stored there.
-        out_excel_file = input("Enter the name for excel file : ")
-        if out_excel_file:
-            # re initialization of the file path after getting the filename
-            out_excel_path = os.path.join(out_excel_path,out_excel_file+".xlsx")
-            excel_sheet.to_excel(out_excel_path,index=False,engine='openpyxl')
-            success_status_msg("Excel output created.")
-        else:
-            print("Please enter the filename..")
+        
     except Exception as e:
         better_error_handling(e)
     finally:
