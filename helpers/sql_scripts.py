@@ -21,7 +21,7 @@ def line_limit_checker(word_count,line_limit):
     return False
 
 
-def order_table_updation(tablename,filepath,input_filename):
+def order_table_updation():
     table_name = "Orders"
     field = "purchase_date"
     date = "2024-09-30" 

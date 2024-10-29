@@ -17,10 +17,14 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         order_ids = ""; order_id_count =0
         for order_id in order_id_list:
             order_id_count+=1
-            if line_limit_checker(word_count=order_id_count,line_limit=3):
+            if order_id_list[-1] == order_id:
+                order_ids+= f"'{order_id}'"
+            elif line_limit_checker(word_count=order_id_count,line_limit=3):
                 order_ids+= f"'{order_id}',\n"
-            else:
+            elif not line_limit_checker(word_count=order_id_count,line_limit=3):
                 order_ids+= f"'{order_id}',"
+
+            
             # avoiding the comma from the last column
         # Strip comma from last order id by identifying it using the pattern
         shipment_report_query = f"""
@@ -45,10 +49,9 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         cursor = conn.cursor()
         cursor.execute(shipment_report_query)
         results = cursor.fetchall()
-        print(results)
         # Print the results
         for row in results:
-            print(row)
+            pass
         # excel conversion
         
         
@@ -58,7 +61,6 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         better_error_handling(e)
     finally:
         print(shipment_report_query)
-        print(f"Order Ids last char : {order_ids.split(",")}")
 
 
 
