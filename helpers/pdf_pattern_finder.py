@@ -14,21 +14,21 @@ def pdf_pattern_finder(filepath,pattern):
         filename = input("Enter pdf filename : ")
 
         file_path = os.path.join(filepath, f"{filename}.pdf")
-        print("File Accessed.")
+        success_status_msg("File Accessed.")
 
         with pdfplumber.open(file_path) as pdf:
-            print("Opening the pdf file")
+            success_status_msg("Opening the pdf file")
             page_count =0
             for page in pdf.pages:
                 page_text = page.extract_text()
                 page_count+=1
                 if page_text:
-                    print(f"Opening page {page_count}.",end=" - ")
+                    success_status_msg(f"Opening page {page_count}.")
                     result = re.findall(pattern,page_text)
                     # a single page can have one pattern or more than one pattern, so.............
                     # amazon label have 1 pattern per page and post lable have 4 patterns per page
                     if type(result) == list:
-                        print(f"patterns found on page{page_count} : {result}")
+                        success_status_msg(f"patterns found on page {page_count} : {result}")
                         for id in result:
                             pattern_list.append(id)
                     elif type(result) == int:

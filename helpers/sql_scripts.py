@@ -12,7 +12,7 @@ https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python
 def query_backup(filename,query):
     with open(f"{filename}.sql",'w') as query_backup:
         query_backup.write(query)
-        print("Query Backed Up.")
+        success_status_msg("Query Backed Up.")
 
 
 def line_limit_checker(word_count,line_limit):

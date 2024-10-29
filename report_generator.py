@@ -36,7 +36,8 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
             ORDER BY {order_by_clause};
         """
         #loading_animation(len(order_ids)), ask for the loading value and execute the loading animation only while it is not executed. 
-
+        # Backing up the query
+        query_backup(f"{sql_filename}",shipment_report_query)
         conn = pg8000.connect(
             user='postgres',
             password='1234',
@@ -44,28 +45,33 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
             port=5432,            
             database='Amazon'
         )
+        if conn:
+            cursor = conn.cursor()
+            cursor.execute(shipment_report_query)
+            results = cursor.fetchall()
+        else:
+            better_error_handling("Database connection failed..")
 
-        cursor = conn.cursor()
-        cursor.execute(shipment_report_query)
-        results = cursor.fetchall()
-        # Print the results
-        for row in results:
-            pass
+        
         # excel conversion
         column_list = [desc[0] for desc in cursor.description]
         excel_sheet = pd.DataFrame(results,columns=column_list)
-
+        # if the excel file already exists, a sheet should be created inside the file and the output should be stored there.
         out_excel_file = input("Enter the name for excel file : ")
-        excel_sheet.to_excel(os.path.join(out_excel_path,out_excel_file+".xlsx"),index=False,engine='openpyxl')
-
-        # Backing up the query
-        query_backup(f"{sql_filename}",shipment_report_query)
+        if out_excel_file:
+            # re initialization of the file path after getting the filename
+            out_excel_path = os.path.join(out_excel_path,out_excel_file+".xlsx")
+            excel_sheet.to_excel(out_excel_path,index=False,engine='openpyxl')
+            success_status_msg("Excel output created.")
+        else:
+            print("Please enter the filename..")
     except Exception as e:
         better_error_handling(e)
     finally:
-        cursor.close()
-        conn.close()
-        print(shipment_report_query)
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'conn' in locals() and conn:
+            conn.close()
 
 
 
