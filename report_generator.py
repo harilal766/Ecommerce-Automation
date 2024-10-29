@@ -65,19 +65,6 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Driver code for report generator
 def report_driver(report_type): 
     report_type = report_type.lower()
