@@ -4,12 +4,11 @@ from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
 import pg8000
 import pandas as pd
-
+import os
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
 """
-def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sql_filename):
-    out_excel_path = None
+def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sql_filename,out_excel_path):
     order_ids = None
     order_id_list = pdf_pattern_finder(filepath=pdf_path,pattern=pattern)
     #last_column = order_id_list[-1]
@@ -53,13 +52,19 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         for row in results:
             pass
         # excel conversion
-        
-        
+        column_list = [desc[0] for desc in cursor.description]
+        excel_sheet = pd.DataFrame(results,columns=column_list)
+
+        out_excel_file = input("Enter the name for excel file : ")
+        excel_sheet.to_excel(os.path.join(out_excel_path,out_excel_file+".xlsx"),index=False,engine='openpyxl')
+
         # Backing up the query
         query_backup(f"{sql_filename}",shipment_report_query)
     except Exception as e:
         better_error_handling(e)
     finally:
+        cursor.close()
+        conn.close()
         print(shipment_report_query)
 
 
@@ -88,7 +93,8 @@ def report_driver(report_type):
             fields="""amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax""",
             database="Amazon",table="Orders", id = "amazon_order_id",
             order_by_clause="product_name asc,quantity asc",
-            sql_filename="amzn_shipment_query"
+            sql_filename="amzn_shipment_query",
+            out_excel_path=r"D:\5.Amazon\Mathew global\Scheduled report"
         )
     elif "shopify" in report_type:
         shipment_report(
@@ -99,5 +105,7 @@ def report_driver(report_type):
                     Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name,""",
             database="Shopify",table="sh_orders",id="name",
             order_by_clause="lineitem_name ASC, lineitem_price ASC",
-            sql_filename="post shipment report"
+            sql_filename="post shipment report",
+            out_excel_path=r"D:\3.Shopify\Date wise order list"
+            
         )

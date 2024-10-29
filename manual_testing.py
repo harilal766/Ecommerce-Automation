@@ -19,7 +19,7 @@ create_table(sql_table_name="Transactions",
 
 #pdf_pattern_finder(filepath=r"D:\5.Amazon\Mathew global\INvoice",pattern=amazon_order_id_pattern) 
 
-report_driver("Amazon")
+#report_driver("Amazon")
 
 
 
