@@ -1,6 +1,6 @@
 import pandas as pd
 from helpers.messages import better_error_handling,success_status_msg
-from helpers.sql_scripts import query_backup,line_limit_checker,column_underscore
+from helpers.sql_scripts import query_backup,line_limit_checker
 
 def datatype_finder(column):
     types = {
@@ -10,7 +10,7 @@ def datatype_finder(column):
         ("is","will","accepts"): "BOOLEAN NOT NULL",
         ("date","at"): "TIMESTAMP",
         ("quantity", "subtotal", "number"): "INTEGER",
-        ("price","taxes", "discount", "amount","total"): "NUMERIC(10,2)",
+        ("price","taxes", "discount", "amount","total","fees"): "NUMERIC(10,2)",
         ("city","state","address"): "VARCHAR(100)",
         ("zip","postal"): "CHAR(6)"
     }
@@ -42,6 +42,15 @@ def gdatatype_finder(column_data):
         return 'TEXT'
 
 
+
+def column_underscore(column):
+    return column.replace(" ","_")
+
+    # develope if need to be used more than once.
+def sql_column_creator(filepath,filename):
+    columns = ''
+    return columns
+
 def create_table(sql_table_name,file_path):
     try:
         # open the file 
@@ -49,8 +58,6 @@ def create_table(sql_table_name,file_path):
         excel_first_row = excel.iloc[0]
         excel_header = excel.columns
         success_status_msg("Filepath read successfully")
-        
-        #loop columns and replace " " with "_"
         col_with_type = ""
         last_column = list(excel_header)[-1]
         column_count = 0
@@ -71,7 +78,6 @@ def create_table(sql_table_name,file_path):
             );
         """
         query_backup(filename="post order table creation",query=table_creation_query)
-
         # connect the db , execute the query, try adding the sample data
         #psql_connector(sql_table_name)
     except Exception as e:
@@ -79,4 +85,3 @@ def create_table(sql_table_name,file_path):
     finally:
         pass
         success_status_msg(table_creation_query)
-
