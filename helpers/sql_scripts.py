@@ -18,11 +18,13 @@ def psql_db_connection(dbname):
             )
     except Exception as e:
         better_error_handling(e)
+
     finally:
         if connection:
+            success_status_msg(f"Connected to the databse : {dbname}.")
             return connection
         else:
-            better_error_handling("Database connection failed")
+            better_error_handling(f"Connection failed to the database : {dbname}.")
     
 
 def query_backup(filename,query):
@@ -46,69 +48,67 @@ def line_limit_checker(word_count,line_limit):
 
 
 
-def data_import(tablename,sample_filepath,input_filepath):
-    """ 
-        copy Orders (
-            amazon_order_id, merchant_order_id, purchase_date, last_updated_date, order_status, fulfillment_channel, sales_channel, order_channel, url, ship_service_level, product_name, sku, asin, item_status, quantity, currency, item_price, item_tax, shipping_price, shipping_tax, gift_wrap_price, gift_wrap_tax, item_promotion_discount, ship_promotion_discount, ship_city, ship_state, ship_postal_code, ship_country, promotion_ids, is_business_order, purchase_order_number, price_designation, is_iba
-            ) 
-        FROM 'D:/Automation/SQL Test/Order table txt/Orders 1.10.24 - 7.10.24.txt' 
-        WITH (
-            FORMAT text,
-            DELIMITER E'\t',
-            ENCODING 'UTF8',
-            NULL 'null'
-        );
-    """
+def data_import(tablename,sample_filepath,input_filepath,input_filename):
+    delimiters = {
+        "txt": "E'\t'"
+    }
+         
     # importing only while needed so that circular impoprt error can be avoided.
     from .excel_to_sql_scripts import sql_columns_constructor
     columns = sql_columns_constructor(filepath=sample_filepath)
     data_import_query = f"""COPY {tablename} {columns}
-    FROM '{input_filepath}'
+    FROM '{os.path.join(input_filepath,input_filename)}'
     WITH (
-    FORMAT,
-    DELIMITER,
+    FORMAT TEXT,
+    DELIMITER E'\t',
     ENCODING 'UTF8',
     NULL ''
         );
     """
-    print(data_import_query)
 
 
+from datetime import datetime
+import  calendar 
 def order_table_updation():
     table_name = "Orders"
     field = "purchase_date"
-    date = "2024-09-30" 
-    deletion_query = f"DELETE FROM {table_name} WHERE {field} > '{date}';"
-    confirmation_query = ""
-    try:
-        # find the date of last month's last day.
-        # connect to the db
-        # delete old data
-        connection = psql_db_connection(dbname="Amazon")
 
-        """
+    # find the date of last month's last day.
+    today = datetime.today()
+    last_month = today.month-1
+    yestermonth_last_day = calendar.month(today.year,today.month)[-3:-1]
+    if last_month < 10:
+        last_month = f"0{last_month}"
+    yestermonth_last_date = f"{today.year}-{last_month}-{yestermonth_last_day}"
+
+
+    deletion_query = f"DELETE FROM {table_name} WHERE {field} > '{yestermonth_last_date}';"
+    try:
+        # connect to the db
+        connection = psql_db_connection(dbname="Amazon")
+        cursor=connection.cursor()
+        # delete old data
+        cursor.execute(deletion_query)
         # ask user for the updated txt name 
         input_file = input("Enter the input txt filename : ")
         # if the txt file exists
         if input_file:
             # import the txt file data to sql table
             pass
-        """
+        
 
         updation_query = f"""
         /* Deletion of data */
-        DELETE FROM {table_name} WHERE {field} > '{date}';
+        DELETE FROM {table_name} WHERE {field} > '{yestermonth_last_date}';
         /* Confirmation */
-        SELECT * FROM {table_name} WHERE {field} > '{date}';
+        SELECT * FROM {table_name} WHERE {field} > '{yestermonth_last_date}';
         """
         query_backup(filename="order table updation",query=updation_query)
     except Exception as e:
         better_error_handling(e)
     finally:
-        print(updation_query)
+        pass
 
-    
-    
 
     
 def sql_to_excel(sql_cursor,query_result,out_excel_path):

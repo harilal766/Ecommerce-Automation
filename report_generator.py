@@ -42,8 +42,6 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
             cursor = connection.cursor()
             cursor.execute(shipment_report_query)
             results = cursor.fetchall()
-        else:
-            better_error_handling("Database connection failed..")
 
         sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
         

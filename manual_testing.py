@@ -32,8 +32,13 @@ create_table(sql_table_name="Transactions",
 #print(sql_column_creator(filepath=r"D:\Ecommerce-Automation\Test documents\post orders sheet",filename="1.10.24.xlsx"))
 
 
-sql_columns_constructor(filepath=r"D:\Ecommerce-Automation\Test documents\post orders sheet\1.10.24.xlsx")
-
+#sql_columns_constructor(filepath=r"D:\Ecommerce-Automation\Test documents\post orders sheet\1.10.24.xlsx")
+"""
 data_import(tablename="Orders",
             sample_filepath=r"D:\Ecommerce-Automation\Test documents\post orders sheet\1.10.24.xlsx",
             input_filepath=r"D:\5.Amazon\Mathew global\Scheduled report")
+
+"""
+
+
+order_table_updation()
