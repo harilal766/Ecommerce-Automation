@@ -41,15 +41,29 @@ def gdatatype_finder(column_data):
     else:
         return 'TEXT'
 
-
-
 def column_underscore(column):
     return column.replace(" ","_")
 
-    # develope if need to be used more than once.
-def sql_column_creator(filepath,filename):
-    columns = ''
-    return columns
+
+
+# Move this function to excel scripts module
+def sql_columns_constructor(filepath):
+    try:
+        excel = pd.read_excel(filepath,header=0)
+        excel_first_row = excel.iloc[0]
+        excel_header = []
+        for column in excel.columns:
+            excel_header.append(column_underscore(column))
+    except Exception as e:
+        better_error_handling(e)
+    finally:
+        if excel_header:
+            print(tuple(excel_header))
+            return tuple(excel_header)
+
+
+
+
 
 def create_table(sql_table_name,file_path):
     try:
@@ -57,7 +71,11 @@ def create_table(sql_table_name,file_path):
         excel = pd.read_excel(file_path,header=0)
         excel_first_row = excel.iloc[0]
         excel_header = excel.columns
-        success_status_msg("Filepath read successfully")
+        print(excel_header)
+        if excel:
+            success_status_msg("Filepath read successfully.")
+        else:
+            better_error_handling("Unable to open the excel file.")
         col_with_type = ""
         last_column = list(excel_header)[-1]
         column_count = 0
