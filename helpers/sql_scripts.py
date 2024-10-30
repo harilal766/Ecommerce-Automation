@@ -2,7 +2,7 @@
 import pandas as pd
 import os
 from .messages import better_error_handling,success_status_msg
-import calendar
+import calendar,time
 import pg8000
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
@@ -16,6 +16,8 @@ def psql_db_connection(dbname):
             port=5432,            
             database='Amazon'
             )
+    except Exception as e:
+        better_error_handling(e)
     finally:
         if connection:
             return connection
@@ -24,9 +26,14 @@ def psql_db_connection(dbname):
     
 
 def query_backup(filename,query):
-    with open(f"{filename}.sql",'w') as query_backup:
-        query_backup.write(query)
+    try:
+        with open(f"{filename}.sql",'w') as query_backup:
+            query_backup.write(query)
+    except Exception as e:
+        better_error_handling(e)
+    finally:
         success_status_msg("Query Backed Up.")
+
 
 
 def line_limit_checker(word_count,line_limit):
@@ -40,6 +47,12 @@ def order_table_updation():
     field = "purchase_date"
     date = "2024-09-30" 
     try:
+        # find the date of last month's last day.
+        # connect to the db
+        # delete old data
+        # ask user for the updated txt name 
+        # if the txt file exists
+            # import the txt file data to sql table
         updation_query = f"""
         /* Deletion of data */
         DELETE FROM {table_name} WHERE {field} > '{date}';

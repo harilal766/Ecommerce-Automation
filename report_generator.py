@@ -2,8 +2,6 @@ from helpers.pdf_pattern_finder import *
 from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,psql_db_connection
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
-import pandas as pd
-import os
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
 """
