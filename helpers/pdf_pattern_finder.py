@@ -10,11 +10,13 @@ from .regex_patterns import amazon_order_id_pattern
 def pdf_pattern_finder(filepath,pattern):
     try:
         pattern_list = []
-        
         filename = input("Enter pdf filename : ")
+        if filename:
+            file_path = os.path.join(filepath, f"{filename}.pdf")
+            success_status_msg("File Accessed.")
+        else:
+            print("Enter a filename : ")
 
-        file_path = os.path.join(filepath, f"{filename}.pdf")
-        success_status_msg("File Accessed.")
 
         with pdfplumber.open(file_path) as pdf:
             success_status_msg("Opening the pdf file")

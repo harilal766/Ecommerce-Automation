@@ -1,8 +1,7 @@
 from helpers.pdf_pattern_finder import *
-from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel
+from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,psql_db_connection
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
-import pg8000
 import pandas as pd
 import os
 """
@@ -37,22 +36,19 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         """
         #loading_animation(len(order_ids)), ask for the loading value and execute the loading animation only while it is not executed. 
         # Backing up the query
+
         query_backup(f"{sql_filename}",shipment_report_query)
-        conn = pg8000.connect(
-            user='postgres',
-            password='1234',
-            host='localhost',      
-            port=5432,            
-            database='Amazon'
-        )
-        if conn:
-            cursor = conn.cursor()
+
+        
+        connection = psql_db_connection(dbname="Amazon")
+        if connection:
+            cursor = connection.cursor()
             cursor.execute(shipment_report_query)
             results = cursor.fetchall()
         else:
             better_error_handling("Database connection failed..")
 
-        sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path,index="False")
+        sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path,index="True")
         
         
     except Exception as e:

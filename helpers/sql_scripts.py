@@ -3,10 +3,24 @@ import pandas as pd
 import os
 from .messages import better_error_handling,success_status_msg
 import calendar
+import pg8000
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
 """
-
+def psql_db_connection(dbname):
+    try:
+        connection = pg8000.connect(
+            user='postgres',
+            password='1234',
+            host='localhost',      
+            port=5432,            
+            database='Amazon'
+            )
+    finally:
+        if connection:
+            return connection
+        else:
+            better_error_handling("Database connection failed")
     
 
 def query_backup(filename,query):
