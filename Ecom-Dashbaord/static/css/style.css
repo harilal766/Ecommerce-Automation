@@ -1,0 +1,26 @@
+:root{
+    --bg-color:rgb(157, 216, 226);
+    --nav-color:rgb(240, 232, 123);
+
+    --button-color:rgb(135, 238, 135);
+}
+
+/* Navigation Bar */
+.nav {
+    background-color: var(--nav-color);
+}
+
+nav, li{
+    font-family: "Helvetica";
+}
+/* Body */
+body, h1, h2, h3, h4 {
+    /* Swiss style font */
+    font-family: "Helvetica","Universa",sans-serif;
+}
+
+
+
+.body {
+    background-color: var(--bg-color);
+}
