@@ -4,15 +4,16 @@ from helpers.terminal_scripts import clear_terminal,recompile
 from helpers.sql_scripts import order_table_updation
 # Menu
 feature_menu = {
+    0:("Clear Terminal",clear_terminal),
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
     3:("Order table updation",order_table_updation),
+    4:("Table data importing",order_table_updation)
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
 exit_menu = {
-    feat_last_key+1:("Clear Terminal",clear_terminal),
-    feat_last_key+2:("Recompile",recompile)
+    feat_last_key+1:("Recompile",recompile)
     }
 
 menu = {**feature_menu, **exit_menu}

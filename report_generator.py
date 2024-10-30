@@ -34,8 +34,7 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         """
         #loading_animation(len(order_ids)), ask for the loading value and execute the loading animation only while it is not executed. 
         # Backing up the query
-
-        query_backup(f"{sql_filename}",shipment_report_query)
+        #query_backup(f"{sql_filename}",shipment_report_query)
 
         
         connection = psql_db_connection(dbname="Amazon")
@@ -46,16 +45,20 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
         else:
             better_error_handling("Database connection failed..")
 
-        sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path,index="True")
+        sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
         
         
     except Exception as e:
         better_error_handling(e)
     finally:
+        success_status_msg(shipment_report_query)
         if 'cursor' in locals() and cursor:
             cursor.close()
-        if 'conn' in locals() and conn:
-            conn.close()
+        if 'conn' in locals() and connection:
+            connection.close()
+
+
+
 
 
 
@@ -82,7 +85,7 @@ def report_driver(report_type):
                     Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name,""",
             database="Shopify",table="sh_orders",id="name",
             order_by_clause="lineitem_name ASC, lineitem_price ASC",
-            sql_filename="post shipment report",
+            sql_filename="post shipment report query",
             out_excel_path=r"D:\3.Shopify\Date wise order list"
             
         )
