@@ -1,10 +1,7 @@
 from helpers.pdf_pattern_finder import *
-from helpers.sql_scripts import query_backup,line_limit_checker
+from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,psql_db_connection
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
-import pg8000
-import pandas as pd
-import os
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
 """
@@ -36,49 +33,29 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
             ORDER BY {order_by_clause};
         """
         #loading_animation(len(order_ids)), ask for the loading value and execute the loading animation only while it is not executed. 
-
-        conn = pg8000.connect(
-            user='postgres',
-            password='1234',
-            host='localhost',      
-            port=5432,            
-            database='Amazon'
-        )
-
-        cursor = conn.cursor()
-        cursor.execute(shipment_report_query)
-        results = cursor.fetchall()
-        # Print the results
-        for row in results:
-            pass
-        # excel conversion
-        column_list = [desc[0] for desc in cursor.description]
-        excel_sheet = pd.DataFrame(results,columns=column_list)
-
-        out_excel_file = input("Enter the name for excel file : ")
-        excel_sheet.to_excel(os.path.join(out_excel_path,out_excel_file+".xlsx"),index=False,engine='openpyxl')
-
         # Backing up the query
+
         query_backup(f"{sql_filename}",shipment_report_query)
+
+        
+        connection = psql_db_connection(dbname="Amazon")
+        if connection:
+            cursor = connection.cursor()
+            cursor.execute(shipment_report_query)
+            results = cursor.fetchall()
+        else:
+            better_error_handling("Database connection failed..")
+
+        sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path,index="True")
+        
+        
     except Exception as e:
         better_error_handling(e)
     finally:
-        cursor.close()
-        conn.close()
-        print(shipment_report_query)
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'conn' in locals() and conn:
+            conn.close()
 
 
 

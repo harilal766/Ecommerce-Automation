@@ -7,3 +7,4 @@ pdfplumber
 better-exceptions
 loguru
 colorama
+python-amazon-sp-api

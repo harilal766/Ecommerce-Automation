@@ -2,17 +2,38 @@
 import pandas as pd
 import os
 from .messages import better_error_handling,success_status_msg
-import calendar
+import calendar,time
+import pg8000
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
 """
-
+def psql_db_connection(dbname):
+    try:
+        connection = pg8000.connect(
+            user='postgres',
+            password='1234',
+            host='localhost',      
+            port=5432,            
+            database='Amazon'
+            )
+    except Exception as e:
+        better_error_handling(e)
+    finally:
+        if connection:
+            return connection
+        else:
+            better_error_handling("Database connection failed")
     
 
 def query_backup(filename,query):
-    with open(f"{filename}.sql",'w') as query_backup:
-        query_backup.write(query)
-        print("Query Backed Up.")
+    try:
+        with open(f"{filename}.sql",'w') as query_backup:
+            query_backup.write(query)
+    except Exception as e:
+        better_error_handling(e)
+    finally:
+        success_status_msg("Query Backed Up.")
+
 
 
 def line_limit_checker(word_count,line_limit):
@@ -26,6 +47,12 @@ def order_table_updation():
     field = "purchase_date"
     date = "2024-09-30" 
     try:
+        # find the date of last month's last day.
+        # connect to the db
+        # delete old data
+        # ask user for the updated txt name 
+        # if the txt file exists
+            # import the txt file data to sql table
         updation_query = f"""
         /* Deletion of data */
         DELETE FROM {table_name} WHERE {field} > '{date}';
@@ -58,3 +85,20 @@ def order_table_updation():
     """
     
     
+def sql_to_excel(sql_cursor,query_result,out_excel_path,index):
+    try:  
+        # excel conversion
+        column_list = [desc[0] for desc in sql_cursor.description]
+        excel_sheet = pd.DataFrame(query_result,columns=column_list)
+        # if the excel file already exists, a sheet should be created inside the file and the output should be stored there.
+        out_excel_file = input("Enter the name for excel file : ")
+        if out_excel_file:
+            # re initialization of the file path after getting the filename
+            out_excel_path = os.path.join(out_excel_path,out_excel_file+".xlsx")
+            excel_sheet.to_excel(out_excel_path,index=index,engine='openpyxl')
+            success_status_msg("Excel output created.")
+        else:
+            print("Please enter the filename..")
+    except Exception as e:
+        better_error_handling(e)
+        
