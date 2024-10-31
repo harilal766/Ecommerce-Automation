@@ -3,19 +3,22 @@ import pandas as pd
 import os
 from .messages import better_error_handling,success_status_msg
 import calendar,time
-import pg8000
+import pg8000,sqlite3
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
 """
-def psql_db_connection(dbname):
+def db_connection(dbname,db_system):
     try:
-        connection = pg8000.connect(
-            user='postgres',
-            password='1234',
-            host='localhost',      
-            port=5432,            
-            database=dbname
-            )
+        if db_system == "psql":
+            connection = pg8000.connect(
+                user='postgres',
+                password='1234',
+                host='localhost',      
+                port=5432,            
+                database=dbname
+                )
+        elif db_system == "sqlite3":
+            connection = sqlite3.connect(f"{dbname}.db")
     except Exception as e:
         better_error_handling(e)
     finally:
