@@ -35,16 +35,6 @@ def datatype_finder(column):
     return "VARCHAR(50)"
     #return "---------"
 
-def gdatatype_finder(column_data):
-    if pd.api.types.is_integer_dtype(column_data):
-        return 'INTEGER'  # You can use BIGINT for larger integers
-    elif pd.api.types.is_float_dtype(column_data):
-        return 'FLOAT'  # You can use NUMERIC for higher precision
-    elif pd.api.types.is_datetime64_any_dtype(column_data):
-        return 'TIMESTAMP'
-    else:
-        return 'TEXT'
-
 def column_underscore(column):
     if "-" in column:
         return column.replace("-","_")
