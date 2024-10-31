@@ -28,13 +28,7 @@ def datatype_finder(column):
     for keys, value in types.items():
         for key in keys:
             #print(column.split("_"))
-            if (key == col_last_word):
-                return value
-                break
-            elif key == col_first_word:
-                return value
-                break
-            elif (key in column):
+            if (key == str(col_last_word)):
                 return value
                 break
     # Default type if no match is found
