@@ -50,8 +50,10 @@ data_import(tablename="Orders",
 shopify_order_excel_sample = r"D:\Ecommerce-Automation\Test documents\post orders sheet\1.10.24.xlsx"
 
 list = sql_columns_constructor(filepath=shopify_order_excel_sample)
+
 for i in list:
     print(f"{i} - {datatype_finder(i)}")
 
 
-#create_table(sql_table_name="sh_orders",file_path=shopify_order_excel_sample)
+
+create_table(sql_table_name="sh_orders",file_path=shopify_order_excel_sample)

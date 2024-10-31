@@ -5,29 +5,31 @@ from helpers.sql_scripts import query_backup,line_limit_checker
 def datatype_finder(column):
     potential_numbers = ["price","taxes", "discount", "amount","total","fees","quantity",
      "subtotal", "number"]
-    potential_timestamps = ["date","at"]
-    potential_booleans = ["is","will","accepts"]
-    # Text
-    potential_var_20 = ["id","status","phone","mobile"]
-    potential_zipcodes = ["zip","postal"]
-    potential_var_100 = ["city","state","address"]
-    
+    types = {
+        # There should be atlest 2 strings on the tuple
+        
+        ("phone","mobile"): "VARCHAR(15)",
+        ("id","status"): "VARCHAR(20)",
+        ("is","will","accepts"): "BOOLEAN NOT NULL",
+        ("date","at"): "TIMESTAMP",
+        ("quantity", "subtotal", "number"): "NUMERIC(10,2)",
+        ("price","taxes", "discount", "amount","total","fees"): "NUMERIC(10,2)",
+        ("city","state","address"): "VARCHAR(100)",
+        ("zip","postal"): "CHAR(6)"
+    }
+    # Check if the column name contains any of the key elements
     column = column.lower()
-    col_last_word = column.split("_")[-1]
-    col_first_word = column.split("_")[0]
-
-    if col_last_word in potential_numbers:
-        return "NUMERIC(10,2)"
-    elif col_last_word in potential_timestamps:
-        return "TIMESTAMP"
-    elif col_last_word in potential_booleans:
-        return "BOOELAN"
-    elif col_last_word in potential_zipcodes:
-        return "VARCHAR(6)"
-    elif col_last_word in potential_var_20:
-        return "VARCHAR(20)"
-    elif col_last_word in potential_var_100:
-        return "VARCHAR(100)"
+    for keys, value in types.items():
+        for key in keys:
+            col_last_word = column.split("_")[-1]
+            col_first_word = column.split("_")[0]
+            #print(column.split("_"))
+            if (key == col_last_word):
+                return value
+            elif key == col_first_word:
+                return value
+            elif (key in column):
+                return value
     # Default type if no match is found
     return "VARCHAR(50)"
     #return "---------"
@@ -75,7 +77,7 @@ def create_table(sql_table_name,file_path):
         excel_first_row = excel.iloc[0]
         excel_header = excel.columns
         print(excel_header)
-        if excel:
+        if not excel.empty:
             success_status_msg("Filepath read successfully.")
         else:
             better_error_handling("Unable to open the excel file.")
