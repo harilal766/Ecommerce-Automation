@@ -3,6 +3,10 @@ from helpers.messages import better_error_handling,success_status_msg
 from helpers.sql_scripts import query_backup,line_limit_checker
 
 def datatype_finder(column):
+    # dive in to the non header rows of an excel file
+    # if data is string type,
+        # read all the datas in that row and find the maximum length
+    
     potential_numbers = ["price","taxes", "discount", "amount","total","fees","quantity",
      "subtotal", "number"]
     types = {
@@ -10,7 +14,7 @@ def datatype_finder(column):
         
         ("phone","mobile"): "VARCHAR(15)",
         ("id","status"): "VARCHAR(20)",
-        ("is","will","accepts"): "BOOLEAN NOT NULL",
+        ("is","will","accepts"): "BOOLEAN",
         ("date","at"): "TIMESTAMP",
         ("quantity", "subtotal", "number"): "NUMERIC(10,2)",
         ("price","taxes", "discount", "amount","total","fees"): "NUMERIC(10,2)",
@@ -19,17 +23,20 @@ def datatype_finder(column):
     }
     # Check if the column name contains any of the key elements
     column = column.lower()
+    col_last_word = column.split("_")[-1]
+    col_first_word = column.split("_")[0]
     for keys, value in types.items():
         for key in keys:
-            col_last_word = column.split("_")[-1]
-            col_first_word = column.split("_")[0]
             #print(column.split("_"))
             if (key == col_last_word):
                 return value
+                break
             elif key == col_first_word:
                 return value
+                break
             elif (key in column):
                 return value
+                break
     # Default type if no match is found
     return "VARCHAR(50)"
     #return "---------"
