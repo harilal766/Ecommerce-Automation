@@ -5,7 +5,7 @@ from helpers.excel_to_sql_scripts import *
 from helpers.sql_scripts import *
 from helpers.file_ops import *
 from helpers.messages import *
-
+import sqlite3
 
 from report_generator import *
 
@@ -47,7 +47,9 @@ data_import(tablename="Orders",
 
 """
 
-shopify_order_excel_sample = r"D:\Ecommerce-Automation\Test documents\post orders sheet\1.10.24.xlsx"
+#shopify_order_excel_sample = r"D:\Ecommerce-Automation\Test documents\post orders sheet\1.10.24.xlsx"
+
+shopify_order_excel_sample = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
 
 list = sql_columns_constructor(filepath=shopify_order_excel_sample)
 """
@@ -56,15 +58,4 @@ for i in list:
 
 """
 
-
-import pandas as pd
-from sqlalchemy import create_engine
-
-# Read Excel file
-df = pd.read_excel(shopify_order_excel_sample, sheet_name='1.10.24')
-
-# Create a SQLAlchemy engine
-engine = create_engine('postgresql://postgres:1234@localhost:5432/Shopify')
-
-# Write DataFrame to SQL table
-df.to_sql('sh_orders', engine, if_exists='replace', index=False)
+sql_table_creation_or_updation(operation='append')

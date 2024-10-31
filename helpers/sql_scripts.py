@@ -3,7 +3,9 @@ import pandas as pd
 import os
 from .messages import better_error_handling,success_status_msg
 import calendar,time
-import pg8000
+import pg8000,sqlite3
+from sqlalchemy import create_engine
+import pandas as pd
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
 """
@@ -130,3 +132,13 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
     except Exception as e:
         better_error_handling(e)
         
+shopify_order_excel_sample = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
+def sql_table_creation_or_updation(operation):
+    try:
+        excel_data = pd.read_excel(shopify_order_excel_sample, sheet_name='1.10.24')
+        engine = create_engine('sqlite:///Shopify.db')
+        excel_data.to_sql('sh_orders', con=engine, if_exists=str(operation), index=False)
+    except Exception as e:
+        better_error_handling(e)
+
+sql_table_creation_or_updation(operation='replace')
