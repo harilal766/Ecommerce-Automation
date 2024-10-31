@@ -56,7 +56,7 @@ def data_import(tablename,sample_filepath,input_filepath,input_filename):
     # importing only while needed so that circular impoprt error can be avoided.
     from .excel_to_sql_scripts import sql_columns_constructor
     columns = sql_columns_constructor(filepath=sample_filepath)
-    data_import_query = f"""COPY {tablename} {columns}
+    data_import_query = f"""COPY {tablename} {tuple(columns)}
     FROM '{os.path.join(input_filepath,input_filename)}'
     WITH (
     FORMAT TEXT,
@@ -65,6 +65,7 @@ def data_import(tablename,sample_filepath,input_filepath,input_filename):
     NULL ''
         );
     """
+    print(data_import_query)
 
 
 from datetime import datetime

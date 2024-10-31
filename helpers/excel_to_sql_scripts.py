@@ -3,30 +3,31 @@ from helpers.messages import better_error_handling,success_status_msg
 from helpers.sql_scripts import query_backup,line_limit_checker
 
 def datatype_finder(column):
-    types = {
-        # There should be atlest 2 strings on the tuple
-        ("phone","mobile"): "VARCHAR(15)",
-        ("id","status"): "VARCHAR(20)",
-        ("is","will","accepts"): "BOOLEAN NOT NULL",
-        ("date","at"): "TIMESTAMP",
-        ("quantity", "subtotal", "number"): "INTEGER",
-        ("price","taxes", "discount", "amount","total","fees"): "NUMERIC(10,2)",
-        ("city","state","address"): "VARCHAR(100)",
-        ("zip","postal"): "CHAR(6)"
-    }
-    # Check if the column name contains any of the key elements
+    potential_numbers = ["price","taxes", "discount", "amount","total","fees","quantity",
+     "subtotal", "number"]
+    potential_timestamps = ["date","at"]
+    potential_booleans = ["is","will","accepts"]
+    # Text
+    potential_var_20 = ["id","status","phone","mobile"]
+    potential_zipcodes = ["zip","postal"]
+    potential_var_100 = ["city","state","address"]
+    
     column = column.lower()
-    for keys, value in types.items():
-        for key in keys:
-            col_last_word = column.split("_")[-1]
-            col_first_word = column.split("_")[0]
-            #print(column.split("_"))
-            if (key == col_last_word):
-                return value
-            elif key == col_first_word:
-                return value
-            elif (key in column):
-                return value
+    col_last_word = column.split("_")[-1]
+    col_first_word = column.split("_")[0]
+
+    if col_last_word in potential_numbers:
+        return "NUMERIC(10,2)"
+    elif col_last_word in potential_timestamps:
+        return "TIMESTAMP"
+    elif col_last_word in potential_booleans:
+        return "BOOELAN"
+    elif col_last_word in potential_zipcodes:
+        return "VARCHAR(6)"
+    elif col_last_word in potential_var_20:
+        return "VARCHAR(20)"
+    elif col_last_word in potential_var_100:
+        return "VARCHAR(100)"
     # Default type if no match is found
     return "VARCHAR(50)"
     #return "---------"
@@ -42,7 +43,10 @@ def gdatatype_finder(column_data):
         return 'TEXT'
 
 def column_underscore(column):
-    return column.replace(" ","_")
+    if "-" in column:
+        return column.replace("-","_")
+    else:
+        return column.replace(" ","_")
 
 
 
@@ -58,8 +62,7 @@ def sql_columns_constructor(filepath):
         better_error_handling(e)
     finally:
         if excel_header:
-            print(tuple(excel_header))
-            return tuple(excel_header)
+            return excel_header
 
 
 
