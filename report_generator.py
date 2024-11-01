@@ -1,11 +1,13 @@
 from helpers.pdf_pattern_finder import *
-from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,db_connection
+from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,db_connection,sql_table_creation_or_updation
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
 """
-def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sql_filename,out_excel_path):
+def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
+                    sql_filename,
+                    input_filepath,out_excel_path):
     order_ids = None
     order_id_list = pdf_pattern_finder(filepath=pdf_path,pattern=pattern)
     #last_column = order_id_list[-1]
@@ -33,21 +35,30 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
             ORDER BY {order_by_clause};
         """
         #loading_animation(len(order_ids)), ask for the loading value and execute the loading animation only while it is not executed. 
+        
         # Backing up the query
-        #query_backup(f"{sql_filename}",shipment_report_query)
-        connection = db_connection(dbname="Amazon",db_system="sqlite")
+        query_backup(f"{sql_filename}",shipment_report_query)
+
+        # Creating the table and closing
+        sql_table_creation_or_updation(dbname=database,tablename=table,
+                                       replace_or_append="replace",
+                                       input_file_dir=input_filepath)
+        
+        # connecting to the db
+        connection = db_connection(dbname=database,db_system="sqlite")
         if connection:
             cursor = connection.cursor()
             cursor.execute(shipment_report_query)
             results = cursor.fetchall()
 
+        # converting the sql result into excel file
         sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
-        
         
     except Exception as e:
         better_error_handling(e)
     finally:
         success_status_msg(shipment_report_query)
+        # closing the db
         if 'cursor' in locals() and cursor:
             cursor.close()
         if 'conn' in locals() and connection:
@@ -72,6 +83,7 @@ def report_driver(report_type):
             database="Amazon",table="Orders", id = "amazon_order_id",
             order_by_clause="product_name asc,quantity asc",
             sql_filename="amzn_shipment_query",
+            input_filepath=r"D:\5.Amazon\Mathew global\Scheduled report",
             out_excel_path=r"D:\5.Amazon\Mathew global\Scheduled report"
         )
     elif "shopify" in report_type:
@@ -84,6 +96,6 @@ def report_driver(report_type):
             database="Shopify",table="sh_orders",id="name",
             order_by_clause="lineitem_name ASC, lineitem_price ASC",
             sql_filename="post shipment report query",
+            input_filepath=r"D:\3.Shopify\Date wise order list",
             out_excel_path=r"D:\3.Shopify\Date wise order list"
-            
         )

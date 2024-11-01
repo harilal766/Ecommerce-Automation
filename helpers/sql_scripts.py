@@ -9,7 +9,7 @@ import pandas as pd
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
 """
-def db_connection(dbname,db_system,):
+def db_connection(dbname,db_system):
     try:
         if db_system == "postgres":
             connection = pg8000.connect(
@@ -137,7 +137,7 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
         
 
 
-def sql_table_creation_or_updation(dbname,replace_or_append,input_file_dir):
+def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file_dir):
     try:
         connection = db_connection(dbname=dbname,db_system="sqlite")
         filename = input("Enter the input filename with extension :- ")
@@ -148,13 +148,19 @@ def sql_table_creation_or_updation(dbname,replace_or_append,input_file_dir):
         if extension == "xlsx":
             sheet_name = input("Enter the name of the sheet : ")
             df = pd.read_excel(filepath, sheet_name=sheet_name)
-        elif extension == "txt" or extension == "csv":
-            df = pd.read_csv(filepath,delimiter=',')
+        elif extension == "txt":
+            df = pd.read_csv(filepath,delimiter='\t',on_bad_lines='skip')
+        elif extension == "csv":
+            df = pd.read_csv(filepath,delimiter=',',on_bad_lines='skip')
         else:
             raise ValueError("UNSUPPORTED EXTENSION")
-    
+        
+        # replacing " " with "-"
+        df.columns = df.columns.str.replace(' ', '_')
+            
+
         engine = create_engine(f'sqlite:///{dbname}.db')
-        df.to_sql('sh_orders', con=engine, if_exists=str(replace_or_append), index=False)
+        df.to_sql(tablename,con=engine, if_exists=str(replace_or_append), index=False)
     except Exception as e:
         better_error_handling(e)
     finally:
