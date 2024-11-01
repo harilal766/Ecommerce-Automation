@@ -81,7 +81,9 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
 # Directories
     #POST
 lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
-win_shopify_cod_order_excel_dir = r"D:\6.SPEED POST\Return Report COD"
+
+win_shopify_cod = r"D:\6.SPEED POST\Return Report COD"
+lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
     #AMAZON
 win_amazon_order_txt_file = r"D:\5.Amazon\Mathew global\Scheduled report"
 
@@ -91,9 +93,9 @@ win_amazon_order_txt_file = r"D:\5.Amazon\Mathew global\Scheduled report"
 
 
 
-sql_table_creation_or_updation(dbname="Shopify",tablename="sh_orders",
+sql_table_creation_or_updation(dbname="Shopify",tablename="po_cod",
                                replace_or_append="replace",
-                               input_file_dir=win_shopify_cod_order_excel_dir)
+                               input_file_dir=lin_shopify_cod)
 
 """
 sql_table_creation_or_updation(dbname="Amazon",tablename="Orders",
