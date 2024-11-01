@@ -90,13 +90,12 @@ win_amazon_order_txt_file = r"D:\5.Amazon\Mathew global\Scheduled report"
 
 
 
-
+"""
 sql_table_creation_or_updation(dbname="Shopify",tablename="cod_orders",
                                replace_or_append="replace",
                                input_file_dir=win_shopify_cod_order_excel_dir)
-
 """
+
 sql_table_creation_or_updation(dbname="Amazon",tablename="Orders",
                                replace_or_append='replace',
                                input_file_dir=win_amazon_order_txt_file)
-"""

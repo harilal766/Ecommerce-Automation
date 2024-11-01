@@ -30,7 +30,7 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
             {fields} 
             FROM {table} 
             WHERE {id} IN (
-                \t{tuple(order_id_list)}
+                \t{order_ids}
             )
             ORDER BY {order_by_clause};
         """
