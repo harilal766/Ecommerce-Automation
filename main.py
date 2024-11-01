@@ -7,8 +7,7 @@ feature_menu = {
     0:("Clear Terminal",clear_terminal),
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
-    3:("Order table updation",order_table_updation),
-    4:("Table data importing",order_table_updation)
+    4:("Table updation",order_table_updation),
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]

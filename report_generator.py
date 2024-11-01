@@ -1,5 +1,5 @@
 from helpers.pdf_pattern_finder import *
-from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,psql_db_connection
+from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,db_connection
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
 """
@@ -28,16 +28,14 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
             {fields} 
             FROM {table} 
             WHERE {id} IN (
-                \t{order_ids}
+                \t{tuple(order_id_list)}
             )
             ORDER BY {order_by_clause};
         """
         #loading_animation(len(order_ids)), ask for the loading value and execute the loading animation only while it is not executed. 
         # Backing up the query
         #query_backup(f"{sql_filename}",shipment_report_query)
-
-        
-        connection = psql_db_connection(dbname="Amazon")
+        connection = db_connection(dbname="Amazon",db_system="sqlite")
         if connection:
             cursor = connection.cursor()
             cursor.execute(shipment_report_query)
@@ -57,6 +55,8 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,sq
 
 
 
+def table_querying(operation):
+    pass
 
 
 

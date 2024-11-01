@@ -1,6 +1,10 @@
 import platform
 
 def dir_switch(directory):
+    if platform.system == "Windows":
+        pass
+    elif platform.system == "linux":
+        pass
     alternate_dirs = {
         # Post
         "post_label" :(r"D:\6.SPEED POST\1.Shipping labels", r"/home/hari/Desktop/Automation/Test documents/post shipping labels/"),

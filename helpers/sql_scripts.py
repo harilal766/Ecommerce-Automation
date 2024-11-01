@@ -9,15 +9,18 @@ import pandas as pd
 """
 https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
 """
-def psql_db_connection(dbname):
+def db_connection(dbname,db_system,):
     try:
-        connection = pg8000.connect(
-            user='postgres',
-            password='1234',
-            host='localhost',      
-            port=5432,            
-            database=dbname
-            )
+        if db_system == "postgres":
+            connection = pg8000.connect(
+                user='postgres',
+                password='1234',
+                host='localhost',      
+                port=5432,            
+                database=dbname
+                )
+        elif db_system == "sqlite":
+            connection = sqlite3.connect(f"{dbname}.db")
     except Exception as e:
         better_error_handling(e)
 
@@ -132,13 +135,27 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
     except Exception as e:
         better_error_handling(e)
         
-shopify_order_excel_sample = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
-def sql_table_creation_or_updation(operation):
+
+
+def sql_table_creation_or_updation(dbname,replace_or_append,input_file_dir):
     try:
-        excel_data = pd.read_excel(shopify_order_excel_sample, sheet_name='1.10.24')
-        engine = create_engine('sqlite:///Shopify.db')
-        excel_data.to_sql('sh_orders', con=engine, if_exists=str(operation), index=False)
+        connection = db_connection(dbname=dbname,db_system="sqlite")
+        filename = input("Enter the input filename with extension :- ")
+        extension = str(filename.split(".")[-1]).lower()
+        df = ""
+        filepath = os.path.join(input_file_dir,filename)
+        
+        if extension == "xlsx":
+            sheet_name = input("Enter the name of the sheet : ")
+            df = pd.read_excel(filepath, sheet_name=sheet_name)
+        elif extension == "txt" or extension == "csv":
+            df = pd.read_csv(filepath,delimiter=',')
+        else:
+            raise ValueError("UNSUPPORTED EXTENSION")
+    
+        engine = create_engine(f'sqlite:///{dbname}.db')
+        df.to_sql('sh_orders', con=engine, if_exists=str(replace_or_append), index=False)
     except Exception as e:
         better_error_handling(e)
-
-sql_table_creation_or_updation(operation='replace')
+    finally:
+        connection.close()
