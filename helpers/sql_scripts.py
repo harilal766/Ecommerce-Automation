@@ -2,6 +2,7 @@
 import pandas as pd
 import os
 from .messages import better_error_handling,success_status_msg
+from .file_ops import input_handling
 import calendar,time
 import pg8000,sqlite3
 from sqlalchemy import create_engine
@@ -124,7 +125,7 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
         column_list = [desc[0].replace("_"," ") for desc in sql_cursor.description]
         excel_sheet = pd.DataFrame(query_result,columns=column_list)
         # if the excel file already exists, a sheet should be created inside the file and the output should be stored there.
-        out_excel_file = input("Enter the name for excel file : ")
+        out_excel_file = input_handling("Enter the name for excel file : ")
         if out_excel_file:
             # re initialization of the file path after getting the filename
             out_excel_path = os.path.join(out_excel_path,out_excel_file+".xlsx")
@@ -138,6 +139,7 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
 
 
 def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file_dir):
+    success_status_msg("SQL CRUD OPERATIONS")
     try:
         connection = db_connection(dbname=dbname,db_system="sqlite")
         filename = input("Enter the input filename with extension :- ")
