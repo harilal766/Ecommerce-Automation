@@ -156,7 +156,7 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
             raise ValueError("UNSUPPORTED EXTENSION")
         
         # replacing " " with "-"
-        df.columns = df.columns.str.replace('-', '_').str.replace("-","_")
+        df.columns = df.columns.str.replace(' ', '_').str.replace("-","_")
         
             
 
