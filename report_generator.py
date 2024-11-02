@@ -82,7 +82,7 @@ def report_driver(report_type):
     if "amazon" in report_type:
         shipment_report(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/amazon shipping label",
-            pdf_path=r"D:\5.Amazon\Mathew global\INvoice",
+            pdf_path=dir_switch(win=win_amazon_invoice,lin=lin_amazon_invoice),
             pattern=amazon_order_id_pattern,
             fields="""amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax""",
             database="Amazon",table="Orders", id = "amazon_order_id",
@@ -94,7 +94,7 @@ def report_driver(report_type):
     elif "shopify" in report_type:
         shipment_report(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/post shipping labes",
-            pdf_path=r"D:\6.SPEED POST\1.Shipping labels",
+            pdf_path=dir_switch(win=win_shopify_invoice,lin=lin_shopify_invoice),
             pattern=post_order_id_pattern,
             fields=""" Name, Financial_Status, Paid_at, Fulfillment_Status, Fulfilled_at, Subtotal, Shipping, Total, Lineitem_quantity, Lineitem_name,
                     Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name,""",

@@ -10,13 +10,22 @@ from .file_ops import *
 
 # Directories
     #POST
+win_shopify_invoice = r"D:\6.SPEED POST\1.Shipping labels"
+lin_shopify_invoice = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post shipping labes"
+
+win_shopify_order_excel_file = r""
 lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
 
 win_shopify_cod = r"D:\6.SPEED POST\Return Report COD"
 lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
     #AMAZON
 win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"
+
 win_amazon_invoice = r"D:\5.Amazon\Mathew global\INvoice"
+lin_amazon_invoice =r"/home/hari/Desktop/Ecommerce-Automation/Test documents/amazon shipping label"
+
+win_amzn_scheduled_report = r"D:\5.Amazon\Mathew global\Scheduled report"
+lin_amzn_scheduled_report = r""
 
 
 
