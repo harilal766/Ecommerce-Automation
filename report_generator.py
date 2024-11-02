@@ -5,6 +5,9 @@ from helpers.regex_patterns import *
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
 """
+
+
+
 def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
                     sql_filename,
                     input_filepath,out_excel_path):
@@ -54,7 +57,7 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
             # converting the sql result into excel file
             sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
         else:
-            better_error_handling("Connection Failed")
+            status_message(message="Connection Failed",color="red")
         
     except Exception as e:
         better_error_handling(e)

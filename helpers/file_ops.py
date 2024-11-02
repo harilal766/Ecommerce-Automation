@@ -39,10 +39,11 @@ def input_handling(instruction):
 
 
 def input_checker(display_message,filepath):
+    available_files = sorted((os.listdir(filepath)))
     while True:
         try:
             file = input(display_message)
-            if f"{file}.pdf" not in os.listdir(filepath):
+            if f"{file}" not in available_files:
                 status_message(message="File Not Found, Try again.",color='red')
             else:
                 status_message(message="File Found.",color='green')
@@ -60,15 +61,15 @@ def pdf_pattern_finder(filepath,pattern):
     filename = None
     status_message(message=f"Filepath : {filepath}",color='blue')
     try:
-        filename = input_checker(display_message="Enter pdf the filename : ",filepath=filepath)
+        filename = input_checker(display_message="Enter the filename with extension : ",filepath=filepath)
         if filename:
-            file_path = os.path.join(filepath, f"{filename}.pdf")
+            file_path = os.path.join(filepath, f"{filename}")
             success_status_msg("File Accessed.")
         else:
             print("Enter a filename : ")
 
         with pdfplumber.open(file_path) as pdf:
-            success_status_msg("Opening the pdf file")
+            success_status_msg("Opening the file........")
             page_count =0
             for page in pdf.pages:
                 page_text = page.extract_text()
@@ -88,6 +89,6 @@ def pdf_pattern_finder(filepath,pattern):
     except Exception as e:
         print(e)
     finally:
-        success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}.pdf\n{pattern_list}")
+        success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
         return pattern_list
 
