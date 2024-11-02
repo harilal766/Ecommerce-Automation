@@ -1,1 +1,5 @@
 **/__pycache__/
+
+
+# Ignore temporary files created by Excel
+~$*.xlsx

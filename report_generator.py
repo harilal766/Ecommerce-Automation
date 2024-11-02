@@ -1,4 +1,4 @@
-from helpers.pdf_pattern_finder import *
+from helpers.file_ops import *
 from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,db_connection,sql_table_creation_or_updation
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
@@ -12,7 +12,7 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
     order_id_list = pdf_pattern_finder(filepath=pdf_path,pattern=pattern)
     #last_column = order_id_list[-1]
     try:
-        order_ids = ""; order_id_count =0
+        order_ids = ""; order_id_count = 0
         for order_id in order_id_list:
             order_id_count+=1
             if order_id_list[-1] == order_id:
@@ -47,12 +47,14 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
         # connecting to the db
         connection = db_connection(dbname=database,db_system="sqlite")
         if connection:
+            success_status_msg("Connection Succeeded.")
             cursor = connection.cursor()
             cursor.execute(shipment_report_query)
             results = cursor.fetchall()
-
-        # converting the sql result into excel file
-        sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
+            # converting the sql result into excel file
+            sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
+        else:
+            better_error_handling("Connection Failed")
         
     except Exception as e:
         better_error_handling(e)

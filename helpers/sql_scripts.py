@@ -120,6 +120,7 @@ def order_table_updation():
     
 def sql_to_excel(sql_cursor,query_result,out_excel_path):
     try:  
+        print("Excel conversion Started.")
         # excel conversion
         # replacing underscores with empty spaces in columns
         column_list = [desc[0].replace("_"," ") for desc in sql_cursor.description]
@@ -128,14 +129,21 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
         out_excel_file = input_handling("Enter the name for excel file : ")
         if out_excel_file:
             # re initialization of the file path after getting the filename
-            out_excel_path = os.path.join(out_excel_path,out_excel_file+".xlsx")
+            out_directory = out_excel_path
+            out_excel_path = os.path.join(out_directory,out_excel_file+".xlsx")
             excel_sheet.to_excel(out_excel_path,index="Flase",engine='openpyxl')
-            success_status_msg("Excel output created.")
+            if out_excel_file in os.listdir(out_directory):
+                success_status_msg(f"Excel output file : {out_directory} created.")
         else:
             print("Please enter the filename..")
     except Exception as e:
         better_error_handling(e)
         
+
+        
+def input_sanitizer(instruction,datatype):
+    pass
+
 
 
 def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file_dir):
@@ -160,10 +168,10 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
         # replacing " " with "-"
         df.columns = df.columns.str.replace(' ', '_').str.replace("-","_")
         
-            
-
         engine = create_engine(f'sqlite:///{dbname}.db')
         df.to_sql(tablename,con=engine, if_exists=str(replace_or_append), index=False)
+    except FileNotFoundError:
+        print(f"{filename} not found, if the name is correct, please check the spaces....")
     except Exception as e:
         better_error_handling(e)
     finally:
