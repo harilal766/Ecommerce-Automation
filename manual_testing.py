@@ -1,5 +1,3 @@
-from helpers.dir_switcher import *
-from helpers.pdf_pattern_finder import *
 from helpers.regex_patterns import *
 from helpers.excel_to_sql_scripts import *
 from helpers.sql_scripts import *
@@ -60,15 +58,6 @@ for i in list:
 
 
 
-# Directories
-    #POST
-lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
-
-win_shopify_cod = r"D:\6.SPEED POST\Return Report COD"
-lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
-    #AMAZON
-win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"
-win_amazon_invoice = r"D:\5.Amazon\Mathew global\INvoice"
 
 
 
@@ -76,7 +65,7 @@ win_amazon_invoice = r"D:\5.Amazon\Mathew global\INvoice"
 
 
 
-#sql_table_creation_or_updation(dbname="Shopify",tablename="sh_orders",replace_or_append="replace",input_file_dir=win_shopify_cod)
+sql_table_creation_or_updation(dbname="Shopify",tablename="cod_oorja",replace_or_append="replace",input_file_dir=dir_switch(win=win_shopify_cod,lin=lin_shopify_cod))
 
 
 #pdf_pattern_finder(filepath=win_amazon_invoice,pattern=amazon_order_id_pattern)

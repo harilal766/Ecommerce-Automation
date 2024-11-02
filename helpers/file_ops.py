@@ -1,5 +1,31 @@
 import os
 from .messages import better_error_handling,status_message
+import platform
+import pdfplumber
+import re
+import os
+from .messages import *
+from .regex_patterns import amazon_order_id_pattern
+from .file_ops import *
+
+# Directories
+    #POST
+lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
+
+win_shopify_cod = r"D:\6.SPEED POST\Return Report COD"
+lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
+    #AMAZON
+win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"
+win_amazon_invoice = r"D:\5.Amazon\Mathew global\INvoice"
+
+
+
+
+def dir_switch(win,lin):
+    if platform == "windows":
+        return win
+    return lin 
+
 def filepath_constructor(filepath,filename):
     filepath = os.path.join(filepath,filename)
     return filepath
@@ -25,14 +51,6 @@ def input_checker(display_message,filepath):
             status_message(message="Keyboard Interruption, Try again.",color='red')
     return file
 
-
-import pdfplumber
-import re
-import os
-from .messages import *
-from .dir_switcher import dir_switch
-from .regex_patterns import amazon_order_id_pattern
-from .file_ops import *
 
 
 

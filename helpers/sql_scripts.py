@@ -1,15 +1,15 @@
 #$import psycopg2
 import pandas as pd
 import os
-from .messages import better_error_handling,success_status_msg
-from .file_ops import input_handling
+from .messages import better_error_handling,success_status_msg,status_message
+from .file_ops import input_handling,input_checker
 import calendar,time
+from datetime import datetime
+import  calendar 
 import pg8000,sqlite3
 from sqlalchemy import create_engine
 import pandas as pd
-"""
-https://www.geeksforgeeks.org/postgresql-connecting-to-the-database-using-python/
-"""
+
 def db_connection(dbname,db_system):
     try:
         if db_system == "postgres":
@@ -51,9 +51,6 @@ def line_limit_checker(word_count,line_limit):
 
 
 
-
-
-
 def data_import(tablename,sample_filepath,input_filepath,input_filename):
     delimiters = {
         "txt": "E'\t'"
@@ -74,8 +71,7 @@ def data_import(tablename,sample_filepath,input_filepath,input_filename):
     print(data_import_query)
 
 
-from datetime import datetime
-import  calendar 
+
 def order_table_updation():
     table_name = "Orders"
     field = "purchase_date"
@@ -92,12 +88,12 @@ def order_table_updation():
     deletion_query = f"DELETE FROM {table_name} WHERE {field} > '{yestermonth_last_date}';"
     try:
         # connect to the db
-        connection = psql_db_connection(dbname="Amazon")
+        connection = db_connection(dbname="Amazon")
         cursor=connection.cursor()
         # delete old data
         cursor.execute(deletion_query)
         # ask user for the updated txt name 
-        input_file = input("Enter the input txt filename : ")
+        input_file = input_checker(display_message="Enter the input txt filename : ")
         # if the txt file exists
         if input_file:
             # import the txt file data to sql table
@@ -150,7 +146,7 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
     success_status_msg("SQL CRUD OPERATIONS")
     try:
         connection = db_connection(dbname=dbname,db_system="sqlite")
-        filename = input("Enter the input filename with extension :- ")
+        filename = input_checker(display_message="Enter the input filename with extension :- ",filepath=input_file_dir)
         extension = str(filename.split(".")[-1]).lower()
         df = ""
         filepath = os.path.join(input_file_dir,filename)
@@ -171,7 +167,7 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
         engine = create_engine(f'sqlite:///{dbname}.db')
         df.to_sql(tablename,con=engine, if_exists=str(replace_or_append), index=False)
     except FileNotFoundError:
-        print(f"{filename} not found, if the name is correct, please check the spaces....")
+        status_message(message=f"{filename} not found, if the name is correct, please check the spaces....",color='red')
     except Exception as e:
         better_error_handling(e)
     finally:
