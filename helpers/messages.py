@@ -34,6 +34,14 @@ def success_status_msg(status):
     #print(green_boundary)
     print(f"{Fore.GREEN}{status}{Style.RESET_ALL}")
     #print(green_boundary)
-    
 
+def status_message(message,color):
+    foregreen = None
+    if color.lower() == 'red':
+        foregreen = Fore.RED
+    elif color.lower() == 'green':
+        foregreen = Fore.GREEN
+    elif color.lower() == "blue":
+        foregreen = Fore.BLUE
+    print(f"{foregreen}{message}{Style.RESET_ALL}")
         
