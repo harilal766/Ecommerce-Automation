@@ -13,7 +13,7 @@ from .file_ops import *
 win_shopify_invoice = r"D:\6.SPEED POST\1.Shipping labels"
 lin_shopify_invoice = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post shipping labes"
 
-win_shopify_order_excel_file = r""
+win_shopify_order_excel_file = r"D:\3.Shopify\Date wise order list"
 lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
 
 win_shopify_cod = r"D:\6.SPEED POST\Return Report COD"
@@ -40,11 +40,6 @@ def filepath_constructor(filepath,filename):
     return filepath
 
 
-def input_handling(instruction):
-    try:
-        return instruction
-    except KeyboardInterrupt as ki:
-        print("Interrupted.")
 
 
 def input_checker(display_message,filepath):

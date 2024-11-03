@@ -88,8 +88,8 @@ def report_driver(report_type):
             database="Amazon",table="Orders", id = "amazon_order_id",
             order_by_clause="product_name asc,quantity asc",
             sql_filename="amzn_shipment_query",
-            input_filepath=r"D:\5.Amazon\Mathew global\Scheduled report",
-            out_excel_path=r"D:\5.Amazon\Mathew global\Scheduled report"
+            input_filepath=dir_switch(win=win_amazon_invoice,lin=lin_amazon_invoice),
+            out_excel_path=dir_switch(win=win_amzn_scheduled_report,lin=lin_amzn_scheduled_report)
         )
     elif "shopify" in report_type:
         shipment_report(
@@ -101,6 +101,6 @@ def report_driver(report_type):
             database="Shopify",table="sh_orders",id="name",
             order_by_clause="lineitem_name ASC, lineitem_price ASC",
             sql_filename="post shipment report query",
-            input_filepath=r"D:\3.Shopify\Date wise order list",
-            out_excel_path=r"D:\3.Shopify\Date wise order list"
+            input_filepath=dir_switch(win=win_shopify_invoice,lin=lin_shopify_invoice),
+            out_excel_path=dir_switch(win=win_shopify_order_excel_file,lin=lin_shopify_order_excel_file)
         )

@@ -1,8 +1,8 @@
 #$import psycopg2
 import pandas as pd
 import os
-from helpers.messages import better_error_handling,success_status_msg,status_message
-from .file_ops import input_handling,input_checker
+from .messages import better_error_handling,success_status_msg,status_message
+from .file_ops import input_checker
 import calendar,time
 from datetime import datetime
 import  calendar 
@@ -171,6 +171,5 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
     except Exception as e:
         better_error_handling(e)
     finally:
-        status_message(message="Closing Connection.",color="blue")
         connection.close()
         status_message(message="Connection closed.",color="green")
