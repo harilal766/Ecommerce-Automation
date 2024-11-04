@@ -8,9 +8,10 @@ from helpers.regex_patterns import *
 
 
 
-def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
+def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
                     sql_filename,
                     input_filepath,out_excel_path):
+    function_boundary(title="FILTERING QUERY")
     order_ids = None
     order_id_list = pdf_pattern_finder(filepath=pdf_path,pattern=pattern)
     #last_column = order_id_list[-1]
@@ -80,7 +81,7 @@ def table_querying(operation):
 def report_driver(report_type): 
     report_type = report_type.lower()
     if "amazon" in report_type:
-        shipment_report(
+        filter_query(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/amazon shipping label",
             pdf_path=dir_switch(win=win_amazon_invoice,lin=lin_amazon_invoice),
             pattern=amazon_order_id_pattern,
@@ -92,7 +93,7 @@ def report_driver(report_type):
             out_excel_path=dir_switch(win=win_amzn_scheduled_report,lin=lin_amzn_scheduled_report)
         )
     elif "shopify" in report_type:
-        shipment_report(
+        filter_query(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/post shipping labes",
             pdf_path=dir_switch(win=win_shopify_invoice,lin=lin_shopify_invoice),
             pattern=post_order_id_pattern,

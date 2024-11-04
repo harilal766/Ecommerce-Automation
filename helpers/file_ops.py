@@ -28,14 +28,18 @@ win_amzn_scheduled_report = r"D:\5.Amazon\Mathew global\Scheduled report"
 lin_amzn_scheduled_report = r""
 
 
-
+def function_boundary(title):
+    dash = "-"*15
+    print(f"{dash}{title}{dash}")
 
 def dir_switch(win,lin):
     if platform == "windows":
         return win
-    return lin 
+    elif platform == "Linux":
+        return lin 
 
 def filepath_constructor(filepath,filename):
+    
     filepath = os.path.join(filepath,filename)
     return filepath
 
@@ -43,6 +47,7 @@ def filepath_constructor(filepath,filename):
 
 
 def input_checker(display_message,filepath):
+    function_boundary(title='INPUT CHECK')
     available_files = sorted((os.listdir(filepath)))
     while True:
         try:
