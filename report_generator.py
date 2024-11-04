@@ -8,11 +8,12 @@ from helpers.regex_patterns import *
 
 
 
-def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
+def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
                     sql_filename,
                     input_filepath,out_excel_path):
+    function_boundary(title="FILTERING QUERY")
     order_ids = None
-    order_id_list = pdf_pattern_finder(filepath=pdf_path,pattern=pattern)
+    order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension",filepath=pdf_path,pattern=pattern)
     #last_column = order_id_list[-1]
     try:
         order_ids = ""; order_id_count = 0
@@ -80,7 +81,7 @@ def table_querying(operation):
 def report_driver(report_type): 
     report_type = report_type.lower()
     if "amazon" in report_type:
-        shipment_report(
+        filter_query(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/amazon shipping label",
             pdf_path=dir_switch(win=win_amazon_invoice,lin=lin_amazon_invoice),
             pattern=amazon_order_id_pattern,
@@ -88,11 +89,11 @@ def report_driver(report_type):
             database="Amazon",table="Orders", id = "amazon_order_id",
             order_by_clause="product_name asc,quantity asc",
             sql_filename="amzn_shipment_query",
-            input_filepath=dir_switch(win=win_amazon_invoice,lin=lin_amazon_invoice),
-            out_excel_path=dir_switch(win=win_amzn_scheduled_report,lin=lin_amzn_scheduled_report)
+            input_filepath=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report),
+            out_excel_path=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
         )
     elif "shopify" in report_type:
-        shipment_report(
+        filter_query(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/post shipping labes",
             pdf_path=dir_switch(win=win_shopify_invoice,lin=lin_shopify_invoice),
             pattern=post_order_id_pattern,

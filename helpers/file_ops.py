@@ -7,6 +7,7 @@ import os
 from .messages import *
 from .regex_patterns import amazon_order_id_pattern
 from .file_ops import *
+from pathlib import Path
 
 # Directories
     #POST
@@ -24,16 +25,20 @@ win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"
 win_amazon_invoice = r"D:\5.Amazon\Mathew global\INvoice"
 lin_amazon_invoice =r"/home/hari/Desktop/Ecommerce-Automation/Test documents/amazon shipping label"
 
-win_amzn_scheduled_report = r"D:\5.Amazon\Mathew global\Scheduled report"
-lin_amzn_scheduled_report = r""
+win_amazon_scheduled_report = r"D:\5.Amazon\Mathew global\Scheduled report"
+lin_amazon_scheduled_report = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/amazon scheduled report"
 
 
-
+def function_boundary(title):
+    dash = "-"*15
+    print(f"{dash}{title}{dash}")
 
 def dir_switch(win,lin):
-    if platform == "windows":
+    operating_sys = (platform.system()).lower()
+    if operating_sys == "windows":
         return win
-    return lin 
+    elif operating_sys == "linux":
+        return lin 
 
 def filepath_constructor(filepath,filename):
     filepath = os.path.join(filepath,filename)
@@ -43,7 +48,16 @@ def filepath_constructor(filepath,filename):
 
 
 def input_checker(display_message,filepath):
+    function_boundary(title='INPUT CHECK')
+
+    # displaying the available files in a last in first out order
+    status_message(message=f"Filepath : {filepath}",color='blue')
+    files_list = [f for f in Path(filepath).iterdir() if f.is_file()]
+    recently_added = sorted( files_list, key=os.path.getctime,reverse=True)
+    recently_added = [file.name for file in recently_added]
+    print(f"Recently Added  Files : {recently_added}")
     available_files = sorted((os.listdir(filepath)))
+
     while True:
         try:
             file = input(display_message)
@@ -60,12 +74,11 @@ def input_checker(display_message,filepath):
 
 
 # need Seperate function for file selection
-def pdf_pattern_finder(filepath,pattern):
+def pdf_pattern_finder(message,filepath,pattern):
+    function_boundary(title="PDF PATTERN FINDER")
     pattern_list = []
-    filename = None
-    status_message(message=f"Filepath : {filepath}",color='blue')
     try:
-        filename = input_checker(display_message="Enter the filename with extension : ",filepath=filepath)
+        filename = input_checker(display_message=f"{message} : ",filepath=filepath)
         if filename:
             file_path = os.path.join(filepath, f"{filename}")
             success_status_msg("File Accessed.")
@@ -89,6 +102,7 @@ def pdf_pattern_finder(filepath,pattern):
                             pattern_list.append(id)
                     elif len(result) == 0:
                         status_message(message=f"No patterns found on page {page_count}.",color='red')
+            success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
 
     except Exception as e:
         print(e)

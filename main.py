@@ -2,6 +2,7 @@ from report_generator import report_driver
 from scripts.postal_tracking import postal_track
 from helpers.terminal_scripts import clear_terminal,recompile
 from helpers.sql_scripts import order_table_updation
+from helpers.file_ops import function_boundary
 # Menu
 feature_menu = {
     0:("Clear Terminal",clear_terminal),
@@ -21,7 +22,7 @@ space = "-"*15
 def main():
     while True:
         # Prompting the user for an option
-        print(f"{space}MENU{space}")
+        function_boundary(title="MENU")
         for option in menu:
             print(f"{option}. {menu[option][0]}")
         print(f"{space}-----{space}")
