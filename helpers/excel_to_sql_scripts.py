@@ -6,34 +6,26 @@ def datatype_finder(column):
     # dive in to the non header rows of an excel file
     # if data is string type,
         # read all the datas in that row and find the maximum length
-    
-    potential_numbers = ["price","taxes", "discount", "amount","total","fees","quantity",
-     "subtotal", "number"]
     types = {
         # There should be atlest 2 strings on the tuple
-        
         ("phone","mobile"): "VARCHAR(15)",
         ("id","status"): "VARCHAR(20)",
         ("is","will","accepts"): "BOOLEAN",
         ("date","at"): "TIMESTAMP",
-        ("quantity", "subtotal", "number"): "NUMERIC(10,2)",
+        ("quantity", "subtotal", "number"): "INTEGER",
         ("price","taxes", "discount", "amount","total","fees"): "NUMERIC(10,2)",
-        ("city","state","address"): "VARCHAR(100)",
+        ("city","state","address","street"): "VARCHAR(100)",
         ("zip","postal"): "CHAR(6)"
     }
     # Check if the column name contains any of the key elements
-    column = column.lower()
-    col_last_word = column.split("_")[-1]
-    col_first_word = column.split("_")[0]
-    for keys, value in types.items():
-        for key in keys:
-            #print(column.split("_"))
-            if (key == str(col_last_word)):
-                return value
-                break
-    # Default type if no match is found
-    return "VARCHAR(50)"
-    #return "---------"
+    # Make sure the last word of the column is a string.
+    col_last_word = str(column.split("_")[-1].lower())
+    for key_tuple in types:
+        if (col_last_word in key_tuple):
+            return (types.get(key_tuple))
+        else:
+            return "VARCHAR(50)"
+            #return "---------"
 
 def column_underscore(column):
     if "-" in column:
@@ -61,13 +53,12 @@ def sql_columns_constructor(filepath):
 
 
 
-def create_table(sql_table_name,file_path):
+def create_table_from_excel(sql_table_name,file_path):
     try:
         # open the file 
         excel = pd.read_excel(file_path,header=0)
         excel_first_row = excel.iloc[0]
         excel_header = excel.columns
-        print(excel_header)
         if not excel.empty:
             success_status_msg("Filepath read successfully.")
         else:

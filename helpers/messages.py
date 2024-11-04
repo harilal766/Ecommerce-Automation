@@ -1,6 +1,7 @@
 from loguru import logger
 from colorama import Fore,Style,init
 import shutil
+import re
 
 init()
 terminal_width = shutil.get_terminal_size()
@@ -43,5 +44,7 @@ def status_message(message,color):
         foregreen = Fore.GREEN
     elif color.lower() == "blue":
         foregreen = Fore.BLUE
+    if message[-1] == r'\w':
+        message = message +'.'
     print(f"{foregreen}{message}{Style.RESET_ALL}")
         
