@@ -97,11 +97,10 @@ def report_driver(report_type):
             #pdf_path="/home/hari/Desktop/Automation/Test documents/post shipping labes",
             pdf_path=dir_switch(win=win_shopify_invoice,lin=lin_shopify_invoice),
             pattern=post_order_id_pattern,
-            fields=""" Name, Financial_Status, Paid_at, Fulfillment_Status, Fulfilled_at, Subtotal, Shipping, Total, Lineitem_quantity, Lineitem_name,
-                    Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name,""",
+            fields=""" Name, Financial_Status, Paid_at, Fulfillment_Status, Fulfilled_at, Subtotal, Shipping, Total, Lineitem_quantity, Lineitem_name,Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name""",
             database="Shopify",table="sh_orders",id="name",
             order_by_clause="lineitem_name ASC, lineitem_price ASC",
             sql_filename="post shipment report query",
-            input_filepath=dir_switch(win=win_shopify_invoice,lin=lin_shopify_invoice),
+            input_filepath=dir_switch(win=win_shopify_order_excel_file,lin=lin_shopify_order_excel_file),
             out_excel_path=dir_switch(win=win_shopify_order_excel_file,lin=lin_shopify_order_excel_file)
         )
