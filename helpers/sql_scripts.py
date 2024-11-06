@@ -2,7 +2,7 @@
 import pandas as pd
 import os
 from .messages import better_error_handling,success_status_msg,status_message
-from .file_ops import input_handling,input_checker
+from .file_ops import *
 import calendar,time
 from datetime import datetime
 import  calendar 
@@ -11,6 +11,7 @@ from sqlalchemy import create_engine
 
 
 def db_connection(dbname,db_system):
+    function_boundary(title="DB CONNECTION")
     try:
         if db_system == "psql":
 
@@ -116,19 +117,20 @@ def order_table_updation():
 
     
 def sql_to_excel(sql_cursor,query_result,out_excel_path):
+    function_boundary(title="SQL 2 EXCEL CONVERSION")
     try:  
-        print("Excel conversion Started.")
+        success_status_msg("Excel conversion Started.")
         # excel conversion
         # replacing underscores with empty spaces in columns
         column_list = [desc[0].replace("_"," ") for desc in sql_cursor.description]
         excel_sheet = pd.DataFrame(query_result,columns=column_list)
         # if the excel file already exists, a sheet should be created inside the file and the output should be stored there.
-        out_excel_file = input_handling("Enter the name for excel file : ")
-        if out_excel_file:
+        out_excel_file = input("Enter the name of the output excel file : ")
+        if len(out_excel_file) > 0:
             # re initialization of the file path after getting the filename
             out_directory = out_excel_path
             out_excel_path = os.path.join(out_directory,out_excel_file+".xlsx")
-            excel_sheet.to_excel(out_excel_path,index="Flase",engine='openpyxl')
+            excel_sheet.to_excel(out_excel_path,index="False",engine='openpyxl')
             if out_excel_file in os.listdir(out_directory):
                 success_status_msg(f"Excel output file : {out_directory} created.")
         else:
@@ -173,3 +175,4 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
         better_error_handling(e)
     finally:
         connection.close()
+        status_message(message="Connection closed.",color="green")

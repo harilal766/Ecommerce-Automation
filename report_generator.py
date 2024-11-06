@@ -5,11 +5,15 @@ from helpers.regex_patterns import *
 """
     make the query for filtering orders form sql table bsaed on seperate cod and non cod pdf files
 """
-def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
+
+
+
+def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
                     sql_filename,
                     input_filepath,out_excel_path):
+    function_boundary(title="FILTERING QUERY")
     order_ids = None
-    order_id_list = pdf_pattern_finder(filepath=pdf_path,pattern=pattern)
+    order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension",filepath=pdf_path,pattern=pattern)
     #last_column = order_id_list[-1]
     try:
         order_ids = ""; order_id_count = 0
@@ -54,7 +58,7 @@ def shipment_report(pdf_path,pattern,fields,database,table,id,order_by_clause,
             # converting the sql result into excel file
             sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
         else:
-            better_error_handling("Connection Failed")
+            status_message(message="Connection Failed",color="red")
         
     except Exception as e:
         better_error_handling(e)
@@ -77,27 +81,26 @@ def table_querying(operation):
 def report_driver(report_type): 
     report_type = report_type.lower()
     if "amazon" in report_type:
-        shipment_report(
+        filter_query(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/amazon shipping label",
-            pdf_path=r"D:\5.Amazon\Mathew global\INvoice",
+            pdf_path=dir_switch(win=win_amazon_invoice,lin=lin_amazon_invoice),
             pattern=amazon_order_id_pattern,
             fields="""amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax""",
             database="Amazon",table="Orders", id = "amazon_order_id",
             order_by_clause="product_name asc,quantity asc",
             sql_filename="amzn_shipment_query",
-            input_filepath=r"D:\5.Amazon\Mathew global\Scheduled report",
-            out_excel_path=r"D:\5.Amazon\Mathew global\Scheduled report"
+            input_filepath=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report),
+            out_excel_path=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
         )
     elif "shopify" in report_type:
-        shipment_report(
+        filter_query(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/post shipping labes",
-            pdf_path=r"D:\6.SPEED POST\1.Shipping labels",
+            pdf_path=dir_switch(win=win_shopify_invoice,lin=lin_shopify_invoice),
             pattern=post_order_id_pattern,
-            fields=""" Name, Financial_Status, Paid_at, Fulfillment_Status, Fulfilled_at, Subtotal, Shipping, Total, Lineitem_quantity, Lineitem_name,
-                    Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name,""",
+            fields=""" Name, Financial_Status, Paid_at, Fulfillment_Status, Fulfilled_at, Subtotal, Shipping, Total, Lineitem_quantity, Lineitem_name,Lineitem_price, Lineitem_compare_at_price, Shipping_Province_Name""",
             database="Shopify",table="sh_orders",id="name",
             order_by_clause="lineitem_name ASC, lineitem_price ASC",
             sql_filename="post shipment report query",
-            input_filepath=r"D:\3.Shopify\Date wise order list",
-            out_excel_path=r"D:\3.Shopify\Date wise order list"
+            input_filepath=dir_switch(win=win_shopify_order_excel_file,lin=lin_shopify_order_excel_file),
+            out_excel_path=dir_switch(win=win_shopify_order_excel_file,lin=lin_shopify_order_excel_file)
         )

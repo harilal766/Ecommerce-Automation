@@ -65,9 +65,9 @@ for i in list:
 
 
 
-sql_table_creation_or_updation(dbname="Shopify",tablename="cod_oorja",replace_or_append="replace",input_file_dir=dir_switch(win=win_shopify_cod,lin=lin_shopify_cod))
+#sql_table_creation_or_updation(dbname="Shopify",tablename="cod_oorja",replace_or_append="replace",input_file_dir=dir_switch(win=win_shopify_cod,lin=lin_shopify_cod))
 
 
-#pdf_pattern_finder(filepath=win_amazon_invoice,pattern=amazon_order_id_pattern)
 
 
+input_checker(display_message="--------",filepath=win_amazon_invoice)
