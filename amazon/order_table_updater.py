@@ -71,11 +71,6 @@ class Orders(SPAPIBase):
     """
     def getOrders(self,created_after,order_status):
         endpoint = "orders/v0/orders"
-        access_token = get_access_token()
-        headers = {
-            "x-amz-access-token": access_token,
-            "Content-Type": "application/json",
-        }
         params = {
             "MarketplaceIds": self.marketplace_id,  # Use your Marketplace ID
             "CreatedAfter": created_after,
