@@ -27,7 +27,6 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
 # SP-API endpoint
 BASE_URL = "https://sellingpartnerapi-eu.amazon.com/"
-ORDER_ENDPOINT = "orders/v0/orders"
 #ORDER_ENDPOINT = "https://sandbox.sellingpartnerapi-eu.amazon.com/orders/v0/orders"
 
 
@@ -50,38 +49,39 @@ def get_access_token():
 
 
 class SPAPIBase:
-    def __init__(self,access_token=get_access_token(),base_url="https://sellingpartnerapi-eu.amazon.com/",marketplace_id="A21TJRUUN4KGV"):
+    def __init__(self,access_token=get_access_token(),
+                 base_url="https://sellingpartnerapi-eu.amazon.com/",
+                 marketplace_id="A21TJRUUN4KGV"):
         self.access_token=access_token
         self.base_url=base_url
         self.marketplace_id=marketplace_id
+        self.headers = {
+            "x-amz-access-token": self.access_token,
+            "Content-Type": "application/json",
+        }
 
-class Orders:
-    def getOrders(created_after,order_status):
-        """ 
+class Orders(SPAPIBase):
+    """ 
         Order api function parameters (optional)
         link : https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#getorders
 
-        getOrders, getOrder
-getOrderBuyerInfo
-        getOrderAddress
-        getOrderItems
-        getOrderItemsBuyerInfo
-        updateShipmentStatus
-        getOrderRegulatedInfo
-        updateVerificationStatus
-        confirmShipment
+        getOrders, getOrder, getOrderBuyerInfo, getOrderAddress, getOrderItems
+        getOrderItemsBuyerInfo, updateShipmentStatus, getOrderRegulatedInfo
+        updateVerificationStatus, confirmShipment
     """
+    def getOrders(self,created_after,order_status):
+        endpoint = "orders/v0/orders"
         access_token = get_access_token()
         headers = {
             "x-amz-access-token": access_token,
             "Content-Type": "application/json",
         }
         params = {
-            "MarketplaceIds": "A21TJRUUN4KGV",  # Use your Marketplace ID
+            "MarketplaceIds": self.marketplace_id,  # Use your Marketplace ID
             "CreatedAfter": created_after,
             "OrderStatuses":order_status,
         }
-        response = requests.get(BASE_URL+ORDER_ENDPOINT, headers=headers, params=params)
+        response = requests.get(self.base_url+endpoint, headers=self.headers, params=params)
         response.raise_for_status()
         return response.json()
     
@@ -94,7 +94,8 @@ def driver():
         created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
             # CHOICES : PendingAvailability, Pending, PartiallyShipped, Shipped, InvoiceUnconfirmed 
         # Step 3: Get order data
-        orders = Orders.getOrders(created_after,order_status="Unshipped")
+        orders_instance=Orders()
+        orders = orders_instance.getOrders(created_after,order_status="Unshipped")
         data = json.dumps(orders,indent=4)
         #print(data)
         print(f"First key : {next(iter(orders))}")
