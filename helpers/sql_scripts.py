@@ -8,13 +8,12 @@ from datetime import datetime
 import  calendar 
 import pg8000,sqlite3
 from sqlalchemy import create_engine
-
+import pandas as pd
 
 def db_connection(dbname,db_system):
     function_boundary(title="DB CONNECTION")
     try:
-        if db_system == "psql":
-
+        if db_system == "postgres":
             connection = pg8000.connect(
                 user='postgres',
                 password='1234',
@@ -22,7 +21,7 @@ def db_connection(dbname,db_system):
                 port=5432,            
                 database=dbname
                 )
-        elif db_system == "sqlite3":
+        elif db_system == "sqlite":
             connection = sqlite3.connect(f"{dbname}.db")
     except Exception as e:
         better_error_handling(e)
