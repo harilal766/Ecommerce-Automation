@@ -48,12 +48,30 @@ def get_access_token():
     return response.json().get("access_token")
 
 
+
+class SPAPIBase:
+    def __init__(self,access_token=get_access_token(),base_url="https://sellingpartnerapi-eu.amazon.com/",marketplace_id="A21TJRUUN4KGV"):
+        self.access_token=access_token
+        self.base_url=base_url
+        self.marketplace_id=marketplace_id
+
 class Orders:
-    def get_order_data(access_token, created_after,order_status):
+    def getOrders(created_after,order_status):
         """ 
         Order api function parameters (optional)
         link : https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#getorders
-        """
+
+        getOrders, getOrder
+getOrderBuyerInfo
+        getOrderAddress
+        getOrderItems
+        getOrderItemsBuyerInfo
+        updateShipmentStatus
+        getOrderRegulatedInfo
+        updateVerificationStatus
+        confirmShipment
+    """
+        access_token = get_access_token()
         headers = {
             "x-amz-access-token": access_token,
             "Content-Type": "application/json",
@@ -67,36 +85,6 @@ class Orders:
         response.raise_for_status()
         return response.json()
     
-    """
-        getOrders
-        getOrder
-        getOrderBuyerInfo
-        getOrderAddress
-        getOrderItems
-        getOrderItemsBuyerInfo
-        updateShipmentStatus
-        getOrderRegulatedInfo
-        updateVerificationStatus
-        confirmShipment
-    """
-
-
-class Reports:
-    def get_order_report(access_token):
-        ORDER_REPORT_ENDPOINT = "reports/2021-06-30/reports"
-        "POST https://sellingpartnerapi-na.amazon.com/"
-        headers = {
-            "x-amz-access-token": access_token,
-            "Content-Type": "application/json",
-        }
-        params = {
-            "reportType": "GET_MERCHANT_LISTINGS_ALL_DATA",
-            "dataStartTime": "2019-12-10T20:11:24.000Z",
-            "marketplaceIds": ["A21TJRUUN4KGV"]
-        }
-        requests.get(BASE_URL+ORDER_REPORT_ENDPOINT,headers=headers,params=params)
-
-
 
 def driver():
     try:
@@ -106,7 +94,7 @@ def driver():
         created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
             # CHOICES : PendingAvailability, Pending, PartiallyShipped, Shipped, InvoiceUnconfirmed 
         # Step 3: Get order data
-        orders = Orders.get_order_data(access_token, created_after,order_status="Unshipped")
+        orders = Orders.getOrders(created_after,order_status="Unshipped")
         data = json.dumps(orders,indent=4)
         #print(data)
         print(f"First key : {next(iter(orders))}")
