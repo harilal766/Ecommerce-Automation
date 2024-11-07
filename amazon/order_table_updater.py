@@ -1,11 +1,15 @@
 import requests
 from datetime import datetime, timedelta, timezone
 import json
-import os
-from dotenv import load_dotenv
+import os,sys
+
 
 
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+from dotenv import load_dotenv
+
+
+
 
 load_dotenv()
 
@@ -22,8 +26,10 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 #print(Oauth_authorization_URL)
 
 # SP-API endpoint
-ORDER_ENDPOINT = "https://sellingpartnerapi-eu.amazon.com/orders/v0/orders"
+BASE_URL = "https://sellingpartnerapi-eu.amazon.com/"
+ORDER_ENDPOINT = "orders/v0/orders"
 #ORDER_ENDPOINT = "https://sandbox.sellingpartnerapi-eu.amazon.com/orders/v0/orders"
+
 
 def get_access_token():
     """Obtain a new access token using the refresh token."""
@@ -41,33 +47,71 @@ def get_access_token():
     response.raise_for_status()
     return response.json().get("access_token")
 
-def get_order_data(access_token, created_after):
-    """Fetch orders created after a specific date."""
-    headers = {
-        "x-amz-access-token": access_token,
-        "Content-Type": "application/json",
-    }
-    params = {
-        "MarketplaceIds": "A21TJRUUN4KGV",  # Use your Marketplace ID
-        "CreatedAfter": created_after,
-    }
 
-    response = requests.get(ORDER_ENDPOINT, headers=headers, params=params)
-    response.raise_for_status()
-    return response.json()
+class Orders:
+    def get_order_data(access_token, created_after,order_status):
+        """ 
+        Order api function parameters (optional)
+        link : https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#getorders
+        """
+        headers = {
+            "x-amz-access-token": access_token,
+            "Content-Type": "application/json",
+        }
+        params = {
+            "MarketplaceIds": "A21TJRUUN4KGV",  # Use your Marketplace ID
+            "CreatedAfter": created_after,
+            "OrderStatuses":order_status,
+        }
+        response = requests.get(BASE_URL+ORDER_ENDPOINT, headers=headers, params=params)
+        response.raise_for_status()
+        return response.json()
+    
+    """
+        getOrders
+        getOrder
+        getOrderBuyerInfo
+        getOrderAddress
+        getOrderItems
+        getOrderItemsBuyerInfo
+        updateShipmentStatus
+        getOrderRegulatedInfo
+        updateVerificationStatus
+        confirmShipment
+    """
 
-def main():
+
+class Reports:
+    def get_order_report(access_token):
+        ORDER_REPORT_ENDPOINT = "reports/2021-06-30/reports"
+        "POST https://sellingpartnerapi-na.amazon.com/"
+        headers = {
+            "x-amz-access-token": access_token,
+            "Content-Type": "application/json",
+        }
+        params = {
+            "reportType": "GET_MERCHANT_LISTINGS_ALL_DATA",
+            "dataStartTime": "2019-12-10T20:11:24.000Z",
+            "marketplaceIds": ["A21TJRUUN4KGV"]
+        }
+        requests.get(BASE_URL+ORDER_REPORT_ENDPOINT,headers=headers,params=params)
+
+
+
+def driver():
     try:
         # Step 1: Get Access Token
         access_token = get_access_token()
-        #access_token = ACCESS_TOKEN
         # Step 2: Specify the date to filter orders (e.g., orders from the past 7 days)
         created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
-
+            # CHOICES : PendingAvailability, Pending, PartiallyShipped, Shipped, InvoiceUnconfirmed 
         # Step 3: Get order data
-        orders = get_order_data(access_token, created_after)
+        orders = Orders.get_order_data(access_token, created_after,order_status="Unshipped")
         data = json.dumps(orders,indent=4)
-        print("Order Data:", data)
+        #print(data)
+        print(f"First key : {next(iter(orders))}")
+        print(orders)
+
 
     except requests.exceptions.HTTPError as err:
         print("HTTP Error:", err)
@@ -75,7 +119,7 @@ def main():
         print("Error:", e)
 
 if __name__ == "__main__":
-    main()
+    driver()
 
 
 
