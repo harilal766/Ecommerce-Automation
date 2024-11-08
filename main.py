@@ -3,12 +3,16 @@ from scripts.postal_tracking import postal_track
 from helpers.terminal_scripts import clear_terminal,recompile
 from helpers.sql_scripts import order_table_updation
 from helpers.file_ops import function_boundary
+from datetime import datetime, timedelta, timezone
+from api_driver import amazon_api_driver
 # Menu
 feature_menu = {
     0:("Clear Terminal",clear_terminal),
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
     4:("Table updation",order_table_updation),
+    5:("Orders API",amazon_api_driver),
+    6:("Order API",amazon_api_driver)
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
@@ -39,7 +43,8 @@ def main():
         if (selection in menu):
             print(f"You have selected : {menu[selection][0]}")
             argument = menu[selection][0].lower()
-            if "report" in argument :
+            # selectin api and report functions
+            if "report" in argument or "api" in argument:
                 menu[selection][1](argument)
             else:
                 menu[selection][1]()

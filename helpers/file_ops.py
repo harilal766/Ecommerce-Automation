@@ -46,7 +46,7 @@ def filepath_constructor(filepath,filename):
 
 
 
-
+# change to file_input_checker
 def input_checker(display_message,filepath):
     function_boundary(title='INPUT CHECK')
 
@@ -70,6 +70,22 @@ def input_checker(display_message,filepath):
             status_message(message="Keyboard Interruption, Try again.",color='red')
     return file
 
+
+def text_input_checker(display_message,input_pattern):
+    status_message(message=f"Input pattern : {input_pattern}",color='blue')
+    input_text = input(display_message)
+    while True:
+        try:
+            if not re.match(input_text,input_pattern):
+                status_message(message="Invalid input found.",color="red")
+                break
+            else:
+                success_status_msg("Amazon order id verified...")
+                
+        except KeyboardInterrupt:
+            status_message(message="Keyboard Interruption, Try again.",color='red')
+        
+        
 
 
 

@@ -29,6 +29,8 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 BASE_URL = "https://sellingpartnerapi-eu.amazon.com/"
 #ORDER_ENDPOINT = "https://sandbox.sellingpartnerapi-eu.amazon.com/orders/v0/orders"
 
+def region_finder():
+    pass
 
 def get_access_token():
     """Obtain a new access token using the refresh token."""
@@ -42,23 +44,33 @@ def get_access_token():
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
     }
-    response = requests.post(url, headers=headers, data=data)
-    response.raise_for_status()
-    return response.json().get("access_token")
+    try:
+        response = requests.post(url, headers=headers, data=data)
+        response.raise_for_status()
+        return response.json().get("access_token")
+    except requests.exceptions.RequestException as e:
+        print(f"Access Token Error : {e}")
+        return None
 
 
 
 class SPAPIBase:
-    def __init__(self,access_token=get_access_token(),
-                 base_url="https://sellingpartnerapi-eu.amazon.com/",
-                 marketplace_id="A21TJRUUN4KGV"):
-        self.access_token=access_token
-        self.base_url=base_url
-        self.marketplace_id=marketplace_id
+    def __init__(self,base_url="https://sellingpartnerapi-eu.amazon.com",marketplace_id="A21TJRUUN4KGV"):
+        self.access_token = get_access_token()
+        self.base_url = base_url
+        self.marketplace_id = marketplace_id
         self.headers = {
             "x-amz-access-token": self.access_token,
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
+            }
+
+        self.common_params = {
+            "MarketplaceIds": self.marketplace_id,
         }
+        if self.access_token:
+            print(f"Access Token Successfull : \n{self.access_token}")
+        else:
+            print("Access Token did not obtained.")
 
 class Orders(SPAPIBase):
     """ 
@@ -70,40 +82,59 @@ class Orders(SPAPIBase):
         updateVerificationStatus, confirmShipment
     """
     def getOrders(self,created_after,order_status):
-        endpoint = "orders/v0/orders"
         params = {
-            "MarketplaceIds": self.marketplace_id,  # Use your Marketplace ID
+            "MarketplaceIds": self.marketplace_id,
             "CreatedAfter": created_after,
             "OrderStatuses":order_status,
+        }
+        endpoint = "/orders/v0/orders"
+        
+        response = requests.get(self.base_url+endpoint, headers=self.headers, params=params)
+        response.raise_for_status()
+        return response.json()
+
+    def getOrder(self,orderId):
+        """
+        Rate (requests per second)	Burst
+                            0.5	    30
+        """
+        endpoint = f"/orders/v0/orders/{orderId}"
+        params = {
+            "MarketplaceIds": self.marketplace_id,
+            "orderId" : orderId
         }
         response = requests.get(self.base_url+endpoint, headers=self.headers, params=params)
         response.raise_for_status()
         return response.json()
+        
+
     
 
-def driver():
-    try:
-        # Step 1: Get Access Token
-        access_token = get_access_token()
-        # Step 2: Specify the date to filter orders (e.g., orders from the past 7 days)
-        created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
-            # CHOICES : PendingAvailability, Pending, PartiallyShipped, Shipped, InvoiceUnconfirmed 
-        # Step 3: Get order data
-        orders_instance=Orders()
-        orders = orders_instance.getOrders(created_after,order_status="Unshipped")
-        data = json.dumps(orders,indent=4)
-        #print(data)
-        print(f"First key : {next(iter(orders))}")
-        print(orders)
+class Reports(SPAPIBase):
+    """
+        https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference
 
+        getReports, createReport, getReport, cancelReport
+        getReportSchedules, createReportSchedule, getReportSchedule, cancelReportSchedule, getReportDocument
+    """
+    def getReports(self):
+        endpoint = "/reports/2021-06-30/reports"
+        types = ["GET_FLAT_FILE_ORDERS_DATA_","GET_FLAT_FILE_ACTIONABLE_ORDER_DATA_SHIPPING"]
+        start_time = "2024-11-01T00:00:00Z"
+        end_time = "2024-11-02T00:00:00Z"
+        rep_type = str(types[0])
+        params = {
+            "reportType" : rep_type,
+            "MarketplaceIds": [self.marketplace_id],
+            "dataStartTime" : start_time,
+            "dataEndTime" : end_time
+        }
+        response = requests.get(self.base_url+endpoint,headers=self.headers,params=params)
+        response.raise_for_status()
+        report_id = response.json().get("reportId")
+        return report_id
+    
 
-    except requests.exceptions.HTTPError as err:
-        print("HTTP Error:", err)
-    except Exception as e:
-        print("Error:", e)
-
-if __name__ == "__main__":
-    driver()
 
 
 
