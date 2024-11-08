@@ -73,14 +73,14 @@ def input_checker(display_message,filepath):
 
 def text_input_checker(display_message,input_pattern):
     status_message(message=f"Input pattern : {input_pattern}",color='blue')
-    input_text = input(display_message)
     while True:
         try:
-            if not re.match(input_text,input_pattern):
+            input_text = input(display_message)
+            if not re.match(input_pattern,input_text):
                 status_message(message="Invalid input found.",color="red")
-                break
             else:
                 success_status_msg("Amazon order id verified...")
+                return input_text
                 
         except KeyboardInterrupt:
             status_message(message="Keyboard Interruption, Try again.",color='red')

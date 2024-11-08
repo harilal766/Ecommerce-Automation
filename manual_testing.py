@@ -70,4 +70,7 @@ for i in list:
 
 
 
-input_checker(display_message="--------",filepath=win_amazon_invoice)
+from sp_api.api import Reports
+from sp_api.base import Marketplaces,ReportType
+
+

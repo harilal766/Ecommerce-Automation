@@ -2,6 +2,7 @@ import requests
 from datetime import datetime, timedelta, timezone
 import json
 import os,sys
+from helpers.messages import status_message
 
 
 
@@ -14,7 +15,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Replace these with your credentials
-ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
@@ -25,8 +25,6 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 #Oauth_authorization_URL = f"https://sellercentral.amazon.com/apps/authorize/consent?selling_partner_id={SELLER_ID}&developer_id={DEVELOPER_ID}&client_id={CLIENT_ID}"
 #print(Oauth_authorization_URL)
 
-# SP-API endpoint
-BASE_URL = "https://sellingpartnerapi-eu.amazon.com/"
 #ORDER_ENDPOINT = "https://sandbox.sellingpartnerapi-eu.amazon.com/orders/v0/orders"
 
 def region_finder():
@@ -35,7 +33,7 @@ def region_finder():
 def get_access_token():
     """Obtain a new access token using the refresh token."""
     url = "https://api.amazon.com/auth/o2/token"
-    headers = {
+    headers = { 
         "Content-Type": "application/x-www-form-urlencoded",
     }
     data = {
@@ -47,7 +45,13 @@ def get_access_token():
     try:
         response = requests.post(url, headers=headers, data=data)
         response.raise_for_status()
-        return response.json().get("access_token")
+        access_token = response.json().get("access_token")
+        if response.status_code == 200:
+            status_message(message=f"Access Token Successfull : \n{access_token}",color='green')
+        else:
+            status_message(message=f"Access code {response.status_code}",color='red')
+        return access_token
+    
     except requests.exceptions.RequestException as e:
         print(f"Access Token Error : {e}")
         return None
@@ -63,14 +67,10 @@ class SPAPIBase:
             "x-amz-access-token": self.access_token,
             "Content-Type": "application/json"
             }
-
-        self.common_params = {
+        # Common parameters, individual ones will be added from the respective functions
+        self.params = {
             "MarketplaceIds": self.marketplace_id,
         }
-        if self.access_token:
-            print(f"Access Token Successfull : \n{self.access_token}")
-        else:
-            print("Access Token did not obtained.")
 
 class Orders(SPAPIBase):
     """ 
@@ -82,14 +82,13 @@ class Orders(SPAPIBase):
         updateVerificationStatus, confirmShipment
     """
     def getOrders(self,created_after,order_status):
-        params = {
-            "MarketplaceIds": self.marketplace_id,
+        self.params.update({
             "CreatedAfter": created_after,
             "OrderStatuses":order_status,
-        }
-        endpoint = "/orders/v0/orders"
+        })
+        endpoint = "/orders/v0/orders" 
         
-        response = requests.get(self.base_url+endpoint, headers=self.headers, params=params)
+        response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
         response.raise_for_status()
         return response.json()
 
@@ -99,11 +98,10 @@ class Orders(SPAPIBase):
                             0.5	    30
         """
         endpoint = f"/orders/v0/orders/{orderId}"
-        params = {
-            "MarketplaceIds": self.marketplace_id,
+        self.params.update ({
             "orderId" : orderId
-        }
-        response = requests.get(self.base_url+endpoint, headers=self.headers, params=params)
+        })
+        response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
         response.raise_for_status()
         return response.json()
         
@@ -123,13 +121,17 @@ class Reports(SPAPIBase):
         start_time = "2024-11-01T00:00:00Z"
         end_time = "2024-11-02T00:00:00Z"
         rep_type = str(types[0])
-        params = {
+        headers = {
+            "Authorization": f"Bearer {self.access_token}",  # Use the access token here
+            "Content-Type": "application/json",         # Adjust as per Amazon API requirements
+        }
+
+        self.params.update ({
             "reportType" : rep_type,
-            "MarketplaceIds": [self.marketplace_id],
             "dataStartTime" : start_time,
             "dataEndTime" : end_time
-        }
-        response = requests.get(self.base_url+endpoint,headers=self.headers,params=params)
+        })
+        response = requests.get(self.base_url+endpoint,headers=headers)
         response.raise_for_status()
         report_id = response.json().get("reportId")
         return report_id

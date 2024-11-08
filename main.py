@@ -12,7 +12,8 @@ feature_menu = {
     2:("Shopify shipment report",report_driver),
     4:("Table updation",order_table_updation),
     5:("Orders API",amazon_api_driver),
-    6:("Order API",amazon_api_driver)
+    6:("Order API",amazon_api_driver),
+    7:("Amazon Report API",amazon_api_driver)
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
