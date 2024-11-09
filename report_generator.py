@@ -13,7 +13,7 @@ def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
                     input_filepath,out_excel_path):
     function_boundary(title="FILTERING QUERY")
     order_ids = None
-    order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension",filepath=pdf_path,pattern=pattern)
+    order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension : ",filepath=pdf_path,pattern=pattern)
     #last_column = order_id_list[-1]
     try:
         order_ids = ""; order_id_count = 0

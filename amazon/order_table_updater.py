@@ -104,7 +104,19 @@ class Orders(SPAPIBase):
         response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
         response.raise_for_status()
         return response.json()
-        
+    
+    def getOrderBuyerInfo(self,orderId):
+        """
+        Rate (requests per second)	Burst
+                            0.5	    30
+        """
+        endpoint = f"/orders/v0/orders/{orderId}/buyerInfo"
+        self.params.update ({
+            "orderId" : orderId
+        })
+        response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
+        response.raise_for_status()
+        return response.json()
 
     
 
@@ -119,7 +131,7 @@ class Reports(SPAPIBase):
         endpoint = "/reports/2021-06-30/reports"
         types = ["GET_FLAT_FILE_ORDERS_DATA_","GET_FLAT_FILE_ACTIONABLE_ORDER_DATA_SHIPPING"]
         start_time = "2024-11-01T00:00:00Z"
-        end_time = "2024-11-02T00:00:00Z"
+        end_time = "2024-11-02T00:23:59Z"
         rep_type = str(types[0])
         headers = {
             "Authorization": f"Bearer {self.access_token}",  # Use the access token here

@@ -9,19 +9,23 @@ created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
         
 def amazon_api_driver(option):
     try:
-        if "orders" in option:
+        if 'amazon' in option:
             instance = Orders()
-            response = instance.getOrders(created_after,order_status="Unshipped")
-        elif not "orders" in option and "order" in option:
-            instance = Orders()
-            response = instance.getOrder(orderId=
-                                             text_input_checker(display_message="Enter the order id : ",
-                                                                input_pattern=amazon_order_id_pattern))
-        elif "Amazon report" in option:
-            instance = Reports()
-            response = instance.getReports()
-        data = json.dumps(response,indent=4)
-        print(response)
+            if "orders" in option:
+                response = instance.getOrders(created_after,order_status="Unshipped")
+            elif not "orders" in option and "order" in option:
+                response = instance.getOrder(orderId=
+                                                text_input_checker(display_message="Enter the order id : ",
+                                                                    input_pattern=amazon_order_id_pattern))
+            elif "buyer info" in option:
+                response = instance.getOrderBuyerInfo(orderId=
+                                                      text_input_checker(display_message="Enter the order id : ",
+                                                                    input_pattern=amazon_order_id_pattern))
+            elif "report" in option:
+                response = instance.getReports()
+
+            data = json.dumps(response,indent=4)
+            print(data)
 
 
 
