@@ -43,11 +43,24 @@ def get_access_token():
         "client_secret": CLIENT_SECRET,
     }
     try:
+        # find the time in which last request was made
+        # if the date is same and the difference is  >= 1hr with current time,
+            # request again.
+
+        request_times = []
+        # if the list is empty add a number to avoid errors, this will make its legth 1.
+        if len(request_times) == 0:
+            request_times.append(1)
+        current_time = datetime.now()
+        diference_seconds = ''
+        status_message(message=f"last req : {request_times[-1]} , current time : {current_time}, difference : ",color='blue')
         response = requests.post(url, headers=headers, data=data)
+        last_request_time = datetime.now()
+        request_times.append(last_request_time)
         response.raise_for_status()
         access_token = response.json().get("access_token")
         if response.status_code == 200:
-            status_message(message=f"Access Token Successfull : \n{access_token}",color='green')
+            status_message(message=f"Access Token Successfull.",color='green')
         else:
             status_message(message=f"Access code {response.status_code}",color='red')
         return access_token
@@ -132,8 +145,9 @@ class Reports(SPAPIBase):
         types = ["GET_FLAT_FILE_ORDERS_DATA_","GET_FLAT_FILE_ACTIONABLE_ORDER_DATA_SHIPPING"]
         start_time = "2024-11-01T00:00:00Z"
         end_time = "2024-11-02T00:23:59Z"
-        rep_type = str(types[0])
+        rep_type = str(types[1])
         headers = {
+            "x-amzn-RateLimit-Limit": 0.0222,
             "Authorization": f"Bearer {self.access_token}",  # Use the access token here
             "Content-Type": "application/json",         # Adjust as per Amazon API requirements
         }

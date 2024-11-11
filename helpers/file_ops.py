@@ -17,7 +17,7 @@ lin_shopify_invoice = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/p
 win_shopify_order_excel_file = r"D:\3.Shopify\Date wise order list"
 lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
 
-win_shopify_cod = r"D:\6.SPEED POST\Return Report COD"
+win_shopify_cod = r"D:\6.SPEED POST\Return Report COD tallying"
 lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
     #AMAZON
 win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"

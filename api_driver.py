@@ -21,9 +21,9 @@ def amazon_api_driver(option):
                 response = instance.getOrderBuyerInfo(orderId=
                                                       text_input_checker(display_message="Enter the order id : ",
                                                                     input_pattern=amazon_order_id_pattern))
-            elif "report" in option:
-                response = instance.getReports()
-
+        elif "report api" in option:
+            instance = Reports()
+            response = instance.getReports()
             data = json.dumps(response,indent=4)
             print(data)
 
