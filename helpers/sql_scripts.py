@@ -160,8 +160,10 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
             df = pd.read_csv(filepath,delimiter='\t',on_bad_lines='skip')
         elif extension == "csv":
             df = pd.read_csv(filepath,delimiter=',',on_bad_lines='skip')
+        elif extension == "tsv":
+            df = pd.read_csv(filepath,sep='\t')
         else:
-            raise ValueError("UNSUPPORTED EXTENSION")
+            print("UNSUPPORTED EXTENSION")
         
         # replacing " " with "-"
         df.columns = df.columns.str.replace(' ', '_').str.replace("-","_")

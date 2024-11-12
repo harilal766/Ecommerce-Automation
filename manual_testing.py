@@ -68,20 +68,6 @@ sql_table_creation_or_updation(dbname="Shopify",tablename="po_cod",replace_or_ap
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 from dotenv import load_dotenv
 import requests
 from amazon.order_table_updater import get_access_token
@@ -95,4 +81,64 @@ SP_API_DEFAULT_MARKETPLACE = os.getenv("SP_API_DEFAULT_MARKETPLACE")
 
 
 
-get_access_token()
+def createReport():
+    base_url = "https://sellingpartnerapi-eu.amazon.com/reports/2021-06-30/reports"
+    endpoint = '/reports/2021-06-30/reports'
+    headers = {
+            "x-amz-access-token": get_access_token(),
+            "Content-Type": "application/json"
+            }
+    data = {
+        "reportType":"GET_MERCHANTS_LISTINGS_FYP_REPORT",
+        "marketplaceIds" : ["A21TJRUUN4KGV"]
+     }
+    
+    response = requests.post(base_url,headers=headers, json=data)
+    status_message(message=f"Status code : {response.status_code}",color='blue')
+    status_message(message="Response \n :",color='blue')
+    response.raise_for_status()
+    return response.json()
+
+
+json_updater(field="latest_access_token_request",
+                updated_value=str(datetime.now()),
+                filepath=win_api_config)
+
+
+
+
+"""
+sql_table_creation_or_updation(dbname='Shopify',tablename="sh_orders",replace_or_append="append",
+                               input_file_dir=win_shopify_order_excel_file
+                            )
+"""
+
+h = r"D:\4.Phonepe"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#json_updater(field="latest_access_token_request",updated_value=datetime.now().isoformat(),
+#           filepath=dir_switch(win=win_api_config,lin=lin_api_config))

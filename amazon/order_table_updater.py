@@ -43,20 +43,16 @@ def get_access_token():
         "client_secret": CLIENT_SECRET,
     }
     try:
-        # find the time in which last request was made
+        # find the time in which last request was made and store it in a json file
         # if the date is same and the difference is  >= 1hr with current time,
             # request again.
 
-        request_times = []
         # if the list is empty add a number to avoid errors, this will make its legth 1.
-        if len(request_times) == 0:
-            request_times.append(1)
         current_time = datetime.now()
         diference_seconds = ''
-        status_message(message=f"last req : {request_times[-1]} , current time : {current_time}, difference : ",color='blue')
+        status_message(message=f"last req : -------- , current time : {current_time}, difference : ",color='blue')
         response = requests.post(url, headers=headers, data=data)
         last_request_time = datetime.now()
-        request_times.append(last_request_time)
         response.raise_for_status()
         access_token = response.json().get("access_token")
         if response.status_code == 200:

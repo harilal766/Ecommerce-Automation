@@ -3,7 +3,7 @@ from .messages import better_error_handling,status_message
 import platform
 import pdfplumber
 import re
-import os
+import os,json
 from .messages import *
 from .regex_patterns import amazon_order_id_pattern
 from .file_ops import *
@@ -28,17 +28,22 @@ lin_amazon_invoice =r"/home/hari/Desktop/Ecommerce-Automation/Test documents/ama
 win_amazon_scheduled_report = r"D:\5.Amazon\Mathew global\Scheduled report"
 lin_amazon_scheduled_report = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/amazon scheduled report"
 
+win_api_config = r"D:\Ecommerce-Automation\amazon\time_limits.json"
+lin_api_config = r"/home/hari/Desktop/Ecommerce-Automation/amazon/time_limits.json"
 
 def function_boundary(title):
     dash = "-"*15
     print(f"{dash}{title}{dash}")
 
 def dir_switch(win,lin):
-    operating_sys = (platform.system()).lower()
-    if operating_sys == "windows":
-        return win
-    elif operating_sys == "linux":
-        return lin 
+    try:
+        operating_sys = (platform.system()).lower()
+        if operating_sys == "windows":
+            return win
+        elif operating_sys == "linux":
+            return lin 
+    except Exception as e:
+        better_error_handling(e)
 
 def filepath_constructor(filepath,filename):
     filepath = os.path.join(filepath,filename)
@@ -126,3 +131,20 @@ def pdf_pattern_finder(message,filepath,pattern):
         success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
         return pattern_list
 
+def json_updater(field,updated_value,filepath):
+    try:
+        function_boundary(title="Json Updater")
+    # file loading.
+        with open (filepath,'r+') as file:
+            data = json.load(file)
+            if field not in data.keys():
+                status_message(message="This field does not exist.",color='red')
+            else:
+                status_message(message=f"current value -> {data}",color='blue')
+                data[field] = updated_value
+                status_message(message=f"updation : {data}",color='blue')
+                with open (filepath,'w') as file:
+                    json.dump(data,file,indent=4)
+            # updation
+    except Exception as e:
+        better_error_handling(e)
