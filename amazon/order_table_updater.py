@@ -129,34 +129,33 @@ class Orders(SPAPIBase):
 
     
 
-class Reports(SPAPIBase):
+class Reports():
     """
         https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference
 
         getReports, createReport, getReport, cancelReport
         getReportSchedules, createReportSchedule, getReportSchedule, cancelReportSchedule, getReportDocument
     """
-    def getReports(self):
-        endpoint = "/reports/2021-06-30/reports"
-        types = ["GET_FLAT_FILE_ORDERS_DATA_","GET_FLAT_FILE_ACTIONABLE_ORDER_DATA_SHIPPING"]
-        start_time = "2024-11-01T00:00:00Z"
-        end_time = "2024-11-02T00:23:59Z"
-        rep_type = str(types[1])
-        headers = {
-            "x-amzn-RateLimit-Limit": 0.0222,
-            "Authorization": f"Bearer {self.access_token}",  # Use the access token here
-            "Content-Type": "application/json",         # Adjust as per Amazon API requirements
-        }
+    # Add getReports() here
 
-        self.params.update ({
-            "reportType" : rep_type,
-            "dataStartTime" : start_time,
-            "dataEndTime" : end_time
-        })
-        response = requests.get(self.base_url+endpoint,headers=headers)
-        response.raise_for_status()
-        report_id = response.json().get("reportId")
-        return report_id
+    
+    def createReport():
+        base_url = "https://sellingpartnerapi-eu.amazon.com"
+        endpoint = '/reports/2021-06-30/reports'
+        headers = {
+                "x-amz-access-token": f"bearer <{get_access_token()}>",
+                "Content-Type": "application/json"
+                }
+        data = {
+            "reportType":"GET_MERCHANTS_LISTINGS_FYP_REPORT",
+            "marketplaceIds" : ["A21TJRUUN4KGV"]
+        }
+        
+        response = requests.post(base_url+endpoint,headers=headers, json=data)
+        status_message(message=f"Status code : {response.status_code}",color='blue')
+        status_message(message="Response \n :",color='blue')
+        #response.raise_for_status()
+        return response.json()
     
 
 

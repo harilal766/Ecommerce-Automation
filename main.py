@@ -20,7 +20,7 @@ feature_menu = {
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
 exit_menu = {
-    'r':("Recompile",recompile)
+    -1:("Recompile",recompile)
     }
 
 menu = {**feature_menu, **exit_menu}
@@ -52,7 +52,8 @@ def main():
                 menu[selection][1](argument)
             else:
                 menu[selection][1]()
-            status_message(message=f"{space}END{space}",color='red')
+            if selection:
+                status_message(message=f"{space}END{space}",color='red')
         else:
             print("Invalid Selection,Try again.")
 
