@@ -1,5 +1,5 @@
 import os
-from .messages import better_error_handling,status_message
+from .messages import better_error_handling,color_print
 import platform
 import pdfplumber
 import re
@@ -31,6 +31,8 @@ lin_amazon_scheduled_report = r"/home/hari/Desktop/Ecommerce-Automation/Test doc
 win_api_config = r"D:\Ecommerce-Automation\amazon\time_limits.json"
 lin_api_config = r"/home/hari/Desktop/Ecommerce-Automation/amazon/time_limits.json"
 
+win_amazon_return = r"D:\5.Amazon\Mathew global\Return"
+
 def function_boundary(title):
     dash = "-"*15
     print(f"{dash}{title}{dash}")
@@ -56,7 +58,7 @@ def input_checker(display_message,filepath):
     function_boundary(title='INPUT CHECK')
 
     # displaying the available files in a last in first out order
-    status_message(message=f"Filepath : {filepath}",color='blue')
+    color_print(message=f"Filepath : {filepath}",color='blue')
     files_list = [f for f in Path(filepath).iterdir() if f.is_file()]
     recently_added = sorted( files_list, key=os.path.getctime,reverse=True)
     recently_added = [file.name for file in recently_added]
@@ -67,28 +69,28 @@ def input_checker(display_message,filepath):
         try:
             file = input(display_message)
             if f"{file}" not in available_files:
-                status_message(message="File Not Found, Try again.",color='red')
+                color_print(message="File Not Found, Try again.",color='red')
             else:
-                status_message(message="File Found.",color='green')
+                color_print(message="File Found.",color='green')
                 break
         except KeyboardInterrupt:
-            status_message(message="Keyboard Interruption, Try again.",color='red')
+            color_print(message="Keyboard Interruption, Try again.",color='red')
     return file
 
 
 def text_input_checker(display_message,input_pattern):
-    status_message(message=f"Input pattern : {input_pattern}",color='blue')
+    color_print(message=f"Input pattern : {input_pattern}",color='blue')
     while True:
         try:
             input_text = input(display_message)
             if not re.match(input_pattern,input_text):
-                status_message(message="Invalid input found.",color="red")
+                color_print(message="Invalid input found.",color="red")
             else:
-                success_status_msg("Amazon order id verified...")
+                success_status_msg("Pattern verified...")
                 return input_text
                 
         except KeyboardInterrupt:
-            status_message(message="Keyboard Interruption, Try again.",color='red')
+            color_print(message="Keyboard Interruption, Try again.",color='red')
         
         
 
@@ -118,11 +120,11 @@ def pdf_pattern_finder(message,filepath,pattern):
                     # a single page can have one pattern or more than one pattern, so.............
                     # amazon label have 1 pattern per page and post lable have 4 patterns per page
                     if result:
-                        status_message(message=f"patterns found on page {page_count} : {result}",color='green')
+                        color_print(message=f"patterns found on page {page_count} : {result}",color='green')
                         for id in result:
                             pattern_list.append(id)
                     elif len(result) == 0:
-                        status_message(message=f"No patterns found on page {page_count}.",color='red')
+                        color_print(message=f"No patterns found on page {page_count}.",color='red')
             success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
 
     except Exception as e:
@@ -138,11 +140,11 @@ def json_updater(field,updated_value,filepath):
         with open (filepath,'r+') as file:
             data = json.load(file)
             if field not in data.keys():
-                status_message(message="This field does not exist.",color='red')
+                color_print(message="This field does not exist.",color='red')
             else:
-                status_message(message=f"current value -> {data}",color='blue')
+                color_print(message=f"current value -> {data}",color='blue')
                 data[field] = updated_value
-                status_message(message=f"updation : {data}",color='blue')
+                color_print(message=f"updation : {data}",color='blue')
                 with open (filepath,'w') as file:
                     json.dump(data,file,indent=4)
             # updation

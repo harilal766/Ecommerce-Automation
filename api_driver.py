@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta, timezone
 from amazon.order_table_updater import SPAPIBase,Orders,Reports
-from amazon.response_manipulator import next_shipment_details
+from amazon.response_manipulator import next_shipment_summary
 import requests,json
-from helpers.messages import better_error_handling,status_message,success_status_msg
+from helpers.messages import better_error_handling,color_print,success_status_msg
 from helpers.regex_patterns import amazon_order_id_pattern
 from helpers.file_ops import text_input_checker
 created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
@@ -14,8 +14,10 @@ def amazon_api_driver(option):
         if 'amazon' in option:
             instance = Orders()
             if "orders" in option:
-                response = instance.getOrders(created_after=created_after,order_status="Unshipped")
-                next_shipment_details(response=response)
+                # go to api docs and find other order statueses like waiting for pickup
+                response = instance.getOrders(CreatedAfter=created_after,
+                                              OrderStatuses="Unshipped")
+                next_shipment_summary(response=response)
             elif not "orders" in option and "order" in option:
                 response = instance.getOrder(orderId=
                                                 text_input_checker(display_message="Enter the order id : ",
@@ -35,7 +37,7 @@ def amazon_api_driver(option):
     except Exception as e:
         better_error_handling(e)
     except requests.exceptions.HTTPError as err:
-        print("HTTP Error:", err)
+        better_error_handling(err)
 
 
 

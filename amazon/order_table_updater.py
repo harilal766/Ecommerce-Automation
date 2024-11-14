@@ -2,7 +2,7 @@ import requests
 from datetime import datetime, timedelta, timezone
 import json
 import os,sys
-from helpers.messages import status_message
+from helpers.messages import color_print
 
 
 
@@ -50,15 +50,15 @@ def get_access_token():
         # if the list is empty add a number to avoid errors, this will make its legth 1.
         current_time = datetime.now()
         diference_seconds = ''
-        status_message(message=f"last req : -------- , current time : {current_time}, difference : ",color='blue')
+        color_print(message=f"last req : -------- , current time : {current_time}, difference : ",color='blue')
         response = requests.post(url, headers=headers, data=data)
         last_request_time = datetime.now()
         response.raise_for_status()
         access_token = response.json().get("access_token")
         if response.status_code == 200:
-            status_message(message=f"Access Token Successfull.",color='green')
+            color_print(message=f"Access Token Successfull.",color='green')
         else:
-            status_message(message=f"Access code {response.status_code}",color='red')
+            color_print(message=f"Access code {response.status_code}",color='red')
         return access_token
     
     except requests.exceptions.RequestException as e:
@@ -90,10 +90,10 @@ class Orders(SPAPIBase):
         getOrderItemsBuyerInfo, updateShipmentStatus, getOrderRegulatedInfo
         updateVerificationStatus, confirmShipment
     """
-    def getOrders(self,created_after,order_status):
+    def getOrders(self,CreatedAfter,OrderStatuses):
         self.params.update({
-            "CreatedAfter": created_after,
-            "OrderStatuses":order_status,
+            "CreatedAfter": CreatedAfter,
+            "OrderStatuses":OrderStatuses
         })
         endpoint = "/orders/v0/orders" 
         
@@ -137,7 +137,32 @@ class Reports():
         getReportSchedules, createReportSchedule, getReportSchedule, cancelReportSchedule, getReportDocument
     """
     # Add getReports() here
-
+    """
+    Order Report Types
+        GET_FLAT_FILE_ACTIONABLE_ORDER_DATA_SHIPPING
+        GET_ORDER_REPORT_DATA_INVOICING
+        GET_ORDER_REPORT_DATA_TAX
+        GET_ORDER_REPORT_DATA_SHIPPING
+        GET_FLAT_FILE_ORDER_REPORT_DATA_INVOICING
+        GET_FLAT_FILE_ORDER_REPORT_DATA_SHIPPING
+        GET_FLAT_FILE_ORDER_REPORT_DATA_TAX
+        GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL
+        GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL
+        GET_FLAT_FILE_ARCHIVED_ORDERS_DATA_BY_ORDER_DATE
+        GET_XML_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL
+        GET_XML_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL
+        GET_FLAT_FILE_PENDING_ORDERS_DATA
+        GET_PENDING_ORDERS_DATA
+        GET_CONVERGED_FLAT_FILE_PENDING_ORDERS_DATA
+   
+    Return Report Types
+        GET_XML_RETURNS_DATA_BY_RETURN_DATE
+        GET_FLAT_FILE_RETURNS_DATA_BY_RETURN_DATE
+        GET_XML_MFN_PRIME_RETURNS_REPORT
+        GET_CSV_MFN_PRIME_RETURNS_REPORT
+        GET_XML_MFN_SKU_RETURN_ATTRIBUTES_REPORT
+        GET_FLAT_FILE_MFN_SKU_RETURN_ATTRIBUTES_REPORT
+    """
     
     def createReport():
         base_url = "https://sellingpartnerapi-eu.amazon.com"
@@ -152,12 +177,11 @@ class Reports():
         }
         
         response = requests.post(base_url+endpoint,headers=headers, json=data)
-        status_message(message=f"Status code : {response.status_code}",color='blue')
-        status_message(message="Response \n :",color='blue')
+        color_print(message=f"Status code : {response.status_code}",color='blue')
+        color_print(message="Response \n :",color='blue')
         #response.raise_for_status()
         return response.json()
     
-
 
 
 

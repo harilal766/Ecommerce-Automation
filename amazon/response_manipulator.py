@@ -1,21 +1,28 @@
-from helpers.messages import status_message
+from helpers.messages import color_print
 from helpers.messages import better_error_handling
-
-def next_shipment_details(response):
+from datetime import datetime
+def next_shipment_summary(response):
     try:# only for amazon api, these api contains the field -> AmazonOrderId.
         out_list = response['payload']['Orders']
+        today_string = str(datetime.today()).split(" ")[0]
+        cod_set = set(); prepaid_set = set()
         order_count = 0; cod_count = 0; prepaid_count = 0
         for item in out_list:
+            ship_date_string = str(item['EarliestShipDate']).split("T")[0]
+            last_update_date_string = str(item[ "LastUpdateDate"]).split("T")[0]
+            print(f"Ship date : {ship_date_string},  Today : {today_string}")
             if (type(item) == dict):
                 order_count += 1
-                #status_message(message=f"Order : {order_count}{'-'*40}",color='blue')
+                color_print(message=f"Order : {order_count}{'-'*40}",color='blue')
                 for key,value in item.items():
-                    if  key == 'PaymentMethodDetails' and value == ['CashOnDelivery']:
-                        cod_count+=1
-                    elif key == 'PaymentMethodDetails' and value == ['Standard']:
-                        prepaid_count+=1
-                    #print(f"{key} : {value}")
+                    if  ship_date_string == today_string == last_update_date_string and item['PaymentMethodDetails'] == ['CashOnDelivery']:
+                        cod_set.add(item['AmazonOrderId'])
+                    elif item['PaymentMethodDetails'] == ['Standard'] and ship_date_string == today_string == last_update_date_string:
+                        prepaid_set.add(item['AmazonOrderId'])
+                    if ship_date_string == today_string:
+                        print(f"{key} : {value}")
+        color_print(message=f"COD : {cod_set} \n Prepaid : {prepaid_set}",color='blue')
     except Exception as e:
         better_error_handling(e)
         
-    status_message(f"Total orders: {order_count}, COD : {cod_count}, Prepaid : {prepaid_count}.",color='blue')
+    color_print(f"Total orders: {order_count}\nCOD for {today_string} : {len(cod_set)}\nPrepaid for {today_string} : {len(prepaid_set)}",color='blue')

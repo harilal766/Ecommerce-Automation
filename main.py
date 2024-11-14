@@ -4,23 +4,25 @@ from helpers.terminal_scripts import clear_terminal,recompile
 from helpers.sql_scripts import order_table_updation
 from helpers.file_ops import function_boundary
 from helpers.messages import *
+from post_tracking import post_tracking
 from datetime import datetime, timedelta, timezone
 from api_driver import amazon_api_driver
+
 # Menu
 feature_menu = {
     0:("Clear Terminal",clear_terminal),
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
-    4:("Table updation",order_table_updation),
-    5:("Amazon Orders API",amazon_api_driver),
-    6:("Amazon Order API",amazon_api_driver),
-    7:("amazon order buyer info api",amazon_api_driver),
-    8:("Amazon Report API",amazon_api_driver)
+    3:("Post Tracking",post_tracking),
+    4:("Amazon Orders API",amazon_api_driver),
+    5:("Amazon Order API",amazon_api_driver),
+    6:("amazon order buyer info api",amazon_api_driver),
+    7:("Amazon Report API",amazon_api_driver)
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
 exit_menu = {
-    -1:("Recompile",recompile)
+    99:("Recompile",recompile)
     }
 
 menu = {**feature_menu, **exit_menu}
@@ -47,13 +49,13 @@ def main():
             print(f"You have selected : {menu[selection][0]}")
             argument = menu[selection][0].lower()
             # selectin api and report functions
-            status_message(message=f"{space}Execution Log{space}",color='blue') 
+            color_print(message=f"{space}Execution Log{space}",color='blue') 
             if "report" in argument or "api" in argument:
                 menu[selection][1](argument)
             else:
                 menu[selection][1]()
             if selection:
-                status_message(message=f"{space}END{space}",color='red')
+                color_print(message=f"{space}END{space}",color='red')
         else:
             print("Invalid Selection,Try again.")
 

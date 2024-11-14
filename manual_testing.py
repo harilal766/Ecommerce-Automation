@@ -9,24 +9,12 @@ import sqlite3
 import pandas as pd
 import os
 
-"""
-    Filepath should be like this r"<path>"
-"""
-print("Code Testing")
 
 
 
-"""
-sql_table_creation_or_updation(dbname="Shopify",tablename="po_cod",replace_or_append="replace",
-                               input_file_dir=dir_switch(win=win_shopify_cod,lin=lin_shopify_cod))
-"""
 
-"""
-sql_table_creation_or_updation(dbname='Shopify',tablename="sh_orders",
-                            replace_or_append="append",
-                            input_file_dir=win_shopify_order_excel_file
-                            )
-"""
+
+
 
 
 
@@ -48,29 +36,25 @@ SP_API_DEFAULT_MARKETPLACE = os.getenv("SP_API_DEFAULT_MARKETPLACE")
 from bs4 import BeautifulSoup
 
 
-article_no = "EL609980010IN"
-post_track = f"https://api.cept.gov.in/CustomTracking/TrackConsignment.asmx/ArticleTracking?Article={article_no}&requestingApplication=Cust0M$Tr%40ck"
-
-response = requests.get(post_track)
-import xml.etree.ElementTree as ET
-
-# Parse the XML content
-root = ET.fromstring(response.content)
-
-# Access specific data
-for item in root.findall('.//YourElement'):
-    print(item.text)
-
-
-
-
-
-
-
-
 
 
 
 #json_updater(field="latest_access_token_request",updated_value=datetime.now().isoformat(),
 #           filepath=dir_switch(win=win_api_config,lin=lin_api_config))
 
+
+# API TESTING
+"""
+created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+instance = Orders()
+response = instance.getOrders(CreatedAfter=created_after,OrderStatuses='Unshipped')
+"""
+
+today_string = str(datetime.today()).split(" ")[0]
+#print(today_string)
+
+
+
+
+
+#sql_table_creation_or_updation(dbname="Amazon",tablename="Returns",replace_or_append='append',input_file_dir=win_amazon_return)
