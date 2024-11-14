@@ -32,5 +32,3 @@ def post_tracking():
     print(f"Tracking Link :\n{post_track}")
 
 
-
-post_tracking()
