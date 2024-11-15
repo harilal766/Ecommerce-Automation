@@ -33,8 +33,6 @@ SP_API_DEFAULT_MARKETPLACE = os.getenv("SP_API_DEFAULT_MARKETPLACE")
 
 
 
-from bs4 import BeautifulSoup
-
 
 
 
@@ -62,5 +60,4 @@ today_string = str(datetime.today()).split(" ")[0]
 
 
 
-file_updater(filepath=dir_switch(win=win_env,
-                                 lin=lin_env))
+#file_updater(filepath=dir_switch(win=win_env,lin=lin_env))

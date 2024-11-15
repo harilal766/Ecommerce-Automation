@@ -68,9 +68,6 @@ os.environ['LWA_APP_ID'] = CLIENT_ID
 os.environ['LWA_CLIENT_SECRET'] = CLIENT_SECRET
 os.environ['SP_API_REFRESH_TOKEN'] = REFRESH_TOKEN
 
-os.environ['AWS_ACCESS_KEY'] = 'your_aws_access_key'
-os.environ['AWS_SECRET_KEY'] = 'your_aws_secret_key'
-os.environ['ROLE_ARN'] = 'your_role_arn'
 
 # Report Creation...
 def n_days_back_timestamp(days):
