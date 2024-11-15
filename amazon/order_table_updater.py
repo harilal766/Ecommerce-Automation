@@ -99,7 +99,9 @@ class Orders(SPAPIBase):
         
         response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
         response.raise_for_status()
-        return response.json()
+        response = response.json()
+        orders = response['payload']['Orders']
+        return orders
 
     def getOrder(self,orderId):
         """

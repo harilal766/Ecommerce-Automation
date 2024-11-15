@@ -28,6 +28,8 @@ SomeClient(
 from sp_api.base import Marketplaces
 from sp_api.api import Orders
 
+from helpers.messages import better_error_handling
+
 # Order...
 order_client = Orders(credentials=credentials, marketplace=Marketplaces.DE)
 order = order_client.get_order('403-1082177-4218763')
@@ -71,12 +73,88 @@ os.environ['AWS_SECRET_KEY'] = 'your_aws_secret_key'
 os.environ['ROLE_ARN'] = 'your_role_arn'
 
 # Report Creation...
+def n_days_back_timestamp(days):
+    try:
+        if type(days) == int: 
+            # Substract (time now - time n days back) and return the answer in iso format
+            return (datetime.utcnow() - timedelta(days=days)).isoformat()
+        else:
+            color_print(message="Enter a number.",color='red')
+    except Exception as e:
+        better_error_handling(e)
+        
+
+
+n_days_back=n_days_back_timestamp(7)
+yesterday=n_days_back_timestamp(1)
+
+
 res = ReportsV2().create_report(
     reportType=ReportType.GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL,
     # optionally, you can set a start and end time for your report
-    dataStartTime=(datetime.utcnow() - timedelta(days=7)).isoformat(),
-    dataEndTime=(datetime.utcnow() - timedelta(days=1)).isoformat()
+    dataStartTime=n_days_back,
+    dataEndTime=yesterday
     )
+color_print(message=f"Reports From {n_days_back} To {yesterday}",color='blue')
 #print(res)
 report_id = res.payload['reportId']
 color_print(message=f"Report Id : {report_id}",color='green') # object containing a report id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+from amazon.order_table_updater import Orders
+created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
+
+
+instance = Orders()
+resp = instance.getOrders(CreatedAfter=created_after,OrderStatuses='Unshipped')
+
+print(resp)
+
+"""

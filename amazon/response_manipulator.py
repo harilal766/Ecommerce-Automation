@@ -3,11 +3,11 @@ from helpers.messages import better_error_handling
 from datetime import datetime
 def next_shipment_summary(response):
     try:# only for amazon api, these api contains the field -> AmazonOrderId.
-        out_list = response['payload']['Orders']
+        #out_list = response['payload']['Orders']
         today_string = str(datetime.today()).split(" ")[0]
         cod_orders = []; prepaid_orders = []
         order_count = 0; cod_count = 0; prepaid_count = 0; 
-        for item in out_list:
+        for item in response:
             #ship_date_string = str(item['EarliestShipDate']).split("T")[0]
             ship_date_string = today_string
             last_update_date_string = str(item[ "LastUpdateDate"]).split("T")[0]
