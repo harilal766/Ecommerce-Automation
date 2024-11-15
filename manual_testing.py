@@ -60,3 +60,7 @@ today_string = str(datetime.today()).split(" ")[0]
 #sql_table_creation_or_updation(dbname="Amazon",tablename="Returns",replace_or_append='append',input_file_dir=win_amazon_return)
 
 
+
+
+file_updater(filepath=dir_switch(win=win_env,
+                                 lin=lin_env))

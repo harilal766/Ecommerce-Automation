@@ -27,10 +27,10 @@ def post_tracking():
         result = db_querying(connection=connection,query=barcode_query)
         print(result)
     # Access tejs db and find the barcode
-    ship24_track = f"https://www.ship24.com/tracking?p={input_id}&a=947"
+    ship24_track = f"https://www.ship24.com/tracking?p={tracking_id}&a=947"
     indiapost_track = f"https://api.cept.gov.in/CustomTracking/TrackConsignment.asmx/ArticleTracking?Article={tracking_id}&requestingApplication=Cust0M$Tr%40ck"
 
     tracking_link = ship24_track
-    print(f"Tracking Link :\n{tracking_link}")
+    print(f"Ship 24 :\n{tracking_link}\nIndiapost :\n{indiapost_track}")
 
 

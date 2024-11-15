@@ -33,6 +33,10 @@ lin_api_config = r"/home/hari/Desktop/Ecommerce-Automation/amazon/time_limits.js
 
 win_amazon_return = r"D:\5.Amazon\Mathew global\Return"
 
+win_env = r"D/Ecommerce-Automation/.env"
+lin_env = r"/home/hari/Desktop/Ecommerce-Automation/.env"
+
+
 def function_boundary(title):
     dash = "-"*15
     print(f"{dash}{title}{dash}")
@@ -150,3 +154,12 @@ def json_updater(field,updated_value,filepath):
             # updation
     except Exception as e:
         better_error_handling(e)
+
+
+
+def file_updater(filepath):
+    with open(filepath,'r') as file:
+        for line in file:
+            print(line)
+
+
