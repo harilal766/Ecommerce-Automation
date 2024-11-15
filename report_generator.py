@@ -13,7 +13,7 @@ def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
                     input_filepath,out_excel_path):
     function_boundary(title="FILTERING QUERY")
     order_ids = None
-    order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension",filepath=pdf_path,pattern=pattern)
+    order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension : ",filepath=pdf_path,pattern=pattern)
     #last_column = order_id_list[-1]
     try:
         order_ids = ""; order_id_count = 0
@@ -58,7 +58,7 @@ def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
             # converting the sql result into excel file
             sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
         else:
-            status_message(message="Connection Failed",color="red")
+            color_print(message="Connection Failed",color="red")
         
     except Exception as e:
         better_error_handling(e)

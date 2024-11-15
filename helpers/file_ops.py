@@ -1,9 +1,9 @@
 import os
-from .messages import better_error_handling,status_message
+from .messages import better_error_handling,color_print
 import platform
 import pdfplumber
 import re
-import os
+import os,json
 from .messages import *
 from .regex_patterns import amazon_order_id_pattern
 from .file_ops import *
@@ -17,7 +17,7 @@ lin_shopify_invoice = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/p
 win_shopify_order_excel_file = r"D:\3.Shopify\Date wise order list"
 lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
 
-win_shopify_cod = r"D:\6.SPEED POST\Return Report COD"
+win_shopify_cod = r"D:\6.SPEED POST\Return Report COD tallying"
 lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
     #AMAZON
 win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"
@@ -28,17 +28,28 @@ lin_amazon_invoice =r"/home/hari/Desktop/Ecommerce-Automation/Test documents/ama
 win_amazon_scheduled_report = r"D:\5.Amazon\Mathew global\Scheduled report"
 lin_amazon_scheduled_report = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/amazon scheduled report"
 
+win_api_config = r"D:\Ecommerce-Automation\amazon\time_limits.json"
+lin_api_config = r"/home/hari/Desktop/Ecommerce-Automation/amazon/time_limits.json"
+
+win_amazon_return = r"D:\5.Amazon\Mathew global\Return"
+
+win_env = r"D/Ecommerce-Automation/.env"
+lin_env = r"/home/hari/Desktop/Ecommerce-Automation/.env"
+
 
 def function_boundary(title):
     dash = "-"*15
     print(f"{dash}{title}{dash}")
 
 def dir_switch(win,lin):
-    operating_sys = (platform.system()).lower()
-    if operating_sys == "windows":
-        return win
-    elif operating_sys == "linux":
-        return lin 
+    try:
+        operating_sys = (platform.system()).lower()
+        if operating_sys == "windows":
+            return win
+        elif operating_sys == "linux":
+            return lin 
+    except Exception as e:
+        better_error_handling(e)
 
 def filepath_constructor(filepath,filename):
     filepath = os.path.join(filepath,filename)
@@ -46,12 +57,12 @@ def filepath_constructor(filepath,filename):
 
 
 
-
+# change to file_input_checker
 def input_checker(display_message,filepath):
     function_boundary(title='INPUT CHECK')
 
     # displaying the available files in a last in first out order
-    status_message(message=f"Filepath : {filepath}",color='blue')
+    color_print(message=f"Filepath : {filepath}",color='blue')
     files_list = [f for f in Path(filepath).iterdir() if f.is_file()]
     recently_added = sorted( files_list, key=os.path.getctime,reverse=True)
     recently_added = [file.name for file in recently_added]
@@ -62,14 +73,30 @@ def input_checker(display_message,filepath):
         try:
             file = input(display_message)
             if f"{file}" not in available_files:
-                status_message(message="File Not Found, Try again.",color='red')
+                color_print(message="File Not Found, Try again.",color='red')
             else:
-                status_message(message="File Found.",color='green')
+                color_print(message="File Found.",color='green')
                 break
         except KeyboardInterrupt:
-            status_message(message="Keyboard Interruption, Try again.",color='red')
+            color_print(message="Keyboard Interruption, Try again.",color='red')
     return file
 
+
+def text_input_checker(display_message,input_pattern):
+    color_print(message=f"Input pattern : {input_pattern}",color='blue')
+    while True:
+        try:
+            input_text = input(display_message)
+            if not re.match(input_pattern,input_text):
+                color_print(message="Invalid input found.",color="red")
+            else:
+                success_status_msg("Pattern verified...")
+                return input_text
+                
+        except KeyboardInterrupt:
+            color_print(message="Keyboard Interruption, Try again.",color='red')
+        
+        
 
 
 
@@ -97,11 +124,11 @@ def pdf_pattern_finder(message,filepath,pattern):
                     # a single page can have one pattern or more than one pattern, so.............
                     # amazon label have 1 pattern per page and post lable have 4 patterns per page
                     if result:
-                        status_message(message=f"patterns found on page {page_count} : {result}",color='green')
+                        color_print(message=f"patterns found on page {page_count} : {result}",color='green')
                         for id in result:
                             pattern_list.append(id)
                     elif len(result) == 0:
-                        status_message(message=f"No patterns found on page {page_count}.",color='red')
+                        color_print(message=f"No patterns found on page {page_count}.",color='red')
             success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
 
     except Exception as e:
@@ -109,4 +136,30 @@ def pdf_pattern_finder(message,filepath,pattern):
     finally:
         success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
         return pattern_list
+
+def json_updater(field,updated_value,filepath):
+    try:
+        function_boundary(title="Json Updater")
+    # file loading.
+        with open (filepath,'r+') as file:
+            data = json.load(file)
+            if field not in data.keys():
+                color_print(message="This field does not exist.",color='red')
+            else:
+                color_print(message=f"current value -> {data}",color='blue')
+                data[field] = updated_value
+                color_print(message=f"updation : {data}",color='blue')
+                with open (filepath,'w') as file:
+                    json.dump(data,file,indent=4)
+            # updation
+    except Exception as e:
+        better_error_handling(e)
+
+
+
+def file_updater(filepath):
+    with open(filepath,'r') as file:
+        for line in file:
+            print(line)
+
 

@@ -1,7 +1,7 @@
 #$import psycopg2
 import pandas as pd
 import os
-from .messages import better_error_handling,success_status_msg,status_message
+from .messages import better_error_handling,success_status_msg,color_print
 from .file_ops import *
 import calendar,time
 from datetime import datetime
@@ -160,8 +160,10 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
             df = pd.read_csv(filepath,delimiter='\t',on_bad_lines='skip')
         elif extension == "csv":
             df = pd.read_csv(filepath,delimiter=',',on_bad_lines='skip')
+        elif extension == "tsv":
+            df = pd.read_csv(filepath,sep='\t')
         else:
-            raise ValueError("UNSUPPORTED EXTENSION")
+            print("UNSUPPORTED EXTENSION")
         
         # replacing " " with "-"
         df.columns = df.columns.str.replace(' ', '_').str.replace("-","_")
@@ -169,9 +171,9 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
         engine = create_engine(f'sqlite:///{dbname}.db')
         df.to_sql(tablename,con=engine, if_exists=str(replace_or_append), index=False)
     except FileNotFoundError:
-        status_message(message=f"{filename} not found, if the name is correct, please check the spaces....",color='red')
+        color_print(message=f"{filename} not found, if the name is correct, please check the spaces....",color='red')
     except Exception as e:
         better_error_handling(e)
     finally:
         connection.close()
-        status_message(message="Connection closed.",color="green")
+        color_print(message="Connection closed.",color="green")

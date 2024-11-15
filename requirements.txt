@@ -8,3 +8,6 @@ better-exceptions
 loguru
 colorama
 python-amazon-sp-api
+requests-aws4auth
+boto3
+load_dotenv
