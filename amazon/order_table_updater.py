@@ -1,6 +1,10 @@
-
-from .import *
-
+import requests
+from datetime import datetime, timedelta, timezone
+import json
+import os,sys
+from helpers.messages import color_print
+from dotenv import load_dotenv
+from helpers.file_ops import *
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
 
 
@@ -44,17 +48,30 @@ def get_access_token():
 
         # if the list is empty add a number to avoid errors, this will make its legth 1.
         current_time = datetime.now()
-        diference_seconds = ''
-        color_print(message=f"last req : -------- , current time : {current_time}, difference : ",color='blue')
-        response = requests.post(url, headers=headers, data=data)
-        last_request_time = datetime.now()
-        response.raise_for_status()
-        access_token = response.json().get("access_token")
-        if response.status_code == 200:
-            color_print(message=f"Access Token Successfull.",color='green')
+        
+        data = json_reader(dir_switch(win=win_api_config,lin=lin_api_config))
+        last_request_time = data['latest_access_token_request']
+        # access token need to be requested after 3600 seconds.
+        diference_seconds = 4000
+        if diference_seconds < 3600:
+            pass
         else:
-            color_print(message=f"Access code {response.status_code}",color='red')
-        return access_token
+            color_print(message=f"last req : -------- , current time : {current_time}, difference : ",color='blue')
+            response = requests.post(url, headers=headers, data=data)
+            request_time = datetime.now().isoformat()
+            response.raise_for_status()
+            access_token = response.json().get("access_token")
+
+            # Update the request time to a json file for later use...
+            json_updater(field="latest_access_token_request",updated_value=request_time,
+                            filepath=dir_switch(win=win_api_config,lin=lin_api_config))
+            
+            # Status messages based on the code...
+            if response.status_code == 200:
+                color_print(message=f"Access Token Successfull.",color='green')
+            else:
+                color_print(message=f"Access code {response.status_code}",color='red')
+            return access_token
     
     except requests.exceptions.RequestException as e:
         print(f"Access Token Error : {e}")

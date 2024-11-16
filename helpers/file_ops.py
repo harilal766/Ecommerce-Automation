@@ -137,6 +137,13 @@ def pdf_pattern_finder(message,filepath,pattern):
         success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
         return pattern_list
 
+def json_reader(filepath):
+    with open(filepath,'r') as file:
+        data = json.load(file)
+        print(data)
+        return data
+
+
 def json_updater(field,updated_value,filepath):
     try:
         function_boundary(title="Json Updater")
@@ -157,9 +164,23 @@ def json_updater(field,updated_value,filepath):
 
 
 
-def file_updater(filepath):
-    with open(filepath,'r') as file:
-        for line in file:
-            print(line)
+
+
+
+
+
+# .env File handling....
+from dotenv import load_dotenv, set_key
+
+
+load_dotenv()
+def env_file_updater(key):
+    filepath = '.env'
+    current_value = os.getenv(key)
+    new_value = "-----"
+    status = f"Key : {key}\nCurrent value : {current_value}\nNew value : {new_value}"
+    set_key(filepath,key,new_value)
+    color_print(message=status,color='blue')
+
 
 
