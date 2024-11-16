@@ -1,11 +1,7 @@
 from loguru import logger
 from colorama import Fore,Style,init
-import shutil
-import re
 
-init()
-terminal_width = shutil.get_terminal_size()
-print(terminal_width)
+
 hyphen = "-"* 110
 red_boundary = ""
 

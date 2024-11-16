@@ -61,3 +61,11 @@ today_string = str(datetime.today()).split(" ")[0]
 
 
 #file_updater(filepath=dir_switch(win=win_env,lin=lin_env))
+
+from helpers.terminal_scripts import recompile
+
+recompile()
+
+
+
+
