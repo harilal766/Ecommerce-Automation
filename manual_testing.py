@@ -41,10 +41,10 @@ SP_API_DEFAULT_MARKETPLACE = os.getenv("SP_API_DEFAULT_MARKETPLACE")
 
 
 # API TESTING
+import sys
 
 
+print(sys.executable)
 
 
-
-
- 
+get_access_token()

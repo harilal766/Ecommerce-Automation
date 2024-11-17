@@ -41,5 +41,5 @@ def color_print(message,color):
     elif color.lower() == "blue":
         foregreen = Fore.BLUE
     
-    print(f"{foregreen}{message}{Style.RESET_ALL}")
+    print(f"{foregreen}{message.capitalize()}{Style.RESET_ALL}")
         

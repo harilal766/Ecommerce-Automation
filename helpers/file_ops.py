@@ -35,6 +35,12 @@ win_amazon_return = r"D:\5.Amazon\Mathew global\Return"
 
 win_env = r"D/Ecommerce-Automation/.env"
 lin_env = r"/home/hari/Desktop/Ecommerce-Automation/.env"
+    # ---
+win_python = r"C:/Program Files/Python313/python.exe"
+lin_python = ""
+
+win_main = r"d:/Ecommerce-Automation/main.py"
+lin_main = r"/home/hari/Desktop/Ecommerce-Automation/main.py"
 
 
 def function_boundary(title):
@@ -174,10 +180,8 @@ from dotenv import load_dotenv, set_key
 
 
 load_dotenv()
-def env_file_updater(key):
+def env_file_updater(key,current_value,new_value):
     filepath = '.env'
-    current_value = os.getenv(key)
-    new_value = "-----"
     status = f"Key : {key}\nCurrent value : {current_value}\nNew value : {new_value}"
     set_key(filepath,key,new_value)
     color_print(message=status,color='blue')

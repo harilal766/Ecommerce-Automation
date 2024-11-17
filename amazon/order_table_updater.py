@@ -1,81 +1,9 @@
 import requests
 from datetime import datetime, timedelta, timezone
-import json
-import os,sys
 from helpers.messages import color_print
-from dotenv import load_dotenv
 from helpers.file_ops import *
+from amazon.authorization import get_access_token
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
-
-
-
-
-
-load_dotenv()
-
-# Replace these with your credentials
-REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-
-#SELLER_ID = "ACJLZEYR3QZJFCQ77FO2CO36MSZQ"
-#DEVELOPER_ID = "-------"
-
-#Oauth_authorization_URL = f"https://sellercentral.amazon.com/apps/authorize/consent?selling_partner_id={SELLER_ID}&developer_id={DEVELOPER_ID}&client_id={CLIENT_ID}"
-#print(Oauth_authorization_URL)
-
-#ORDER_ENDPOINT = "https://sandbox.sellingpartnerapi-eu.amazon.com/orders/v0/orders"
-
-def region_finder():
-    pass
-
-def get_access_token():
-    """Obtain a new access token using the refresh token."""
-    url = "https://api.amazon.com/auth/o2/token"
-    headers = { 
-        "Content-Type": "application/x-www-form-urlencoded",
-    }
-    data = {
-        "grant_type": "refresh_token",
-        "refresh_token": REFRESH_TOKEN,
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
-    }
-    try:
-        # find the time in which last request was made and store it in a json file
-        # if the date is same and the difference is  >= 1hr with current time,
-            # request again.
-
-        # if the list is empty add a number to avoid errors, this will make its legth 1.
-        current_time = datetime.now()
-        
-        data = json_reader(dir_switch(win=win_api_config,lin=lin_api_config))
-        last_request_time = data['latest_access_token_request']
-        # access token need to be requested after 3600 seconds.
-        diference_seconds = 4000
-        if diference_seconds < 3600:
-            pass
-        else:
-            color_print(message=f"last req : -------- , current time : {current_time}, difference : ",color='blue')
-            response = requests.post(url, headers=headers, data=data)
-            request_time = datetime.now().isoformat()
-            response.raise_for_status()
-            access_token = response.json().get("access_token")
-
-            # Update the request time to a json file for later use...
-            json_updater(field="latest_access_token_request",updated_value=request_time,
-                            filepath=dir_switch(win=win_api_config,lin=lin_api_config))
-            
-            # Status messages based on the code...
-            if response.status_code == 200:
-                color_print(message=f"Access Token Successfull.",color='green')
-            else:
-                color_print(message=f"Access code {response.status_code}",color='red')
-            return access_token
-    
-    except requests.exceptions.RequestException as e:
-        print(f"Access Token Error : {e}")
-        return None
 
 
 
