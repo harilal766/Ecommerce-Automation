@@ -13,6 +13,7 @@ load_dotenv()
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+SP_API_DEFAULT_MARKETPLACE = os.getenv("SP_API_DEFAULT_MARKETPLACE")
 
 #SELLER_ID = "ACJLZEYR3QZJFCQ77FO2CO36MSZQ"
 #DEVELOPER_ID = "-------"
@@ -25,11 +26,6 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 def region_finder():
     pass
     
-current_time = datetime.now()
-data = json_handler(filepath=dir_switch(win=win_api_config,lin=lin_api_config),operation='read')
-last_request_time = datetime.fromisoformat(data['latest_access_token_request'])
-difference_seconds = (current_time - last_request_time).total_seconds()
-limit = 3600
 
 def generate_access_token():
     url = "https://api.amazon.com/auth/o2/token"
@@ -56,24 +52,26 @@ def generate_access_token():
         print(f"Access Token Error: {e}")
         return None
 
-def is_access_token_expired():
-    if difference_seconds < limit:
-        return False
-    else:
-        return True
-    
-
-
-
-
 def get_or_generate_access_token():
+    current_time = datetime.now()
     try:
-        pass
+        data = file_handler(filepath=dir_switch(win=win_api_config,lin=lin_api_config),operation='read')
+        last_request_time = datetime.fromisoformat(data['latest_access_token_request'])
+        difference_seconds = (current_time - last_request_time).total_seconds()
+        limit = 3600
         # if the access token is expired
-            # if yes, generate a new one.
-                # Store the new one in to the json file
-        # else
+        if difference_seconds > limit:
+            # generate a new one.
+            new_access_token = generate_access_token()
+            # Store the new one in to the json file
+            return new_access_token
+        else:
             # extract the access token from the env file and return it
+            env_file = file_handler(filepath=dir_switch(win=win_env,lin=lin_env),operation='read')
+            previous_access_token = env_file['ACCESS_TOKEN']
+            return previous_access_token
+
+            
     except Exception as e:
         better_error_handling(e)
         

@@ -143,33 +143,52 @@ def pdf_pattern_finder(message,filepath,pattern):
         success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
         return pattern_list
 
+from dotenv import load_dotenv,dotenv_values,set_key
 
-def json_handler(filepath,operation,field=None, updated_value=None):
+
+
+def file_handler(filepath,operation,field=None, current_value=None,updated_value=None):
+    extension = filepath.split('.')[-1]
+    modes = {'read':'r','update':'r+'}
     try:
-        with open(filepath,'r+') as file:
-            data = json.load(file)
-
+        with open(filepath,f'{modes[operation]}') as file:
+            color_print(message=f"Filepath :\n{filepath}, Extension : {extension}",color='green')
+            # Read Operation
             if operation == 'read':
-                print(data)
-                return data
-            elif operation == 'update':
-                if field is None or updated_value in None:
-                    color_print(message="Field/updated value is empty.",color='red')
-
-                if field not in data:
-                    color_print(message="This field does not exist.",color='red')
+                if extension == 'json':
+                    data = json.load(file)
+                elif extension == 'env':
+                    data = dotenv_values(".env")
                 else:
-                    color_print(message=f"current value -> {data}",color='blue')
+                    data = file
+                color_print(message=f"Data : \n {data}",color='green')
+                return data
+            # Update Operation
+            elif operation == 'update':
+                if extension == 'env':
+                    
+                    set_key(filepath,field,updated_value)
+                    
+                elif extension == 'json':
+                    data = json.load(file)
+                    current_value = data[field]
+                    if data == None:
+                        color_print(message="Empty file..",color='red')
+                    
+                    print(data)
                     data[field] = updated_value
                     color_print(message=f"updation : {data}",color='blue')
                     with open (filepath,'w') as file:
                         json.dump(data,file,indent=4)
+                # Displaying the changes made....
+                status = f"Key : {field}\nCurrent value : {current_value}\nNew value : {updated_value}"
+                color_print(message=status,color='blue')
     except Exception as e:
         better_error_handling(e)
 
 
 # .env File handling....
-from dotenv import load_dotenv, set_key
+
 
 def open_file():
     pass
@@ -178,17 +197,3 @@ def close_file():
     pass
 
 
-
-load_dotenv()
-def env_handler(filepath,operation,key=None,current_value=None, updated_value=None):
-    try:
-        if operation == 'read':
-            pass
-        elif operation == 'update':
-            status = f"Key : {key}\nCurrent value : {current_value}\nNew value : {updated_value}"
-            set_key(filepath,key,updated_value)
-            color_print(message=status,color='blue')
-
-
-    except Exception as e:
-        better_error_handling(e)
