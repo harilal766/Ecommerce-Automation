@@ -35,6 +35,12 @@ win_amazon_return = r"D:\5.Amazon\Mathew global\Return"
 
 win_env = r"D/Ecommerce-Automation/.env"
 lin_env = r"/home/hari/Desktop/Ecommerce-Automation/.env"
+    # ---
+win_python = r"C:/Program Files/Python313/python.exe"
+lin_python = ""
+
+win_main = r"d:/Ecommerce-Automation/main.py"
+lin_main = r"/home/hari/Desktop/Ecommerce-Automation/main.py"
 
 
 def function_boundary(title):
@@ -137,6 +143,13 @@ def pdf_pattern_finder(message,filepath,pattern):
         success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
         return pattern_list
 
+def json_reader(filepath):
+    with open(filepath,'r') as file:
+        data = json.load(file)
+        print(data)
+        return data
+
+
 def json_updater(field,updated_value,filepath):
     try:
         function_boundary(title="Json Updater")
@@ -157,9 +170,21 @@ def json_updater(field,updated_value,filepath):
 
 
 
-def file_updater(filepath):
-    with open(filepath,'r') as file:
-        for line in file:
-            print(line)
+
+
+
+
+
+# .env File handling....
+from dotenv import load_dotenv, set_key
+
+
+load_dotenv()
+def env_file_updater(key,current_value,new_value):
+    filepath = '.env'
+    status = f"Key : {key}\nCurrent value : {current_value}\nNew value : {new_value}"
+    set_key(filepath,key,new_value)
+    color_print(message=status,color='blue')
+
 
 

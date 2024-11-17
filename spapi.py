@@ -60,9 +60,9 @@ for page in load_all_orders(LastUpdatedAfter=(datetime.utcnow() - timedelta(days
 """
 # Reports....
 from datetime import datetime, timedelta
-from sp_api.api import ReportsV2
+from sp_api.api import ReportsV2,Reports
 from sp_api.base.reportTypes import ReportType
-import os 
+import os
 from helpers.messages import color_print
 os.environ['LWA_APP_ID'] = CLIENT_ID
 os.environ['LWA_CLIENT_SECRET'] = CLIENT_SECRET
@@ -84,8 +84,9 @@ def n_days_back_timestamp(days):
 
 n_days_back=n_days_back_timestamp(7)
 yesterday=n_days_back_timestamp(1)
-
-
+def createReport():
+    pass
+# Report Creation
 res = ReportsV2().create_report(
     reportType=ReportType.GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL,
     # optionally, you can set a start and end time for your report
@@ -93,30 +94,24 @@ res = ReportsV2().create_report(
     dataEndTime=yesterday
     )
 color_print(message=f"Reports From {n_days_back} To {yesterday}",color='blue')
-#print(res)
 report_id = res.payload['reportId']
 color_print(message=f"Report Id : {report_id}",color='green') # object containing a report id
 
 
 
 
+# Getting a single report
+report = Reports().get_report(report_id)
+payload = report.payload
+report_status = f"Report ID :{payload['reportId']}, Status : {payload['processingStatus']}."
+color_print(message=report_status,color='blue')
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+# Cancelling a report
 
 
 

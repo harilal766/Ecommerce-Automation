@@ -37,27 +37,14 @@ SP_API_DEFAULT_MARKETPLACE = os.getenv("SP_API_DEFAULT_MARKETPLACE")
 
 
 
-#json_updater(field="latest_access_token_request",updated_value=datetime.now().isoformat(),
-#           filepath=dir_switch(win=win_api_config,lin=lin_api_config))
+
 
 
 # API TESTING
-"""
-created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
-instance = Orders()
-response = instance.getOrders(CreatedAfter=created_after,OrderStatuses='Unshipped')
-"""
-
-today_string = str(datetime.today()).split(" ")[0]
-#print(today_string)
+import sys
 
 
+print(sys.executable)
 
 
-
-#sql_table_creation_or_updation(dbname="Amazon",tablename="Returns",replace_or_append='append',input_file_dir=win_amazon_return)
-
-
-
-
-#file_updater(filepath=dir_switch(win=win_env,lin=lin_env))
+get_access_token()
