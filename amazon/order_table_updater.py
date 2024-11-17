@@ -2,14 +2,13 @@ import requests
 from datetime import datetime, timedelta, timezone
 from helpers.messages import color_print
 from helpers.file_ops import *
-from amazon.authorization import get_access_token
+from amazon.authorization import generate_access_token
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
-
 
 
 class SPAPIBase:
     def __init__(self,base_url="https://sellingpartnerapi-eu.amazon.com",marketplace_id="A21TJRUUN4KGV"):
-        self.access_token = get_access_token()
+        self.access_token = generate_access_token()
         self.base_url = base_url
         self.marketplace_id = marketplace_id
         self.headers = {
@@ -110,7 +109,7 @@ class Reports():
         base_url = "https://sellingpartnerapi-eu.amazon.com"
         endpoint = '/reports/2021-06-30/reports'
         headers = {
-                "x-amz-access-token": f"bearer <{get_access_token()}>",
+                "x-amz-access-token": f"bearer <{generate_access_token()}>",
                 "Content-Type": "application/json"
                 }
         data = {

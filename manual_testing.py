@@ -21,7 +21,7 @@ import os
 
 from dotenv import load_dotenv
 import requests
-from amazon.order_table_updater import get_access_token
+from amazon.order_table_updater import generate_access_token
 from amazon.order_table_updater import Reports,Orders
 from datetime import datetime, timedelta, timezone
 load_dotenv()
@@ -46,5 +46,5 @@ import sys
 
 print(sys.executable)
 
+from amazon.authorization import *
 
-get_access_token()

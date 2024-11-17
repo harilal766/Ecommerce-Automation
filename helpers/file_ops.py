@@ -143,48 +143,52 @@ def pdf_pattern_finder(message,filepath,pattern):
         success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
         return pattern_list
 
-def json_reader(filepath):
-    with open(filepath,'r') as file:
-        data = json.load(file)
-        print(data)
-        return data
 
-
-def json_updater(field,updated_value,filepath):
+def json_handler(filepath,operation,field=None, updated_value=None):
     try:
-        function_boundary(title="Json Updater")
-    # file loading.
-        with open (filepath,'r+') as file:
+        with open(filepath,'r+') as file:
             data = json.load(file)
-            if field not in data.keys():
-                color_print(message="This field does not exist.",color='red')
-            else:
-                color_print(message=f"current value -> {data}",color='blue')
-                data[field] = updated_value
-                color_print(message=f"updation : {data}",color='blue')
-                with open (filepath,'w') as file:
-                    json.dump(data,file,indent=4)
-            # updation
+
+            if operation == 'read':
+                print(data)
+                return data
+            elif operation == 'update':
+                if field is None or updated_value in None:
+                    color_print(message="Field/updated value is empty.",color='red')
+
+                if field not in data:
+                    color_print(message="This field does not exist.",color='red')
+                else:
+                    color_print(message=f"current value -> {data}",color='blue')
+                    data[field] = updated_value
+                    color_print(message=f"updation : {data}",color='blue')
+                    with open (filepath,'w') as file:
+                        json.dump(data,file,indent=4)
     except Exception as e:
         better_error_handling(e)
-
-
-
-
-
-
 
 
 # .env File handling....
 from dotenv import load_dotenv, set_key
 
+def open_file():
+    pass
+
+def close_file():
+    pass
+
+
 
 load_dotenv()
-def env_file_updater(key,current_value,new_value):
-    filepath = '.env'
-    status = f"Key : {key}\nCurrent value : {current_value}\nNew value : {new_value}"
-    set_key(filepath,key,new_value)
-    color_print(message=status,color='blue')
+def env_handler(filepath,operation,key=None,current_value=None, updated_value=None):
+    try:
+        if operation == 'read':
+            pass
+        elif operation == 'update':
+            status = f"Key : {key}\nCurrent value : {current_value}\nNew value : {updated_value}"
+            set_key(filepath,key,updated_value)
+            color_print(message=status,color='blue')
 
 
-
+    except Exception as e:
+        better_error_handling(e)
