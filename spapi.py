@@ -81,7 +81,7 @@ def n_days_back_timestamp(days):
         better_error_handling(e)
         
 
-
+"""
 n_days_back=n_days_back_timestamp(7)
 yesterday=n_days_back_timestamp(1)
 def createReport():
@@ -96,57 +96,21 @@ res = ReportsV2().create_report(
 color_print(message=f"Reports From {n_days_back} To {yesterday}",color='blue')
 report_id = res.payload['reportId']
 color_print(message=f"Report Id : {report_id}",color='green') # object containing a report id
+"""
 
 
-
-
+"""
 # Getting a single report
-report = Reports().get_report(report_id)
+report = Reports().get_reports(report_id)
 payload = report.payload
 report_status = f"Report ID :{payload['reportId']}, Status : {payload['processingStatus']}."
 color_print(message=report_status,color='blue')
 
 
 
-
-
-
 # Cancelling a report
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
-from amazon.order_table_updater import Orders
-created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
 
 
-instance = Orders()
-resp = instance.getOrders(CreatedAfter=created_after,OrderStatuses='Unshipped')
-
-print(resp)
-
-"""

@@ -105,24 +105,27 @@ class Reports():
         GET_FLAT_FILE_MFN_SKU_RETURN_ATTRIBUTES_REPORT
     """
     
-    def createReport():
+    def createReport(self):
+        token = get_or_generate_access_token()
         base_url = "https://sellingpartnerapi-eu.amazon.com"
         endpoint = '/reports/2021-06-30/reports'
         headers = {
-                "x-amz-access-token": f"bearer <{get_or_generate_access_token()}>",
+                "x-amz-access-token": token,
                 "Content-Type": "application/json"
                 }
         data = {
-            "reportType":"GET_MERCHANTS_LISTINGS_FYP_REPORT",
+            "reportType":"GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL",
             "marketplaceIds" : ["A21TJRUUN4KGV"]
         }
         
         response = requests.post(base_url+endpoint,headers=headers, json=data)
         color_print(message=f"Status code : {response.status_code}",color='blue')
-        color_print(message="Response \n :",color='blue')
+        color_print(message="Response :\n",color='blue')
         #response.raise_for_status()
         return response.json()
     
+    def getReports():
+        pass
 
 
 
