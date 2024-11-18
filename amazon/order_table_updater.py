@@ -70,7 +70,7 @@ class Orders(SPAPIBase):
 
     
 
-class Reports():
+class Reports(SPAPIBase):
     """
         https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference
 
@@ -80,6 +80,7 @@ class Reports():
     # Add getReports() here
     """
     Order Report Types
+    "GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL"
         GET_FLAT_FILE_ACTIONABLE_ORDER_DATA_SHIPPING
         GET_ORDER_REPORT_DATA_INVOICING
         GET_ORDER_REPORT_DATA_TAX
@@ -105,20 +106,14 @@ class Reports():
         GET_FLAT_FILE_MFN_SKU_RETURN_ATTRIBUTES_REPORT
     """
     
-    def createReport(self):
-        token = get_or_generate_access_token()
-        base_url = "https://sellingpartnerapi-eu.amazon.com"
+    def createReport(self,reportType):
         endpoint = '/reports/2021-06-30/reports'
-        headers = {
-                "x-amz-access-token": token,
-                "Content-Type": "application/json"
-                }
         data = {
-            "reportType":"GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL",
-            "marketplaceIds" : ["A21TJRUUN4KGV"]
+            "reportType":reportType,
+            "marketplaceIds" : [self.marketplace_id]
         }
-        
-        response = requests.post(base_url+endpoint,headers=headers, json=data)
+        # {'reportId': '50446020045'}
+        response = requests.post(self.base_url+endpoint,headers=self.headers, json=data)
         color_print(message=f"Status code : {response.status_code}",color='blue')
         color_print(message="Response :\n",color='blue')
         #response.raise_for_status()
