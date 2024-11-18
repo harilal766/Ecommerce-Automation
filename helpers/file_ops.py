@@ -171,12 +171,14 @@ def file_handler(filepath,operation,field=None, current_value=None,updated_value
                 elif extension == 'json':
                     data = json.load(file)
                     color_print(message=data,color='green')
-                    data[field] = str(updated_value)
+                    # only int/str value can be added to json file ...
+                    if type(updated_value) != int: 
+                        data[field] = str(updated_value)
                     file.seek(0)
                     json.dump(data,file,indent=4)
                 # Displaying the changes made....
-                status = f"Key : {field}\nCurrent value : {current_value}\nNew value : {updated_value}"
-                color_print(message=status,color='blue')
+                #status = f"Key : {field}\nCurrent value : {current_value}\nNew value : {updated_value}"
+                #color_print(message=status,color='blue')
     except Exception as e:
         better_error_handling(e)
 
