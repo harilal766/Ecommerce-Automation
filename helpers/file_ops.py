@@ -166,20 +166,14 @@ def file_handler(filepath,operation,field=None, current_value=None,updated_value
             # Update Operation
             elif operation == 'update':
                 if extension == 'env':
-                    
                     set_key(filepath,field,updated_value)
                     
                 elif extension == 'json':
                     data = json.load(file)
-                    current_value = data[field]
-                    if data == None:
-                        color_print(message="Empty file..",color='red')
-                    
-                    print(data)
-                    data[field] = updated_value
-                    color_print(message=f"updation : {data}",color='blue')
-                    with open (filepath,'w') as file:
-                        json.dump(data,file,indent=4)
+                    color_print(message=data,color='green')
+                    data[field] = str(updated_value)
+                    file.seek(0)
+                    json.dump(data,file,indent=4)
                 # Displaying the changes made....
                 status = f"Key : {field}\nCurrent value : {current_value}\nNew value : {updated_value}"
                 color_print(message=status,color='blue')

@@ -55,25 +55,42 @@ def generate_access_token():
 def get_or_generate_access_token():
     current_time = datetime.now()
     try:
+        # Read the json file to get the time stamp
         data = file_handler(filepath=dir_switch(win=win_api_config,lin=lin_api_config),operation='read')
-        last_request_time = datetime.fromisoformat(data['latest_access_token_request'])
+        # initialization
+        
+        last_request_time_str = data["latest_access_token_request"]
+        last_request_time = datetime.fromisoformat(last_request_time_str)
+        print(type(last_request_time))
         difference_seconds = (current_time - last_request_time).total_seconds()
         limit = 3600
+        token_status = ''
+        color_print(message=f"Last request : {last_request_time}, Current time : {current_time}, Difference : {difference_seconds} seconds.",color='blue')
         # if the access token is expired
         if difference_seconds > limit:
+            color_print(message="Generating new token.",color='green')
             # generate a new one.
             new_access_token = generate_access_token()
-            # Store the new one in to the json file
+            # Store the new token in to the env file
+            file_handler(filepath='.env',operation='update',
+                field='ACCESS_TOKEN',updated_value=new_access_token)
+            # request time -> json file
+            filepath = dir_switch(win=win_api_config,lin=lin_api_config)
+            field = "latest_access_token_request"
+            file_handler(filepath=filepath,field=field,
+                        operation='update',updated_value=current_time)
             return new_access_token
         else:
-            # extract the access token from the env file and return it
-            env_file = file_handler(filepath=dir_switch(win=win_env,lin=lin_env),operation='read')
-            previous_access_token = env_file['ACCESS_TOKEN']
+            color_print(message="Previous Token can be used.",color='green')
+            # extract the access token value from the env file and return it
+            previous_access_token = os.getenv('ACCESS_TOKEN')
+            # Status message for old token
+           
             return previous_access_token
-
             
     except Exception as e:
         better_error_handling(e)
+        
         
 
 
