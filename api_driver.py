@@ -13,7 +13,7 @@ from amazon.report_types import *
 created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
 
         
-def amazon_api_driver(option):
+def api_driver(option):
     try:
         # Assigining the instance and response based on the selection.
         if 'amazon' in option:

@@ -98,10 +98,18 @@ class Reports(SPAPIBase):
             "reportTypes" : reportTypes
             })
         response = requests.get(self.base_url+endpoint, headers=self.headers,params =  self.params)
-        response.raise_for_status()
+        response.raise_for_status() # ; rate_limit_checker(response)
         response = response.json()
         report = response['reports']
         return report
+    
+    def getReport(self,reportId):
+        endpoint = f"reports/2021-06-30/reports/{reportId}"
+        self.params.update({"reportId" : reportId})
+        response = requests.get(self.base_url+endpoint, headers=self.headers,params =  self.params)
+        response.raise_for_status() # ; rate_limit_checker(response)
+        response = response.json()
+        return response
 
 
 
