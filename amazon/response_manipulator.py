@@ -35,3 +35,17 @@ def next_shipment_summary(response):
         better_error_handling(e)
         
     color_print(f"Total orders: {order_count}\nCOD for {today_string} : {len(cod_orders)}\nPrepaid for {today_string} : {len(prepaid_orders)}",color='blue')
+
+
+
+ 
+def report_display(response):
+    if len(response) == 0:
+        color_print(message=f"Empty Output. : {response}",color='red')
+    else:
+        for i in response:
+            for key,value in i.items():
+                    print(f"{key} -:- {value}")
+            color_print("------------",color="blue")
+
+

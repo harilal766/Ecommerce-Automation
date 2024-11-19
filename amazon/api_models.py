@@ -79,18 +79,6 @@ class Reports(SPAPIBase):
         getReports, createReport, getReport, cancelReport
         getReportSchedules, createReportSchedule, getReportSchedule, cancelReportSchedule, getReportDocument
     """
-    # Add getReports() here
-    """
-   
-    Return Report Types
-        GET_XML_RETURNS_DATA_BY_RETURN_DATE
-        GET_FLAT_FILE_RETURNS_DATA_BY_RETURN_DATE
-        GET_XML_MFN_PRIME_RETURNS_REPORT
-        GET_CSV_MFN_PRIME_RETURNS_REPORT
-        GET_XML_MFN_SKU_RETURN_ATTRIBUTES_REPORT
-        GET_FLAT_FILE_MFN_SKU_RETURN_ATTRIBUTES_REPORT
-    """
-    
     def createReport(self,reportType):
         endpoint = '/reports/2021-06-30/reports'
         data = {
@@ -106,7 +94,9 @@ class Reports(SPAPIBase):
     
     def getReports(self,reportTypes=None,processingStatuses=None):
         endpoint = "/reports/2021-06-30/reports"
-        self.params.update({"reportTypes" : reportTypes})
+        self.params.update({
+            "reportTypes" : reportTypes
+            })
         response = requests.get(self.base_url+endpoint, headers=self.headers,params =  self.params)
         response.raise_for_status()
         response = response.json()
