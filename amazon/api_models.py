@@ -2,8 +2,10 @@ import requests
 from datetime import datetime, timedelta, timezone
 from helpers.messages import color_print
 from helpers.file_ops import *
-from amazon.authorization import get_or_generate_access_token
+from amazon.authorization import *
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+
+
 
 
 class SPAPIBase:
@@ -79,23 +81,6 @@ class Reports(SPAPIBase):
     """
     # Add getReports() here
     """
-    Order Report Types
-    "GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL"
-        GET_FLAT_FILE_ACTIONABLE_ORDER_DATA_SHIPPING
-        GET_ORDER_REPORT_DATA_INVOICING
-        GET_ORDER_REPORT_DATA_TAX
-        GET_ORDER_REPORT_DATA_SHIPPING
-        GET_FLAT_FILE_ORDER_REPORT_DATA_INVOICING
-        GET_FLAT_FILE_ORDER_REPORT_DATA_SHIPPING
-        GET_FLAT_FILE_ORDER_REPORT_DATA_TAX
-        GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL
-        GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL
-        GET_FLAT_FILE_ARCHIVED_ORDERS_DATA_BY_ORDER_DATE
-        GET_XML_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL
-        GET_XML_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL
-        GET_FLAT_FILE_PENDING_ORDERS_DATA
-        GET_PENDING_ORDERS_DATA
-        GET_CONVERGED_FLAT_FILE_PENDING_ORDERS_DATA
    
     Return Report Types
         GET_XML_RETURNS_DATA_BY_RETURN_DATE
@@ -119,8 +104,14 @@ class Reports(SPAPIBase):
         #response.raise_for_status()
         return response.json()
     
-    def getReports():
-        pass
+    def getReports(self,reportTypes=None,processingStatuses=None):
+        endpoint = "/reports/2021-06-30/reports"
+        self.params.update({"reportTypes" : reportTypes})
+        response = requests.get(self.base_url+endpoint, headers=self.headers,params =  self.params)
+        response.raise_for_status()
+        response = response.json()
+        report = response['reports']
+        return report
 
 
 

@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from amazon.order_table_updater import SPAPIBase,Orders,Reports
+from amazon.api_models import SPAPIBase,Orders,Reports
 from amazon.response_manipulator import next_shipment_summary
 import requests,json
 from helpers.messages import better_error_handling,color_print,success_status_msg

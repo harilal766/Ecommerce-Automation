@@ -161,7 +161,9 @@ def file_handler(filepath,operation,field=None, current_value=None,updated_value
                     data = dotenv_values(".env")
                 else:
                     data = file
-                color_print(message=f"Data : \n {data}",color='green')
+                # Make sure env file wont be read on the normal way, for security reasons
+                if not extension == 'env':
+                    color_print(message=f"Data : \n {data}",color='green')
                 return data
             # Update Operation
             elif operation == 'update':
