@@ -143,48 +143,53 @@ def pdf_pattern_finder(message,filepath,pattern):
         success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
         return pattern_list
 
-def json_reader(filepath):
-    with open(filepath,'r') as file:
-        data = json.load(file)
-        print(data)
-        return data
+from dotenv import load_dotenv,dotenv_values,set_key
 
 
-def json_updater(field,updated_value,filepath):
+
+def file_handler(filepath,operation,field=None, current_value=None,updated_value=None):
+    extension = filepath.split('.')[-1]
+    modes = {'read':'r','update':'r+'}
     try:
-        function_boundary(title="Json Updater")
-    # file loading.
-        with open (filepath,'r+') as file:
-            data = json.load(file)
-            if field not in data.keys():
-                color_print(message="This field does not exist.",color='red')
-            else:
-                color_print(message=f"current value -> {data}",color='blue')
-                data[field] = updated_value
-                color_print(message=f"updation : {data}",color='blue')
-                with open (filepath,'w') as file:
+        with open(filepath,f'{modes[operation]}') as file:
+            color_print(message=f"Filepath :\n{filepath}, Extension : {extension}",color='green')
+            # Read Operation
+            if operation == 'read':
+                if extension == 'json':
+                    data = json.load(file)
+                elif extension == 'env':
+                    data = dotenv_values(".env")
+                else:
+                    data = file
+                color_print(message=f"Data : \n {data}",color='green')
+                return data
+            # Update Operation
+            elif operation == 'update':
+                if extension == 'env':
+                    set_key(filepath,field,updated_value)
+                    
+                elif extension == 'json':
+                    data = json.load(file)
+                    color_print(message=data,color='green')
+                    # only int/str value can be added to json file ...
+                    if type(updated_value) != int: 
+                        data[field] = str(updated_value)
+                    file.seek(0)
                     json.dump(data,file,indent=4)
-            # updation
+                # Displaying the changes made....
+                #status = f"Key : {field}\nCurrent value : {current_value}\nNew value : {updated_value}"
+                #color_print(message=status,color='blue')
     except Exception as e:
         better_error_handling(e)
 
 
-
-
-
-
-
-
 # .env File handling....
-from dotenv import load_dotenv, set_key
 
 
-load_dotenv()
-def env_file_updater(key,current_value,new_value):
-    filepath = '.env'
-    status = f"Key : {key}\nCurrent value : {current_value}\nNew value : {new_value}"
-    set_key(filepath,key,new_value)
-    color_print(message=status,color='blue')
+def open_file():
+    pass
 
+def close_file():
+    pass
 
 

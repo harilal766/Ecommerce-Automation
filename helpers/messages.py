@@ -40,6 +40,7 @@ def color_print(message,color):
         foregreen = Fore.GREEN
     elif color.lower() == "blue":
         foregreen = Fore.BLUE
-    
-    print(f"{foregreen}{message.capitalize()}{Style.RESET_ALL}")
+    if type(message) != dict:
+        message.capitalize()
+    print(f"{foregreen}{message}{Style.RESET_ALL}")
         

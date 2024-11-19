@@ -13,6 +13,7 @@ load_dotenv()
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+SP_API_DEFAULT_MARKETPLACE = os.getenv("SP_API_DEFAULT_MARKETPLACE")
 
 #SELLER_ID = "ACJLZEYR3QZJFCQ77FO2CO36MSZQ"
 #DEVELOPER_ID = "-------"
@@ -25,44 +26,8 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 def region_finder():
     pass
     
-def is_access_token_expired():
-    # if the difference is more than limit, return false , if within limit, return True
-    current_time = datetime.now()
-    # find the time in which last request was made and store it in a json file
-        # if the date is same and the difference is  >= 1hr with current time,
-            # request again.
-        # if the list is empty add a number to avoid errors, this will make its legth 1.
-    data = json_reader(dir_switch(win=win_api_config,lin=lin_api_config))
-    last_request_time = datetime.fromisoformat(data['latest_access_token_request'])
-    difference_seconds = (current_time - last_request_time).total_seconds()
-    limit = 3600
-    color_print(message=f"last request at : {last_request_time}, current time : {current_time}, difference : {difference_seconds} seconds.",color='blue')
-    
-    
-    if difference_seconds < limit:
-        return False
-    else:
-        color_print(message=f"access token expired, requesting again...",color='blue')
-        # Storing the new access token to the .env file.
-        request_time = datetime.now().isoformat()
 
-        # Update the request time to a json file for later use...
-        json_updater(field="latest_access_token_request",updated_value=request_time,
-                                filepath=dir_switch(win=win_api_config,lin=lin_api_config))
-        access_token_storing = env_file_updater(key='ACCESS_TOKEN',current_value=os.getenv('ACCESS_TOKEN'),new_value=access_token)
-        if access_token_storing:
-            color_print(message="Access token stored to the env file.",color='green')
-        else:
-            color_print(message="Access token didn't stored to the env file.",color='red')
-        return True
-    
-    
-    
-    
-            
-    
-
-def get_access_token():
+def generate_access_token():
     url = "https://api.amazon.com/auth/o2/token"
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     data = {
@@ -79,10 +44,53 @@ def get_access_token():
         else:
             color='red'
         color_print(f"Response Status Code: {response.status_code}",color=color)
-        
+
         #print(f"Response Content: {response.text}")  # Log server response
         response.raise_for_status()  # Raise error if response status isn't 200
         return response.json().get("access_token")
     except requests.exceptions.RequestException as e:
         print(f"Access Token Error: {e}")
         return None
+
+def get_or_generate_access_token():
+    current_time = datetime.now()
+    try:
+        # Read the json file to get the time stamp
+        data = file_handler(filepath=dir_switch(win=win_api_config,lin=lin_api_config),operation='read')
+        # initialization
+        
+        last_request_time_str = data["latest_access_token_request"]
+        last_request_time = datetime.fromisoformat(last_request_time_str)
+        print(type(last_request_time))
+        difference_seconds = (current_time - last_request_time).total_seconds()
+        limit = 3600
+        token_status = ''
+        color_print(message=f"Last request : {last_request_time}, Current time : {current_time}, Difference : {difference_seconds} seconds.",color='blue')
+        # if the access token is expired
+        if difference_seconds > limit:
+            color_print(message="Generating new token.",color='green')
+            # generate a new one.
+            new_access_token = generate_access_token()
+            # Store the new token in to the env file
+            file_handler(filepath='.env',operation='update',
+                field='ACCESS_TOKEN',updated_value=new_access_token)
+            # request time -> json file
+            filepath = dir_switch(win=win_api_config,lin=lin_api_config)
+            field = "latest_access_token_request"
+            file_handler(filepath=filepath,field=field,
+                        operation='update',updated_value=current_time)
+            return new_access_token
+        else:
+            color_print(message="Previous Token can be used.",color='green')
+            # extract the access token value from the env file and return it
+            previous_access_token = os.getenv('ACCESS_TOKEN')
+            # Status message for old token
+           
+            return previous_access_token
+            
+    except Exception as e:
+        better_error_handling(e)
+        
+        
+
+
