@@ -13,7 +13,7 @@ from amazon.report_types import *
 created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
 
         
-def amazon_api_driver(option):
+def api_driver(option):
     try:
         # Assigining the instance and response based on the selection.
         if 'amazon' in option:
@@ -23,7 +23,7 @@ def amazon_api_driver(option):
                 # go to api docs and find other order statueses like waiting for pickup
                 response = instance.getOrders(CreatedAfter=created_after,
                                               OrderStatuses="Unshipped")
-                result = next_shipment_summary(response=response)
+                response = next_shipment_summary(response=response)
             # For a single order details
             elif not "orders" in option and "order" in option:
                 response = instance.getOrder(orderId=
@@ -36,15 +36,15 @@ def amazon_api_driver(option):
             
             elif "report api" in option:
                 instance = Reports()
-                response = instance.getReports(reportTypes=order_report_types["datewise_archived_orders_data_in_flat_file"])
-                result= report_display(response)
+                response = instance.getReports(reportTypes=order_report_types["datewise archived orders data flatfile"])
+                response= report_display(response)
 
         elif "Shopify" in option:
             pass
 
         
         # Print the data.
-        print(result)
+        print(response)
         # find the dict in which orders are found
         
     except Exception as e:

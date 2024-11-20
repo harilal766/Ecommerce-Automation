@@ -3,7 +3,7 @@ from helpers.terminal_scripts import clear_terminal,recompile
 from helpers.file_ops import function_boundary
 from helpers.messages import *
 from post_tracking import post_tracking
-from api_driver import amazon_api_driver
+from api_driver import api_driver
 
 # Menu4
 feature_menu = {
@@ -11,10 +11,10 @@ feature_menu = {
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
     3:("Post Tracking",post_tracking),
-    4:("Amazon Orders API",amazon_api_driver),
-    5:("Amazon Order API",amazon_api_driver),
-    6:("amazon order buyer info api",amazon_api_driver),
-    7:("Amazon Report API : Requested reports",amazon_api_driver)
+    4:("Amazon Orders API",api_driver),
+    5:("Amazon Order API",api_driver),
+    6:("amazon order buyer info api",api_driver),
+    7:("Amazon Report API : Requested reports",api_driver)
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]

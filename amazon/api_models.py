@@ -6,8 +6,6 @@ from amazon.authorization import *
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
 
 
-
-
 class SPAPIBase:
     def __init__(self,base_url="https://sellingpartnerapi-eu.amazon.com",marketplace_id="A21TJRUUN4KGV"):
         self.access_token = get_or_generate_access_token()
@@ -22,61 +20,61 @@ class SPAPIBase:
             "MarketplaceIds": self.marketplace_id,
         }
 
+    def response_processor(self,endpoint,json_input=None,params=None,payload=None,method=None):
+        # make sure the endpoint have a "/" at the begining and does not end with "/"
+        if endpoint[0] != '/':
+            endpoint = '/'+endpoint
+        # Since majority of methods are GET,...
+        if method == None:
+            color_print(message=f"{method} method.",color='green')
+            response = requests.get(self.base_url+endpoint, headers=self.headers,params = params)
+        elif method == 'post':
+            color_print(message=f"{method} method.",color='green')
+            response = requests.post(self.base_url+endpoint, headers=self.headers,json = json_input)
+
+        color_print(message=f"Status code : {response.status_code} \n Response :",color='blue')
+        response.raise_for_status()
+        response = response.json()
+
+        if payload == None:
+            return response
+        else :
+            return response[payload]
+
+
 class Orders(SPAPIBase):
     """ 
         Order api function parameters (optional)
         link : https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#getorders
 
-        getOrders, getOrder, getOrderBuyerInfo, getOrderAddress, getOrderItems
+        getOrderAddress, getOrderItems
         getOrderItemsBuyerInfo, updateShipmentStatus, getOrderRegulatedInfo
         updateVerificationStatus, confirmShipment
     """
     def getOrders(self,CreatedAfter,OrderStatuses):
+        endpoint = "/orders/v0/orders"
         self.params.update({
             "CreatedAfter": CreatedAfter,
-            "OrderStatuses":OrderStatuses
-        })
-        endpoint = "/orders/v0/orders" 
-        
-        response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
-        response.raise_for_status()
-        response = response.json()
-        orders = response['payload']['Orders']
-        return orders
+            "OrderStatuses":OrderStatuses})  
+        payload = super().response_processor(endpoint=endpoint,params=self.params,payload='payload')
+        return payload.get('Orders')
 
     def getOrder(self,orderId):
-        """
-        Rate (requests per second)	Burst
-                            0.5	    30
-        """
         endpoint = f"/orders/v0/orders/{orderId}"
-        self.params.update ({
-            "orderId" : orderId
-        })
-        response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
-        response.raise_for_status()
-        return response.json()
+        self.params.update ({"orderId" : orderId})
+        return super().response_processor(endpoint=endpoint,params=self.params,payload='payload')
     
     def getOrderBuyerInfo(self,orderId):
-        """
-        Rate (requests per second)	Burst
-                            0.5	    30
-        """
         endpoint = f"/orders/v0/orders/{orderId}/buyerInfo"
-        self.params.update ({
-            "orderId" : orderId
-        })
-        response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
-        response.raise_for_status()
-        return response.json()
-
+        self.params.update ({"orderId" : orderId})
+        return super().response_processor(endpoint=endpoint,params=self.params)
     
 
 class Reports(SPAPIBase):
     """
         https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference
 
-        getReports, createReport, getReport, cancelReport
+        cancelReport
         getReportSchedules, createReportSchedule, getReportSchedule, cancelReportSchedule, getReportDocument
     """
     def createReport(self,reportType):
@@ -85,23 +83,22 @@ class Reports(SPAPIBase):
             "reportType":reportType,
             "marketplaceIds" : [self.marketplace_id]
         }
-        # {'reportId': '50446020045'}
-        response = requests.post(self.base_url+endpoint,headers=self.headers, json=data)
-        color_print(message=f"Status code : {response.status_code}",color='blue')
-        color_print(message="Response :\n",color='blue')
-        #response.raise_for_status()
-        return response.json()
+        return super().response_processor(method='post',endpoint=endpoint,json_input=data)
     
     def getReports(self,reportTypes=None,processingStatuses=None):
         endpoint = "/reports/2021-06-30/reports"
         self.params.update({
             "reportTypes" : reportTypes
             })
-        response = requests.get(self.base_url+endpoint, headers=self.headers,params =  self.params)
-        response.raise_for_status()
-        response = response.json()
-        report = response['reports']
-        return report
+        return super().response_processor(endpoint=endpoint,params=self.params,payload='reports')
+    
+    def getReport(self,reportId):
+        endpoint = f"/reports/2021-06-30/reports/{reportId}"
+        self.params.update({"reportId" : reportId})
+        return super().response_processor(endpoint=endpoint,params=self.params)
+
+    def cancelReport():
+        pass
 
 
 
