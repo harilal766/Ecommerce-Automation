@@ -6,8 +6,6 @@ from amazon.authorization import *
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
 
 
-
-
 class SPAPIBase:
     def __init__(self,base_url="https://sellingpartnerapi-eu.amazon.com",marketplace_id="A21TJRUUN4KGV"):
         self.access_token = get_or_generate_access_token()
@@ -21,6 +19,28 @@ class SPAPIBase:
         self.params = {
             "MarketplaceIds": self.marketplace_id,
         }
+
+    def response_processor(self,method,endpoint,json_input=None,params=None,payload=None):
+        # make sure the endpoint have a "/" at the begining and does not end with "/"
+        if endpoint[0] != '/':
+            endpoint = '/'+endpoint
+
+        if method == 'get':
+            color_print(message=f"{method} method.",color='green')
+            response = requests.get(self.base_url+endpoint, headers=self.headers,params = params)
+        elif method == 'post':
+            color_print(message=f"{method} method.",color='green')
+            response = requests.post(self.base_url+endpoint, headers=self.headers,json = json_input)
+
+        color_print(message=f"Status code : {response.status_code}",color='blue')
+        color_print(message="Response :\n",color='blue')
+        response.raise_for_status()
+        response = response.json()
+
+        if payload == None:
+            return response
+        else :
+            return response[payload]
 
 class Orders(SPAPIBase):
     """ 
@@ -37,12 +57,14 @@ class Orders(SPAPIBase):
             "OrderStatuses":OrderStatuses
         })
         endpoint = "/orders/v0/orders" 
+    
         
         response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
         response.raise_for_status()
         response = response.json()
         orders = response['payload']['Orders']
         return orders
+        
 
     def getOrder(self,orderId):
         """
@@ -53,9 +75,7 @@ class Orders(SPAPIBase):
         self.params.update ({
             "orderId" : orderId
         })
-        response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
-        response.raise_for_status()
-        return response.json()
+        return super().response_processor(method='get',endpoint=endpoint,params=self.params,payload='payload')
     
     def getOrderBuyerInfo(self,orderId):
         """
@@ -66,10 +86,7 @@ class Orders(SPAPIBase):
         self.params.update ({
             "orderId" : orderId
         })
-        response = requests.get(self.base_url+endpoint, headers=self.headers, params=self.params)
-        response.raise_for_status()
-        return response.json()
-
+        return super().response_processor(method='get',endpoint=endpoint,params=self.params)
     
 
 class Reports(SPAPIBase):
@@ -86,12 +103,9 @@ class Reports(SPAPIBase):
             "marketplaceIds" : [self.marketplace_id]
         }
         # {'reportId': '50446020045'}
-        response = requests.post(self.base_url+endpoint,headers=self.headers, json=data)
-        color_print(message=f"Status code : {response.status_code}",color='blue')
-        color_print(message="Response :\n",color='blue')
-        #response.raise_for_status()
-        return response.json()
+        return super().response_processor(method='post',endpoint=endpoint,json_input=data)
     
+
     def getReports(self,reportTypes=None,processingStatuses=None):
         endpoint = "/reports/2021-06-30/reports"
         self.params.update({
@@ -104,12 +118,13 @@ class Reports(SPAPIBase):
         return report
     
     def getReport(self,reportId):
-        endpoint = f"reports/2021-06-30/reports/{reportId}"
+        endpoint = f"/reports/2021-06-30/reports/{reportId}"
         self.params.update({"reportId" : reportId})
         response = requests.get(self.base_url+endpoint, headers=self.headers,params =  self.params)
         response.raise_for_status() # ; rate_limit_checker(response)
         response = response.json()
         return response
+
 
 
 
