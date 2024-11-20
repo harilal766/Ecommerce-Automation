@@ -36,7 +36,7 @@ def api_driver(option):
             
             elif "report api" in option:
                 instance = Reports()
-                response = instance.getReports(reportTypes=order_report_types["datewise_archived_orders_data_in_flat_file"])
+                response = instance.getReports(reportTypes=order_report_types["datewise archived orders data flatfile"])
                 response= report_display(response)
 
         elif "Shopify" in option:

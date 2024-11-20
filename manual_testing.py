@@ -3,7 +3,12 @@ from amazon.report_types import *
 
 
 
-ins = Reports()
-rep_id = ins.createReport(reportType=order_report_types["datewise orders data flatfile"])
+R = Reports(); O=Orders()
+#rep_id = ins.createReport(reportType=order_report_types["datewise orders data flatfile"])
 
-print(rep_id)
+created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
+
+go = O.getOrders(CreatedAfter=created_after,OrderStatuses='Unshipped')
+
+
+print(go)

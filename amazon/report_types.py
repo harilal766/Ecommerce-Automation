@@ -1,10 +1,10 @@
 order_report_types = {
     "actionable shipping flatfile" : "GET_FLAT_FILE_ACTIONABLE_ORDER_DATA_SHIPPING",
-    "" : "GET_ORDER_REPORT_DATA_INVOICING",
-    "" : "GET_ORDER_REPORT_DATA_TAX",
+    "invoicing" : "GET_ORDER_REPORT_DATA_INVOICING",
+    "tax data" : "GET_ORDER_REPORT_DATA_TAX",
     "shipping report" : "GET_ORDER_REPORT_DATA_SHIPPING",
-    "" : "GET_FLAT_FILE_ORDER_REPORT_DATA_INVOICING",
-    "" : "GET_FLAT_FILE_ORDER_REPORT_DATA_SHIPPING",
+    "invoicing flatfile" : "GET_FLAT_FILE_ORDER_REPORT_DATA_INVOICING",
+    "shipping flatfile" : "GET_FLAT_FILE_ORDER_REPORT_DATA_SHIPPING",
     "" : "GET_FLAT_FILE_ORDER_REPORT_DATA_TAX",
     "" : "GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL",
     "datewise orders data flatfile" : "GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL",
@@ -19,9 +19,9 @@ order_report_types = {
 
 return_report_types = {
    "datewise returns xml" : "GET_XML_RETURNS_DATA_BY_RETURN_DATE",
-   "" : "GET_FLAT_FILE_RETURNS_DATA_BY_RETURN_DATE",
-   "" : "GET_XML_MFN_PRIME_RETURNS_REPORT",
-   "" : "GET_CSV_MFN_PRIME_RETURNS_REPORT",
+   "datewise returns flatfile" : "GET_FLAT_FILE_RETURNS_DATA_BY_RETURN_DATE",
+   "prime returns xml" : "GET_XML_MFN_PRIME_RETURNS_REPORT",
+   "prime returns csv" : "GET_CSV_MFN_PRIME_RETURNS_REPORT",
    "" : "GET_XML_MFN_SKU_RETURN_ATTRIBUTES_REPORT",
    "" : "GET_FLAT_FILE_MFN_SKU_RETURN_ATTRIBUTES_REPORT"
 }
