@@ -43,3 +43,14 @@ def report_display(response):
             for key,value in i.items():
                     print(f"{key} -:- {value}")
             color_print("------------",color="blue")
+
+def requested_reports(response):
+    for report in response:
+        if type(report) == dict:
+            for key,value in report.items():
+                print(f"{key} - {value}")
+            color_print(message="----------",color='blue')
+
+
+
+

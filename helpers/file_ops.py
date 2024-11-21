@@ -152,7 +152,7 @@ def file_handler(filepath,operation,field=None, current_value=None,updated_value
     modes = {'read':'r','update':'r+'}
     try:
         with open(filepath,f'{modes[operation]}') as file:
-            color_print(message=f"Filepath :\n{filepath}, Extension : {extension}",color='green')
+            color_print(message=f"Filepath : {filepath}, Extension : {extension}",color='green')
             # Read Operation
             if operation == 'read':
                 if extension == 'json':
@@ -161,9 +161,11 @@ def file_handler(filepath,operation,field=None, current_value=None,updated_value
                     data = dotenv_values(".env")
                 else:
                     data = file
+                """
                 # Make sure env file wont be read on the normal way, for security reasons
                 if not extension == 'env':
                     color_print(message=f"Data : \n {data}",color='green')
+                """
                 return data
             # Update Operation
             elif operation == 'update':
