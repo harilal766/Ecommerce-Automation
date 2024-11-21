@@ -36,7 +36,7 @@ class SPAPIBase:
 
         status_color = 'red'
 
-        success_codes = [200]
+        success_codes = [200,202]
         forbidden_codes = [403]
         error_codes = [400,401,404,415,429,500,503]
 
