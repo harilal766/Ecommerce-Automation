@@ -70,25 +70,25 @@ class Orders(SPAPIBase):
         self.params.update ({"orderId" : orderId})
         return super().response_processor(endpoint=endpoint,params=self.params)
     
-    def getOrderAddress():
+    def getOrderAddress(self,):
         pass 
 
-    def getOrderItems():
+    def getOrderItems(self,):
         pass
 
-    def getOrderItemsBuyerInfo():
+    def getOrderItemsBuyerInfo(self,):
         pass
 
-    def updateShipmentStatus():
+    def updateShipmentStatus(self,):
         pass
 
-    def getOrderRegulatedInfo():
+    def getOrderRegulatedInfo(self,):
         pass
 
-    def updateVerificationStatus():
+    def updateVerificationStatus(self,):
         pass
 
-    def confirmShipment():
+    def confirmShipment(self,):
         pass
     
 
@@ -100,9 +100,18 @@ class Reports(SPAPIBase):
                 "marketplaceIds" : [self.marketplace_id]}
         return super().response_processor(method='post',endpoint=endpoint,json_input=data)
     
-    def getReports(self,reportTypes=None,processingStatuses=None):
+    def getReports(self,reportTypes=None,processingStatuses=None,marketplaceIds=None,
+                   pageSize=None,createdSince=None,CreatedUntil=None,nextToken=None):
         endpoint = "/reports/2021-06-30/reports"
-        self.params.update({ "reportTypes" : reportTypes })
+        self.params.update({ 
+            "reportTypes" : reportTypes,
+            "processingStatuses" : processingStatuses,
+            "marketplaceIds" : marketplaceIds,
+            "pageSize" : pageSize,
+            "cretedSince" : createdSince,
+            "createdUntil" : CreatedUntil,
+            "nextToken" : nextToken
+            })
         response = super().response_processor(endpoint=endpoint,params=self.params,payload='reports')
         return response
     
@@ -121,17 +130,18 @@ class Reports(SPAPIBase):
         self.params.update({"reportTypes" : reportTypes})
         return super().response_processor(endpoint=endpoint,params=self.params)
 
-    def createReportSchedule(self,):
-        pass
+    def createReportSchedule(self):
+        endpoint = f"/reports/2021-06-30/schedules"
 
-    def getReportSchedule(self,):
-        pass
+    def getReportSchedule(self,reportScheduleId):
+        endpoint = f"/reports/2021-06-30/schedules/{reportScheduleId}"
 
-    def cancelReportSchedule(self,):
-        pass 
+    def cancelReportSchedule(self,reportScheduleId):
+        endpoint = f"/reports/2021-06-30/schedules/{reportScheduleId}"
 
-    def getReportDocument(self,):
-        pass
+    def getReportDocument(self,reportDocumentId):
+        endpoint = f"/reports/2021-06-30/documents/{reportDocumentId}"
+        
 
 
 

@@ -70,15 +70,7 @@ os.environ['SP_API_REFRESH_TOKEN'] = REFRESH_TOKEN
 
 
 # Report Creation...
-def n_days_back_timestamp(days):
-    try:
-        if type(days) == int: 
-            # Substract (time now - time n days back) and return the answer in iso format
-            return (datetime.utcnow() - timedelta(days=days)).isoformat()
-        else:
-            color_print(message="Enter a number.",color='red')
-    except Exception as e:
-        better_error_handling(e)
+
         
 
 """
