@@ -19,6 +19,10 @@ lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test do
 
 win_shopify_cod = r"D:\6.SPEED POST\Return Report COD tallying"
 lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
+
+win_shopify_fulfilled = r"D:\3.Shopify\fulfilled report"
+
+
     #AMAZON
 win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"
 

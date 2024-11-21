@@ -100,21 +100,28 @@ class Reports(SPAPIBase):
 
     def cancelReport(self,reportId):
         endpoint = f"/reports/2021-06-30/reports/{reportId}"
-        return super().response_processor(endpoint=endpoint,method='delete')
+        self.params.update({"reportId" : reportId})
+        return super().response_processor(endpoint=endpoint,params=self.params,method='delete')
 
-    def getReportSchedules():
+    def getReportSchedules(self,reportTypes):
+        endpoint = "/reports/2021-06-30/schedules"
+        self.params.update({"reportTypes" : reportTypes})
+        return super().response_processor(endpoint=endpoint,params=self.params)
+
+    def createReportSchedule(self,):
         pass
 
-    def createReportSchedule():
+    def getReportSchedule(self,):
         pass
 
-    def getReportSchedule():
-        pass
-
-    def cancelReportSchedule():
+    def cancelReportSchedule(self,):
         pass 
 
-    def getReportDocument():
+    def getReportDocument(self,):
         pass
 
 
+
+
+class Shipping(SPAPIBase):
+    pass
