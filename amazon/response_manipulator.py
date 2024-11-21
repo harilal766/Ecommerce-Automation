@@ -44,11 +44,15 @@ def report_display(response):
                     print(f"{key} -:- {value}")
             color_print("------------",color="blue")
 
-def requested_reports(response):
+def requested_reports(response,report_id = None):
+    color = 'blue'
     for report in response:
         if type(report) == dict:
             for key,value in report.items():
-                print(f"{key} - {value}")
+                if report['reportId'] == report_id:
+                    color_print(message="Target id found.")
+                    color = 'green'
+                color_print(message = f"{key} - {value}",color=color)
             color_print(message="----------",color='blue')
 
 

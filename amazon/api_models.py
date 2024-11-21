@@ -40,7 +40,7 @@ class SPAPIBase:
         forbidden_codes = [403]
         error_codes = [400,401,404,415,429,500,503]
 
-        if response.status_code in success_codes :
+        if response.status_code < 300 :
             status_color = 'green'
         color_print(message=f"Status code : {response.status_code} \n Response :",color=status_color)
         response.raise_for_status()
@@ -53,14 +53,6 @@ class SPAPIBase:
 
 
 class Orders(SPAPIBase):
-    """ 
-        Order api function parameters (optional)
-        link : https://developer-docs.amazon.com/sp-api/docs/orders-api-v0-reference#getorders
-
-        getOrderAddress, getOrderItems
-        getOrderItemsBuyerInfo, updateShipmentStatus, getOrderRegulatedInfo
-        updateVerificationStatus, confirmShipment
-    """
     def getOrders(self,CreatedAfter,OrderStatuses):
         endpoint = "/orders/v0/orders"
         self.params.update({"CreatedAfter": CreatedAfter,
@@ -77,6 +69,27 @@ class Orders(SPAPIBase):
         endpoint = f"/orders/v0/orders/{orderId}/buyerInfo"
         self.params.update ({"orderId" : orderId})
         return super().response_processor(endpoint=endpoint,params=self.params)
+    
+    def getOrderAddress():
+        pass 
+
+    def getOrderItems():
+        pass
+
+    def getOrderItemsBuyerInfo():
+        pass
+
+    def updateShipmentStatus():
+        pass
+
+    def getOrderRegulatedInfo():
+        pass
+
+    def updateVerificationStatus():
+        pass
+
+    def confirmShipment():
+        pass
     
 
 class Reports(SPAPIBase):

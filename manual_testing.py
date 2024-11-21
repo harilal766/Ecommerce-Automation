@@ -14,7 +14,7 @@ created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
 
 
 
-
+from amazon.response_manipulator import *
 # SUCCESS
 gsr = R.getReportSchedules(reportTypes=order_report_types["datewise orders data flatfile"])
 print(gsr)
@@ -29,7 +29,7 @@ def report_generator(report_type):
         
         # status finder
         status = instance.getReports(reportTypes=report_type)
-        color_print(message=f"Status : {status}",color='red')
+        requested_reports(response=status)
     except Exception as e:
         better_error_handling(e)
 
