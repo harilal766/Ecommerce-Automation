@@ -32,16 +32,19 @@ def success_status_msg(status):
     print(f"{Fore.GREEN}{status}{Style.RESET_ALL}")
     #print(green_boundary)
 
-def color_print(message,color,end=None):
+def color_print(message,color=None,end=None):
     foregreen = None
-    if color.lower() == 'red':
-        foregreen = Fore.RED
-    elif color.lower() == 'green':
+    if color != None:
+        if color.lower() == 'red':
+            foregreen = Fore.RED
+        elif color.lower() == 'green':
+            foregreen = Fore.GREEN
+        elif color.lower() == "blue":
+            foregreen = Fore.BLUE
+        if type(message) != dict:
+            message.capitalize()
+    else:
         foregreen = Fore.GREEN
-    elif color.lower() == "blue":
-        foregreen = Fore.BLUE
-    if type(message) != dict:
-        message.capitalize()
 
     if end == None:
         print(f"{foregreen}{message}{Style.RESET_ALL}")
