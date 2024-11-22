@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime, timedelta, timezone
-from helpers.messages import color_print
+from helpers.messages import color_text
 from helpers.file_ops import *
 from amazon.authorization import *
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
@@ -27,10 +27,10 @@ class SPAPIBase:
         # Since majority of methods are GET,...
         status_end = " -> "
         if method == None:
-            color_print(message=f"GET ⬇️ ",color='blue',end=status_end)
+            color_text(message=f"GET ⬇️ ",color='blue',end=status_end)
             response = requests.get(self.base_url+endpoint, headers=self.headers,params = params)
         elif method == 'post':
-            color_print(message=f"POST ⬆️ ",color='blue',end=status_end)
+            color_text(message=f"POST ⬆️ ",color='blue',end=status_end)
             response = requests.post(self.base_url+endpoint, headers=self.headers,json = json_input)
         elif method == 'delete':
             response = requests.delete(self.base_url+endpoint, headers=self.headers)
@@ -42,7 +42,7 @@ class SPAPIBase:
         status_color = 'red'
         if response.status_code < 300 :
             status_color = 'green'
-        color_print(message=f"{response.status_code}",color=status_color,end=status_end)
+        color_text(message=f"{response.status_code}",color=status_color,end=status_end)
         response.raise_for_status()
         response = response.json()
 

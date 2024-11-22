@@ -63,7 +63,7 @@ from datetime import datetime, timedelta
 from sp_api.api import ReportsV2,Reports
 from sp_api.base.reportTypes import ReportType
 import os
-from helpers.messages import color_print
+from helpers.messages import color_text
 os.environ['LWA_APP_ID'] = CLIENT_ID
 os.environ['LWA_CLIENT_SECRET'] = CLIENT_SECRET
 os.environ['SP_API_REFRESH_TOKEN'] = REFRESH_TOKEN

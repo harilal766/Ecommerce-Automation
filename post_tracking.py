@@ -2,7 +2,7 @@ from helpers.file_ops import text_input_checker
 import re
 from helpers.regex_patterns import post_track_id_pattern,post_order_id_pattern
 from helpers.sql_scripts import db_connection
-from helpers.messages import color_print
+from helpers.messages import color_text
 # combine connection and querying into one function..
 def db_querying(connection,query):
     if connection:
@@ -10,7 +10,7 @@ def db_querying(connection,query):
             cursor.execute(query)
             results = cursor.fetchall()
     else:
-         color_print(message="Connection failed.",color='red')
+         color_text(message="Connection failed.",color='red')
     return results
         
 
@@ -18,7 +18,7 @@ def post_tracking():
     input_id = input("Enter the ID : ")
     tracking_id = ''
     if re.match(post_track_id_pattern,input_id):
-        color_print(message=f"Tracking id found....",color='green')
+        color_text(message=f"Tracking id found....",color='green')
         tracking_id = input_id
     elif re.match(post_order_id_pattern,input_id):
         pass

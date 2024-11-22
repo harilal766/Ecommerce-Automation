@@ -1,4 +1,4 @@
-from helpers.messages import color_print
+from helpers.messages import color_text
 from helpers.messages import better_error_handling
 from datetime import datetime,timedelta
 def next_shipment_summary(response):
@@ -29,20 +29,20 @@ def next_shipment_summary(response):
                 
         boundary = " "   
         id_and_date = f"COD :{cod_orders}\n{boundary}\nPrepaid :{prepaid_orders}\n{boundary}"
-        color_print(message=id_and_date,color='blue')
+        color_text(message=id_and_date,color='blue')
         
     except Exception as e:
         better_error_handling(e)
-    color_print(f"Total orders: {order_count}\nCOD for {today_string} : {len(cod_orders)}\nPrepaid for {today_string} : {len(prepaid_orders)}",color='blue')
+    color_text(f"Total orders: {order_count}\nCOD for {today_string} : {len(cod_orders)}\nPrepaid for {today_string} : {len(prepaid_orders)}",color='blue')
 
 def report_display(response):
     if len(response) == 0:
-        color_print(message=f"Empty Output. : {response}",color='red')
+        color_text(message=f"Empty Output. : {response}",color='red')
     else:
         for i in response:
             for key,value in i.items():
                     print(f"{key} -:- {value}")
-            color_print("------------",color="blue")
+            color_text("------------",color="blue")
 
 def requested_reports(response,report_id = None):
     color = 'blue'
@@ -50,10 +50,10 @@ def requested_reports(response,report_id = None):
         if type(report) == dict:
             for key,value in report.items():
                 if report['reportId'] == report_id:
-                    color_print(message="Target id found.")
+                    color_text(message="Target id found.")
                     color = 'green'
-                color_print(message = f"{key} - {value}",color=color)
-            color_print(message="----------",color='blue')
+                color_text(message = f"{key} - {value}",color=color)
+            color_text(message="----------",color='blue')
 
 
 
@@ -64,6 +64,6 @@ def n_days_back_timestamp(days):
             # Substract (time now - time n days back) and return the answer in iso format
             return (datetime.utcnow() - timedelta(days=days)).isoformat()
         else:
-            color_print(message="Enter a number.",color='red')
+            color_text(message="Enter a number.",color='red')
     except Exception as e:
         better_error_handling(e)
