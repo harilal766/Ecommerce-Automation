@@ -25,24 +25,24 @@ class SPAPIBase:
         if endpoint[0] != '/':
             endpoint = '/'+endpoint
         # Since majority of methods are GET,...
+        status_end = " -> "
         if method == None:
-            color_print(message=f"GET method.",color='green')
+            color_print(message=f"GET ⬇️ ",color='blue',end=status_end)
             response = requests.get(self.base_url+endpoint, headers=self.headers,params = params)
         elif method == 'post':
-            color_print(message=f"POST method.",color='green')
+            color_print(message=f"POST ⬆️ ",color='blue',end=status_end)
             response = requests.post(self.base_url+endpoint, headers=self.headers,json = json_input)
         elif method == 'delete':
             response = requests.delete(self.base_url+endpoint, headers=self.headers)
-
-        status_color = 'red'
 
         success_codes = [200,202]
         forbidden_codes = [403]
         error_codes = [400,401,404,415,429,500,503]
 
+        status_color = 'red'
         if response.status_code < 300 :
             status_color = 'green'
-        color_print(message=f"Status code : {response.status_code} \n Response :",color=status_color)
+        color_print(message=f"{response.status_code}",color=status_color,end=status_end)
         response.raise_for_status()
         response = response.json()
 
@@ -94,10 +94,13 @@ class Orders(SPAPIBase):
 
 class Reports(SPAPIBase):
     # https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference        
-    def createReport(self,reportType):
+    def createReport(self,reportType,reportOptions=None,dataStartTime=None,dataEndTime=None):
         endpoint = '/reports/2021-06-30/reports'
         data = {"reportType":reportType,
-                "marketplaceIds" : [self.marketplace_id]}
+                "reportOptions" : reportOptions,
+                "marketplaceIds" : [self.marketplace_id],
+                "dataStartTime" : dataStartTime,
+                "dataEndTime" : dataEndTime}
         return super().response_processor(method='post',endpoint=endpoint,json_input=data)
     
     def getReports(self,reportTypes=None,processingStatuses=None,marketplaceIds=None,
@@ -141,6 +144,8 @@ class Reports(SPAPIBase):
 
     def getReportDocument(self,reportDocumentId):
         endpoint = f"/reports/2021-06-30/documents/{reportDocumentId}"
+        self.params.update({"reportDocumentId" : reportDocumentId})
+        return super().response_processor(endpoint=endpoint,params=self.params)
         
 
 
