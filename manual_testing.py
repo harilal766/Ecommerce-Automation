@@ -18,6 +18,7 @@ created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
 from amazon.response_manipulator import *
 import requests,time
 import pandas as pd
+from helpers.sql_scripts import sql_table_creation_or_updation
 type = order_report_types["datewise orders data flatfile"]
 # SUCCESS
 gsr = R.getReportSchedules(reportTypes=type)
@@ -37,6 +38,11 @@ def rep_doc_id_generator(report_id):
         else:
             color_text(message=status,color='green')
 
+def file_writer(filepath,filename,data):
+    extension = filename.split(".")[-1]
+    df = pd.DataFrame(data)
+    if extension == "csv":
+        df.to_csv(path_or_buf=filepath,encoding='utf-8')
 
 
 def report_generator(report_type):
@@ -65,22 +71,33 @@ def report_generator(report_type):
             print(f"Status code - {document_response.status_code}")
 
             if document_response.status_code == 200:
-                file_content = [[document_response.content]]
-                #print(file_content)\
+                file_content = document_response.content
+                #print(file_content)
 
-                for line in str(file_content).split("\n"):
-                    print(line)
-                    print("+++++++++")
+                utf_data = file_content.decode("utf-8")
+                print(utf_data)
+                for line in utf_data.split("\n"):
+                    pass
 
                 # Writing the data into a flat file
                 filepath = dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
-                filename="^^^^^.tsv"
-
+                filename="Orders.csv"
                 filepath = os.path.join(filepath,filename)
-
-                df = pd.DataFrame(file_content)
-                df.to_csv(filepath,sep="\t",index=False)
                 
+                """
+                df = pd.DataFrame(utf_data)
+                df.to_csv(path_or_buf=filepath,index=False)
+                """
+
+                with open(filepath,'w') as file:
+                    file.write(utf_data)                    
+                    sql_table_creation_or_updation(dbname='Amazon',tablename="Test",
+                                                   replace_or_append='replace',
+                                                   input_file_dir=filepath)
+
+
+                
+
             else:
                 color_text(message="Unable to generate report.",color='red')
 

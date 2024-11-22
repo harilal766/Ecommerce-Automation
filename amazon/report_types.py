@@ -10,7 +10,7 @@ order_report_types = {
     "datewise orders data flatfile" : "GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL",
     "datewise archived orders data flatfile" : "GET_FLAT_FILE_ARCHIVED_ORDERS_DATA_BY_ORDER_DATE",
     "" : "GET_XML_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL",
-    "" : "GET_XML_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL",
+    "datewise order data xml" : "GET_XML_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL",
     "pending orders flatfile" : "GET_FLAT_FILE_PENDING_ORDERS_DATA",
     "pending orders" : "GET_PENDING_ORDERS_DATA",
     "" : "GET_CONVERGED_FLAT_FILE_PENDING_ORDERS_DATA",
