@@ -23,9 +23,9 @@ gsr = R.getReportSchedules(reportTypes=type)
 
 
 def report_status_checker(report_id):
-    report = R.getReport(reportId=report_id)
-    print(report)
     while True:
+        report = R.getReport(reportId=report_id)
+        print(report)
         if report["processingStatus"] == "IN_QUEUE":
             color_print(message="Waiting...",color='blue')
         elif report["processingStatus"] == "CANCELLED":
@@ -42,6 +42,7 @@ def report_generator(report_type):
     try:
         instance = Reports()
         report_id = instance.createReport(reportType=report_type)
+        report_id = report_id['reportId']
         if report_id:
             color_print(message=f"Report Id Created : {report_id}",color="green")
         
@@ -61,7 +62,9 @@ processing_statuses = ["IN_QUEUE","CANCELLED"]
 
 #o = R.getReports(reportTypes=type,processingStatuses=processing_statuses[0])
 
-#report_generator(report_type=type)
+report_generator(report_type=type)
 
-report_status_checker(report_id='50486020048')
+
+
+
 
