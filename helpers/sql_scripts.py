@@ -144,11 +144,12 @@ def input_sanitizer(instruction,datatype):
 
 
 
-def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file_dir):
+def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file_dir,filename=None):
     success_status_msg("SQL CRUD OPERATIONS")
     try:
         connection = db_connection(dbname=dbname,db_system="sqlite")
-        filename = input_checker(display_message="Enter the input filename with extension :- ",filepath=input_file_dir)
+        if filename != None:
+            filename = input_checker(display_message="Enter the input filename with extension :- ",filepath=input_file_dir)
         extension = str(filename.split(".")[-1]).lower()
         df = ""
         filepath = os.path.join(input_file_dir,filename)
