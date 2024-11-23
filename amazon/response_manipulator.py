@@ -1,6 +1,14 @@
-from helpers.messages import color_text
-from helpers.messages import better_error_handling
+from helpers.messages import *
 from datetime import datetime,timedelta
+from amazon.api_models import *
+from amazon.report_types import *
+from amazon.response_manipulator import *
+import requests
+import pandas as pd
+from io import StringIO
+
+
+
 def next_shipment_summary(response):
     try:# only for amazon api, these api contains the field -> AmazonOrderId.
         #out_list = response['payload']['Orders']
@@ -65,5 +73,56 @@ def n_days_back_timestamp(days):
             return (datetime.utcnow() - timedelta(days=days)).isoformat()
         else:
             color_text(message="Enter a number.",color='red')
+    except Exception as e:
+        better_error_handling(e)
+
+
+
+
+def rep_doc_id_generator(report_id):
+    while True:
+        R = Reports()
+        report = R.getReport(reportId=report_id)
+        status = report["processingStatus"]
+        if status == "DONE":
+            color_text(message=status,color='green')
+            return report['reportDocumentId']
+        if status == "IN_QUEUE":
+            color_text(message=status,color='blue')
+        elif status == "CANCELLED":
+            color_text(message=status,color='red')
+        else:
+            color_text(message=status,color='green')
+
+def sp_api_report_generator(report_type,start_date,end_date,file_dir,filename):
+    try:
+        instance = Reports()
+        report_id = instance.createReport(reportType=report_type,
+                                          dataStartTime=start_date,dataEndTime=end_date)
+        report_id = report_id['reportId']
+        if report_id:
+            color_text(message=f"Report Id Created : {report_id}")
+            # Report document id generation.
+            rep_doc_id = rep_doc_id_generator(report_id=report_id)
+            if rep_doc_id != None:
+                color_text(message=f"Report document Id generated : {rep_doc_id}")
+                report_document = instance.getReportDocument(reportDocumentId=rep_doc_id)
+                document_url = report_document['url'] 
+                document_response = requests.get(document_url)
+                print(f"Status code - {document_response.status_code}")
+                if document_response.status_code == 200:
+                    file_content = document_response.content
+                    decoded_data = file_content.decode("utf-8") # Decoding the response into utf-8
+                    # Writing the data into a csv file
+                    filepath = os.path.join(file_dir,filename)
+                    data_io = StringIO(decoded_data) # converting the decode data into a file simulation
+                    df = pd.read_csv(data_io,sep = '\t')
+                    df.to_csv(filepath,index=False)
+                else:
+                    color_text(message="Unable to generate report.",color='red')
+            else:
+                color_text(message="Report document Id failed,",color='red')
+        else:
+            color_text(message="Report id failed",color='red')
     except Exception as e:
         better_error_handling(e)
