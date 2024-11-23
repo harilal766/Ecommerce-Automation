@@ -24,8 +24,8 @@ class SPAPIBase:
         # make sure the endpoint have a "/" at the begining and does not end with "/"
         if endpoint[0] != '/':
             endpoint = '/'+endpoint
-        # Since majority of methods are GET,...
         status_end = " -> "
+        # Since majority of methods are GET,...
         if method == None:
             color_text(message=f"GET ⬇️ ",color='blue',end=status_end)
             response = requests.get(self.base_url+endpoint, headers=self.headers,params = params)
@@ -33,13 +33,14 @@ class SPAPIBase:
             color_text(message=f"POST ⬆️ ",color='blue',end=status_end)
             response = requests.post(self.base_url+endpoint, headers=self.headers,json = json_input)
         elif method == 'delete':
+            color_text(message=f"DELETE 🚮 ",color='red',end=status_end)
             response = requests.delete(self.base_url+endpoint, headers=self.headers)
 
         success_codes = [200,202]
         forbidden_codes = [403]
         error_codes = [400,401,404,415,429,500,503]
 
-        status_color = 'red'
+        status_color = 'red' ; 
         if response.status_code < 300 :
             status_color = 'green'
         color_text(message=f"{response.status_code}",color=status_color,end=status_end)

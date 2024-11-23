@@ -66,7 +66,7 @@ def requested_reports(response,report_id = None):
 
 
 
-def n_days_back_timestamp(days):
+def n_days_timestamp(days):
     try:
         if type(days) == int: 
             # Substract (time now - time n days back) and return the answer in iso format
