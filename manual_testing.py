@@ -1,32 +1,14 @@
 from amazon.api_models import *
 from amazon.report_types import *
-
-
-
-
-R = Reports(); O=Orders()
-#rep_id = ins.createReport(reportType=order_report_types["datewise orders data flatfile"])
-
-created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
-
-# do = R.cancelReport(reportId="")
-
-
-
-
-
 from amazon.response_manipulator import *
 import requests,time,re,csv
 import pandas as pd
 from io import StringIO
 from helpers.sql_scripts import sql_table_creation_or_updation
 type = order_report_types["datewise orders data flatfile"]
-# SUCCESS
-gsr = R.getReportSchedules(reportTypes=type)
-#print(gsr)
-
 def rep_doc_id_generator(report_id):
     while True:
+        R = Reports()
         report = R.getReport(reportId=report_id)
         status = report["processingStatus"]
         if status == "DONE":
@@ -74,8 +56,6 @@ def report_generator(report_type):
             if document_response.status_code == 200:
                 file_content = document_response.content
                 
-
-
                 # Decoding the response into utf-8
                 decoded_data = file_content.decode("utf-8")
                 # splitting each lines of the decoded data
@@ -86,11 +66,26 @@ def report_generator(report_type):
                 filename="yyyyyyy.csv"
                 filepath = os.path.join(file_dir,filename)
 
+                # The empty space in the reponse text need to be replaced with null
 
-                file_sim = StringIO(decoded_data) # simulating a file for pandas to read
+    
+
+                #file_content = 'b"amazon-order-id\tmerchant-order-id\tpurchase-date\tlast-updated-date\torder-status\tfulfillment-channel\tsales-channel\torder-channel\tship-service-level\tproduct-name\tsku\tasin\titem-status\tquantity\tcurrency\titem-price\titem-tax\tshipping-price\tshipping-tax\tgift-wrap-price\tgift-wrap-tax\titem-promotion-discount\tship-promotion-discount\tship-city\tship-state\tship-postal-code\tship-country\tpromotion-ids\tis-business-order\tpurchase-order-number\tprice-designation\tis-iba\r\n402-8748300-6936363\t\t2024-11-23T06:43:27+00:00\t2024-11-23T06:57:36+00:00\tPending\tMerchant\tAmazon.in\tWebsiteOrderChannel\tStandard\tKAR Mark Kudampuli Dried Lehyam (500 Gm)\t00-KGZ9-I3BZ\tB0CPSC23ZH\tUnshipped\t1\tINR\t640.0\t68.58\t80.0\t8.58\t\t\t\t\tKANJIRAPPALLY\tKERALA\t686507\tIN\t\tfalse\t\t\tfalse\r'
+                #re.sub(r'\d\t\t\d',r'\d\tNull\t\d',file_content)
+                #print(file_content)
+                data_io = StringIO(decoded_data)
+                df = pd.read_csv(data_io,sep = '\t')
+                df.to_csv(filepath,index=False)
+
+                    
+
+                """
+                # Ensure even empty rows are added by reformatting rows to have consistent delimiters
+                processed_data = "\n".join([re.sub(r"^\s*$", "\t\t\t", line) for line in lines])
+                file_sim = StringIO(processed_data) # simulating a file for pandas to read
                 data = pd.read_csv(file_sim,sep=r'\t+',engine='python') # readding the data from the file simulation
                 data.to_csv(filepath,index=False,encoding="utf-8")
-
+                """
             else:
                 color_text(message="Unable to generate report.",color='red')
         else:
