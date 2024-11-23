@@ -41,11 +41,11 @@ class SPAPIBase:
         error_codes = [400,401,404,415,429,500,503]
 
         status_color = 'red' ; 
-        if response.status_code < 300 :
+        if response.status_code in success_codes :
             status_color = 'green'
-        color_text(message=f"{response.status_code}",color=status_color,end=status_end)
-        response.raise_for_status()
-        response = response.json()
+            color_text(message=f"{response.status_code}",color=status_color,end=status_end)
+            response.raise_for_status()
+            response = response.json()
 
         if payload == None:
             return response
