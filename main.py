@@ -30,15 +30,15 @@ def main():
         # Prompting the user for an option
         function_boundary(title="MENU")
         for option in menu:
-            color_print(message=f"{option}. {menu[option][0]}",color='green')
+            color_text(message=f"{option}. {menu[option][0]}",color='green')
         print(f"{space}-----{space}")
         try:
             selection = int(input("Select an option : "))
         except ValueError:
-            color_print(message="Please enter a number\n",color='red')
+            color_text(message="Please enter a number\n",color='red')
             continue
         except KeyboardInterrupt:
-            color_print(message="No option selected.\n",color='red')
+            color_text(message="No option selected.\n",color='red')
             continue
 
         # Processing the selected input
@@ -46,14 +46,14 @@ def main():
             print(f"You have selected : {menu[selection][0]}")
             argument = menu[selection][0].lower()
             # selectin api and report functions
-            color_print(message=f"{space}Execution Log{space}",color='blue') 
+            color_text(message=f"{space}Execution Log{space}",color='blue') 
             if "report" in argument or "api" in argument:
                 menu[selection][1](argument)
             else:
 
                 menu[selection][1]()
             if selection:
-                color_print(message=f"{space}END{space}",color='red')
+                color_text(message=f"{space}END{space}",color='red')
         else:
             print("Invalid Selection,Try again.")
 

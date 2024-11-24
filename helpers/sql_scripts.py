@@ -1,7 +1,7 @@
 #$import psycopg2
 import pandas as pd
 import os
-from .messages import better_error_handling,success_status_msg,color_print
+from .messages import better_error_handling,success_status_msg,color_text
 from .file_ops import *
 import calendar,time
 from datetime import datetime
@@ -144,11 +144,12 @@ def input_sanitizer(instruction,datatype):
 
 
 
-def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file_dir):
+def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file_dir,filename=None):
     success_status_msg("SQL CRUD OPERATIONS")
     try:
         connection = db_connection(dbname=dbname,db_system="sqlite")
-        filename = input_checker(display_message="Enter the input filename with extension :- ",filepath=input_file_dir)
+        if filename != None:
+            filename = input_checker(display_message="Enter the input filename with extension :- ",filepath=input_file_dir)
         extension = str(filename.split(".")[-1]).lower()
         df = ""
         filepath = os.path.join(input_file_dir,filename)
@@ -171,9 +172,9 @@ def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file
         engine = create_engine(f'sqlite:///{dbname}.db')
         df.to_sql(tablename,con=engine, if_exists=str(replace_or_append), index=False)
     except FileNotFoundError:
-        color_print(message=f"{filename} not found, if the name is correct, please check the spaces....",color='red')
+        color_text(message=f"{filename} not found, if the name is correct, please check the spaces....",color='red')
     except Exception as e:
         better_error_handling(e)
     finally:
         connection.close()
-        color_print(message="Connection closed.",color="green")
+        color_text(message="Connection closed.",color="green")

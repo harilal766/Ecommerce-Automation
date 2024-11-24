@@ -1,5 +1,5 @@
 import os
-from .messages import better_error_handling,color_print
+from .messages import better_error_handling,color_text
 import platform
 import pdfplumber
 import re
@@ -19,6 +19,10 @@ lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test do
 
 win_shopify_cod = r"D:\6.SPEED POST\Return Report COD tallying"
 lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
+
+win_shopify_fulfilled = r"D:\3.Shopify\fulfilled report"
+
+
     #AMAZON
 win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"
 
@@ -68,7 +72,7 @@ def input_checker(display_message,filepath):
     function_boundary(title='INPUT CHECK')
 
     # displaying the available files in a last in first out order
-    color_print(message=f"Filepath : {filepath}",color='blue')
+    color_text(message=f"Filepath : {filepath}",color='blue')
     files_list = [f for f in Path(filepath).iterdir() if f.is_file()]
     recently_added = sorted( files_list, key=os.path.getctime,reverse=True)
     recently_added = [file.name for file in recently_added]
@@ -79,28 +83,28 @@ def input_checker(display_message,filepath):
         try:
             file = input(display_message)
             if f"{file}" not in available_files:
-                color_print(message="File Not Found, Try again.",color='red')
+                color_text(message="File Not Found, Try again.",color='red')
             else:
-                color_print(message="File Found.",color='green')
+                color_text(message="File Found.",color='green')
                 break
         except KeyboardInterrupt:
-            color_print(message="Keyboard Interruption, Try again.",color='red')
+            color_text(message="Keyboard Interruption, Try again.",color='red')
     return file
 
 
 def text_input_checker(display_message,input_pattern):
-    color_print(message=f"Input pattern : {input_pattern}",color='blue')
+    color_text(message=f"Input pattern : {input_pattern}",color='blue')
     while True:
         try:
             input_text = input(display_message)
             if not re.match(input_pattern,input_text):
-                color_print(message="Invalid input found.",color="red")
+                color_text(message="Invalid input found.",color="red")
             else:
                 success_status_msg("Pattern verified...")
                 return input_text
                 
         except KeyboardInterrupt:
-            color_print(message="Keyboard Interruption, Try again.",color='red')
+            color_text(message="Keyboard Interruption, Try again.",color='red')
         
         
 
@@ -130,11 +134,11 @@ def pdf_pattern_finder(message,filepath,pattern):
                     # a single page can have one pattern or more than one pattern, so.............
                     # amazon label have 1 pattern per page and post lable have 4 patterns per page
                     if result:
-                        color_print(message=f"patterns found on page {page_count} : {result}",color='green')
+                        color_text(message=f"patterns found on page {page_count} : {result}",color='green')
                         for id in result:
                             pattern_list.append(id)
                     elif len(result) == 0:
-                        color_print(message=f"No patterns found on page {page_count}.",color='red')
+                        color_text(message=f"No patterns found on page {page_count}.",color='red')
             success_status_msg(f"Total {len(pattern_list)} Patterns Found in the file : {filename}\n{pattern_list}")
 
     except Exception as e:
@@ -147,12 +151,15 @@ from dotenv import load_dotenv,dotenv_values,set_key
 
 
 
-def file_handler(filepath,operation,field=None, current_value=None,updated_value=None):
+def file_handler(filepath,operation,field=None,current_value=None,updated_value=None,filename=None,file_content=None):
     extension = filepath.split('.')[-1]
-    modes = {'read':'r','update':'r+'}
+    modes = {'read':'r','update':'r+', 'write' : 'wb'}
     try:
+        if filename != None:
+            filepath = os.path.join(filepath,filename)
+
         with open(filepath,f'{modes[operation]}') as file:
-            color_print(message=f"Filepath :\n{filepath}, Extension : {extension}",color='green')
+            color_text(message=f"Filepath : {filepath}, Extension : {extension}",color='green')
             # Read Operation
             if operation == 'read':
                 if extension == 'json':
@@ -161,9 +168,11 @@ def file_handler(filepath,operation,field=None, current_value=None,updated_value
                     data = dotenv_values(".env")
                 else:
                     data = file
+                """
                 # Make sure env file wont be read on the normal way, for security reasons
                 if not extension == 'env':
                     color_print(message=f"Data : \n {data}",color='green')
+                """
                 return data
             # Update Operation
             elif operation == 'update':
@@ -172,7 +181,7 @@ def file_handler(filepath,operation,field=None, current_value=None,updated_value
                     
                 elif extension == 'json':
                     data = json.load(file)
-                    color_print(message=data,color='green')
+                    color_text(message=data,color='green')
                     # only int/str value can be added to json file ...
                     if type(updated_value) != int: 
                         data[field] = str(updated_value)
@@ -181,6 +190,10 @@ def file_handler(filepath,operation,field=None, current_value=None,updated_value
                 # Displaying the changes made....
                 #status = f"Key : {field}\nCurrent value : {current_value}\nNew value : {updated_value}"
                 #color_print(message=status,color='blue')
+            elif operation == 'write':
+                if extension == 'txt':
+                    file.write(file_content.decode('utf-8'))
+
     except Exception as e:
         better_error_handling(e)
 

@@ -58,7 +58,7 @@ def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
             # converting the sql result into excel file
             sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
         else:
-            color_print(message="Connection Failed",color="red")
+            color_text(message="Connection Failed",color="red")
         
     except Exception as e:
         better_error_handling(e)

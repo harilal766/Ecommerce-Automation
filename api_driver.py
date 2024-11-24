@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 from amazon.api_models import SPAPIBase,Orders,Reports
 from amazon.response_manipulator import next_shipment_summary,report_display
 import requests,json
-from helpers.messages import better_error_handling,color_print,success_status_msg
+from helpers.messages import better_error_handling,color_text,success_status_msg
 from helpers.regex_patterns import amazon_order_id_pattern
 from helpers.file_ops import *
 from amazon.report_types import *

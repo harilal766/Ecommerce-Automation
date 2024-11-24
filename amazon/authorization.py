@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime, timedelta, timezone
-from helpers.messages import color_print
+from helpers.messages import color_text
 from helpers.file_ops import *
 from dotenv import load_dotenv
 import os
@@ -31,7 +31,7 @@ current_time = datetime.now()
 def is_file_empty(filepath):
     data = dotenv_values(filepath)
     if len(data) == 0:
-        color_print(message="This file is empty, please check",color='red')
+        color_text(message="This file is empty, please check",color='red')
         return True
     
 def generate_access_token():
@@ -49,20 +49,20 @@ def generate_access_token():
             color='green'
         else:
             color='red'
-        color_print(f"Response Status Code: {response.status_code}",color=color)
+        color_text(f"Response Status Code: {response.status_code}",color=color)
         #print(f"Response Content: {response.text}")  # Log server response
         response.raise_for_status()  # Raise error if response status isn't 200
         access_token = response.json().get("access_token")
         # Store the new token in to the env file before returning it.
         file_handler(filepath='.env',operation='update',
             field='ACCESS_TOKEN',updated_value=access_token)
-        color_print(message="access token -> env file",color='green')
+        color_text(message="access token -> env file",color='green')
         # request time -> json file
         filepath = dir_switch(win=win_api_config,lin=lin_api_config)
         field = "latest_access_token_request"
         file_handler(filepath=filepath,field=field,
                     operation='update',updated_value=current_time)
-        color_print(message="access token time -> json file",color='green')
+        color_text(message="access token time -> json file",color='green')
         return access_token
     except requests.exceptions.RequestException as e:
         print(f"Access Token Error: {e}")
@@ -79,16 +79,16 @@ def get_or_generate_access_token():
         print(type(last_request_time))
         difference_seconds = (current_time - last_request_time).total_seconds()
         limit = 3600
-        color_print(message=f"Last request : {last_request_time}, Current time : {current_time}, Difference : {difference_seconds} seconds.",color='blue')
+        color_text(message=f"Last request : {last_request_time}, Current time : {current_time}, Difference : {difference_seconds} seconds.",color='blue')
         # if the access token is expired or access token field is empty.  
         if (not last_request_time == "" ) and (difference_seconds > limit):
-            color_print(message="Generating new token.",color='green')
+            color_text(message="Generating new token.",color='green')
             # generate a new one.
             new_access_token = generate_access_token()
-            color_print(message="Access token generated.",color='blue')
+            color_text(message="Access token generated.",color='blue')
             return new_access_token
         elif (difference_seconds < limit):
-            color_print(message="Previous Token can be used.",color='green')
+            color_text(message="Previous Token can be used.",color='green')
             # extract the access token value from the env file and return it
             previous_access_token = os.getenv('ACCESS_TOKEN')
             # Status message for old token
