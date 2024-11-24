@@ -15,17 +15,11 @@ import pandas as pd
 
 
 
-def query_execution(filter_rows):
+def filter_query_execution(dbname,db_system,tablename,filter_rows):
     try:
-        tablename = "Orders"
-        # converting the data to sql for querying
-        df = sp_api_report_df_generator(report_type=order_report_types["datewise orders data flatfile"],
-                                start_date=n_days_timestamp(7),end_date=n_days_timestamp(0))
-
-        df.to_sql(name=tablename,con=db_connection(dbname="Amazon",db_system='sqlite'),if_exists= 'replace',index=False)
         
         fields = """amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax"""
-        database = "Amazon" ; out_excel_path=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
+        out_excel_path=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
 
         order_by_clause="product_name asc,quantity asc"
         query = f"""SELECT {fields}
@@ -37,7 +31,7 @@ def query_execution(filter_rows):
 
 
         # connecting to the db
-        connection = db_connection(dbname=database,db_system="sqlite")
+        connection = db_connection(dbname=dbname,db_system=db_system)
         if connection:
             success_status_msg("Connection Succeeded.")
             cursor = connection.cursor()
