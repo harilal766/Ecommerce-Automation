@@ -34,14 +34,9 @@ def api_driver(option):
                 response = instance.getOrderBuyerInfo(orderId=
                                                       text_input_checker(display_message="Enter the order id : ",
                                                                     input_pattern=amazon_order_id_pattern))
-            
-            elif "report api" in option:
-                pass
 
-        elif "Shopify" in option:
-            pass
 
-        
+    
         # Print the data.
         print(response)
         # find the dict in which orders are found
