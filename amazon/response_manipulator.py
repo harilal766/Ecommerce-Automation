@@ -108,8 +108,16 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
                     data_io = StringIO(decoded_data) # converting the decode data into a file simulation
                     df = pd.read_csv(data_io,sep = '\t')
 
+                    new_headers = []
                     if not df.empty:
+                        # making sure column have underscore word seperator
+                        for column in  df.columns.tolist():
+                            underscore = column.replace("-","_")
+                            new_headers.append(underscore)
+
+                        df.columns = new_headers
                         return df
+                            
                     else : 
                         color_text(message="There was an error in generating the dataframe",color='red')
                 else:

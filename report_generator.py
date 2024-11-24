@@ -8,60 +8,47 @@ from helpers.regex_patterns import *
 
 
 
-def filter_query(pattern,fields,database,table,id,order_by_clause,
-                    sql_filename,
-                    input_filepath,out_excel_path,pdf_path=None):
-    function_boundary(title="FILTERING QUERY")
-    order_ids = None
-    order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension : ",filepath=pdf_path,pattern=pattern)
+def filter_query_generator(fields,table,id,order_by_clause,sql_filename,order_ids):
+    
     #last_column = order_id_list[-1]
     try:
-        order_ids = ""; order_id_count = 0
-        for order_id in order_id_list:
-            order_id_count+=1
-            if order_id_list[-1] == order_id:
-                order_ids+= f"'{order_id}'"
-            elif line_limit_checker(word_count=order_id_count,line_limit=3):
-                order_ids+= f"'{order_id}',\n"
-            elif not line_limit_checker(word_count=order_id_count,line_limit=3):
-                order_ids+= f"'{order_id}',"
+        if order_ids == None:
+            order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension : ",filepath=pdf_path,pattern=pattern)
+            order_ids = ""; order_id_count = 0
+            for order_id in order_id_list:
+                order_id_count+=1
+                if order_id_list[-1] == order_id:
+                    order_ids+= f"'{order_id}'"
+                elif line_limit_checker(word_count=order_id_count,line_limit=3):
+                    order_ids+= f"'{order_id}',\n"
+                elif not line_limit_checker(word_count=order_id_count,line_limit=3):
+                    order_ids+= f"'{order_id}',"
 
             
             # avoiding the comma from the last column
         # Strip comma from last order id by identifying it using the pattern
-        shipment_report_query = f"""
+
+        if not type(order_ids) == tuple:
+            order_ids = tuple(order_ids)
+
+        query = f"""
             SELECT DISTINCT
             {fields} 
             FROM {table} 
-            WHERE {id} IN (
+            WHERE {id} IN 
                 \t{order_ids}
-            )
             ORDER BY {order_by_clause};
         """
-        #loading_animation(len(order_ids)), ask for the loading value and execute the loading animation only while it is not executed. 
-        
         # Backing up the query
-        query_backup(f"{sql_filename}",shipment_report_query)
+        query_backup(f"{sql_filename}",query)
 
-        # Creating the table and closing
-        sql_table_CR(dbname=database,tablename=table,
-                                       replace_or_append="replace",
-                                       input_file_dir=input_filepath)
+        return query
         
-        # connecting to the db
-        connection = db_connection(dbname=database,db_system="sqlite")
-        if connection:
-            success_status_msg("Connection Succeeded.")
-            cursor = connection.cursor()
-            cursor.execute(shipment_report_query)
-            results = cursor.fetchall()
-            # converting the sql result into excel file
-            sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
-        else:
-            color_text(message="Connection Failed",color="red")
+        
         
     except Exception as e:
         better_error_handling(e)
+        """
     finally:
         success_status_msg(shipment_report_query)
         # closing the db
@@ -69,7 +56,7 @@ def filter_query(pattern,fields,database,table,id,order_by_clause,
             cursor.close()
         if 'conn' in locals() and connection:
             connection.close()
-
+"""
 
 
 def table_querying(operation):
@@ -81,7 +68,7 @@ def table_querying(operation):
 def report_driver(report_type): 
     report_type = report_type.lower()
     if "amazon" in report_type:
-        filter_query(
+        filter_query_generator(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/amazon shipping label",
             pdf_path=dir_switch(win=win_amazon_invoice,lin=lin_amazon_invoice),
             pattern=amazon_order_id_pattern,
@@ -93,7 +80,7 @@ def report_driver(report_type):
             out_excel_path=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
         )
     elif "shopify" in report_type:
-        filter_query(
+        filter_query_generator(
             #pdf_path="/home/hari/Desktop/Automation/Test documents/post shipping labes",
             pdf_path=dir_switch(win=win_shopify_invoice,lin=lin_shopify_invoice),
             pattern=post_order_id_pattern,
