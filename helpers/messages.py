@@ -41,8 +41,8 @@ def color_text(message,color=None,end=None):
             foregreen = Fore.GREEN
         elif color.lower() == "blue":
             foregreen = Fore.BLUE
-        if type(message) != dict:
-            message.capitalize()
+        if type(message) == str:
+            message = message.capitalize()
     else:
         foregreen = Fore.GREEN
 

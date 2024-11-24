@@ -1,5 +1,5 @@
 from helpers.file_ops import *
-from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,db_connection,sql_table_creation_or_updation
+from helpers.sql_scripts import query_backup,line_limit_checker,sql_to_excel,db_connection,sql_table_CR
 from helpers.loading_animations import loading_animation
 from helpers.regex_patterns import *
 """
@@ -8,9 +8,9 @@ from helpers.regex_patterns import *
 
 
 
-def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
+def filter_query(pattern,fields,database,table,id,order_by_clause,
                     sql_filename,
-                    input_filepath,out_excel_path):
+                    input_filepath,out_excel_path,pdf_path=None):
     function_boundary(title="FILTERING QUERY")
     order_ids = None
     order_id_list = pdf_pattern_finder(message="Enter the pdf filename with extension : ",filepath=pdf_path,pattern=pattern)
@@ -44,7 +44,7 @@ def filter_query(pdf_path,pattern,fields,database,table,id,order_by_clause,
         query_backup(f"{sql_filename}",shipment_report_query)
 
         # Creating the table and closing
-        sql_table_creation_or_updation(dbname=database,tablename=table,
+        sql_table_CR(dbname=database,tablename=table,
                                        replace_or_append="replace",
                                        input_file_dir=input_filepath)
         
