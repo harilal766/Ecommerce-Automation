@@ -27,9 +27,6 @@ def filter_query_execution(dbname,db_system,tablename,filter_rows):
           where amazon_order_id in {tuple(filter_rows)}
           ORDER BY {order_by_clause};"""
         print(query)
-        pass
-
-
         # connecting to the db
         connection = db_connection(dbname=dbname,db_system=db_system)
         if connection:
@@ -37,12 +34,12 @@ def filter_query_execution(dbname,db_system,tablename,filter_rows):
             cursor = connection.cursor()
             cursor.execute(query)
             results = cursor.fetchall()
+            # converting the sql result into excel file
+            sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
+
+# Error Areas -----------------------------------------------------------------------------------
         else:
             color_text(message="Connection Failed",color="red")
-
-        # converting the sql result into excel file
-        sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
-
     except Exception as e:
         better_error_handling(e)
 

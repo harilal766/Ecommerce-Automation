@@ -37,8 +37,12 @@ def report_driver(report_type):
                 # converting the data to sql for querying
         df = sp_api_report_df_generator(report_type=order_report_types["datewise orders data flatfile"],
                                 start_date=n_days_timestamp(7),end_date=n_days_timestamp(0))
-        df.to_sql(name=tablename,con=db_connection(dbname=db_connection,db_system=db_system),if_exists= 'replace',index=False)
+        df.to_sql(name=tablename,con=db_connection(dbname=db_connection,db_system=db_system),
+                  if_exists= 'replace',index=False)
         
-        filter_query_execution(filter_rows=cod_order_ids)
+        filter_query_execution(dbname=dbname,tablename=tablename,db_system=db_system,
+                               filter_rows=cod_order_ids)
+        filter_query_execution(dbname=dbname,tablename=tablename,db_system=db_system,
+                               filter_rows=prepaid_order_ids)
         
 
