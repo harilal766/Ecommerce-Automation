@@ -33,7 +33,6 @@ def db_connection(dbname,db_system):
         else:
             better_error_handling(f"Connection failed to the database : {dbname}.")
     
-
 def query_backup(filename,query):
     try:
         with open(f"{filename}.sql",'w') as query_backup:
@@ -49,8 +48,6 @@ def line_limit_checker(word_count,line_limit):
     if word_count % line_limit == 0:
         return True
     return False
-
-
 
 def data_import(tablename,sample_filepath,input_filepath,input_filename):
     delimiters = {
@@ -70,50 +67,6 @@ def data_import(tablename,sample_filepath,input_filepath,input_filename):
         );
     """
     print(data_import_query)
-
-
-
-def order_table_updation():
-    table_name = "Orders"
-    field = "purchase_date"
-
-    # find the date of last month's last day.
-    today = datetime.today()
-    last_month = today.month-1
-    yestermonth_last_day = calendar.month(today.year,today.month)[-3:-1]
-    if last_month < 10:
-        last_month = f"0{last_month}"
-    yestermonth_last_date = f"{today.year}-{last_month}-{yestermonth_last_day}"
-
-
-    deletion_query = f"DELETE FROM {table_name} WHERE {field} > '{yestermonth_last_date}';"
-    try:
-        # connect to the db
-        connection = db_connection(dbname="Amazon")
-        cursor=connection.cursor()
-        # delete old data
-        cursor.execute(deletion_query)
-        # ask user for the updated txt name 
-        input_file = input_checker(display_message="Enter the input txt filename : ")
-        # if the txt file exists
-        if input_file:
-            # import the txt file data to sql table
-            pass
-        
-
-        updation_query = f"""
-        /* Deletion of data */
-        DELETE FROM {table_name} WHERE {field} > '{yestermonth_last_date}';
-        /* Confirmation */
-        SELECT * FROM {table_name} WHERE {field} > '{yestermonth_last_date}';
-        """
-        query_backup(filename="order table updation",query=updation_query)
-    except Exception as e:
-        better_error_handling(e)
-    finally:
-        pass
-
-
     
 def sql_to_excel(sql_cursor,query_result,out_excel_path):
     function_boundary(title="SQL 2 EXCEL CONVERSION")
@@ -136,16 +89,8 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
             print("Please enter the filename..")
     except Exception as e:
         better_error_handling(e)
-        
 
-        
-def input_sanitizer(instruction,datatype):
-    pass
-
-
-
-def sql_table_creation_or_updation(dbname,tablename,replace_or_append,input_file_dir,filename=None):
-    success_status_msg("SQL CRUD OPERATIONS")
+def sql_table_CR(dbname,tablename,replace_or_append,input_file_dir,filename=None):
     try:
         connection = db_connection(dbname=dbname,db_system="sqlite")
         if filename != None:

@@ -4,6 +4,8 @@ from helpers.file_ops import function_boundary
 from helpers.messages import *
 from post_tracking import post_tracking
 from api_driver import api_driver
+from manual_testing import filter_query_execution
+
 
 # Menu4
 feature_menu = {
@@ -12,9 +14,7 @@ feature_menu = {
     2:("Shopify shipment report",report_driver),
     3:("Post Tracking",post_tracking),
     4:("Amazon Orders API",api_driver),
-    5:("Amazon Order API",api_driver),
-    6:("amazon order buyer info api",api_driver),
-    7:("Amazon Report API : Requested reports",api_driver)
+    5:("Amazon shipment report API",report_driver)
 }
 # Split into 2 menu dictionaries
 feat_last_key = list(feature_menu.keys())[-1]
@@ -46,11 +46,10 @@ def main():
             print(f"You have selected : {menu[selection][0]}")
             argument = menu[selection][0].lower()
             # selectin api and report functions
-            color_text(message=f"{space}Execution Log{space}",color='blue') 
-            if "report" in argument or "api" in argument:
+            color_text(message=f"{space}Execution Log{space}",color='blue')
+            if "report" in argument:
                 menu[selection][1](argument)
             else:
-
                 menu[selection][1]()
             if selection:
                 color_text(message=f"{space}END{space}",color='red')
