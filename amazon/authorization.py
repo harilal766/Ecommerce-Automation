@@ -48,8 +48,7 @@ def generate_access_token():
 
     try:
         # check if the env file exists...
-        response = requests.post(url, headers=headers, data=data)
-        print(response.content)
+        response = requests.post(url, headers= headers, data=data)
         if response.status_code in success_codes:
             color='green'
             #print(f"Response Content: {response.text}")  # Log server response
@@ -66,12 +65,11 @@ def generate_access_token():
             file_handler(filepath=filepath,field=field,
                         operation='update',updated_value=current_time)
             color_text(message="access token time -> json file",color='green')
-            print(access_token)
             return access_token
 # ERRORS ------------------------------------------------------------------------------
         else:
             color='red'
-        color_text(f"Response Status Code: {response.status_code}",color=color)
+        color_text(f"Response Status Code: {response.status_code}\n{response.content}\nPaste the credentials directly from postman....",color=color)
         
         
     
