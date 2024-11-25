@@ -47,7 +47,7 @@ def main():
             argument = menu[selection][0].lower()
             # selectin api and report functions
             color_text(message=f"{space}Execution Log{space}",color='blue')
-            if "report" in argument:
+            if "api" in argument:
                 menu[selection][1](argument)
             else:
                 menu[selection][1]()

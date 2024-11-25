@@ -1,1 +1,0 @@
-from amazon.authorization import *
