@@ -11,40 +11,40 @@ from pathlib import Path
 
 # Directories
     #POST
-win_shopify_invoice = r"D:\6.SPEED POST\1.Shipping labels"
-lin_shopify_invoice = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post shipping labes"
+win_shopify_invoice = r"D:/6.SPEED POST/1.Shipping labels"
+lin_shopify_invoice = r"/home/hari/Desktop/Ecommerce-Automation/Ecom-Dashboard/Test documents/post shipping labes"
 
-win_shopify_order_excel_file = r"D:\3.Shopify\Date wise order list"
-lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/post orders sheet/1.10.24.xlsx"
+win_shopify_order_excel_file = r"D:/3.Shopify/Date wise order list"
+lin_shopify_order_excel_file = r"/home/hari/Desktop/Ecommerce-Automation/Ecom-Dashboard/Test documents/post orders sheet/1.10.24.xlsx"
 
-win_shopify_cod = r"D:\6.SPEED POST\Return Report COD tallying"
-lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/Return Report COD"
+win_shopify_cod = r"D:/6.SPEED POST/Return Report COD tallying"
+lin_shopify_cod = r"/home/hari/Desktop/Ecommerce-Automation/Ecom-Dashboard/Test documents/Return Report COD"
 
-win_shopify_fulfilled = r"D:\3.Shopify\fulfilled report"
+win_shopify_fulfilled = r"D:/3.Shopify/fulfilled report"
 
 
     #AMAZON
-win_amazon_order_txt = r"D:\5.Amazon\Mathew global\Scheduled report"
+win_amazon_order_txt = r"D:/5.Amazon/Mathew global/Scheduled report"
 
-win_amazon_invoice = r"D:\5.Amazon\Mathew global\INvoice"
-lin_amazon_invoice =r"/home/hari/Desktop/Ecommerce-Automation/Test documents/amazon shipping label"
+win_amazon_invoice = r"D:/5.Amazon/Mathew global/INvoice"
+lin_amazon_invoice =r"/home/hari/Desktop/Ecommerce-Automation/Ecom-Dashboard/Test documents/amazon shipping label"
 
-win_amazon_scheduled_report = r"D:\5.Amazon\Mathew global\Scheduled report"
-lin_amazon_scheduled_report = r"/home/hari/Desktop/Ecommerce-Automation/Test documents/amazon scheduled report"
+win_amazon_scheduled_report = r"D:/5.Amazon/Mathew global/Scheduled report"
+lin_amazon_scheduled_report = r"/home/hari/Desktop/Ecommerce-Automation/Ecom-Dashboard/Test documents/amazon scheduled report"
 
-win_api_config = r"D:\Ecommerce-Automation\amazon\time_limits.json"
-lin_api_config = r"/home/hari/Desktop/Ecommerce-Automation/amazon/time_limits.json"
+win_api_config = r"D:/Ecommerce-Automation/Ecom-Dashboard/amazon/time_limits.json"
+lin_api_config = r"/home/hari/Desktop/Ecommerce-Automation/Ecom-Dashboard/amazon/time_limits.json"
 
-win_amazon_return = r"D:\5.Amazon\Mathew global\Return"
+win_amazon_return = r"D:/5.Amazon/Mathew global/Return"
 
-win_env = r"D/Ecommerce-Automation/.env"
-lin_env = r"/home/hari/Desktop/Ecommerce-Automation/.env"
+win_env = r"D/Ecommerce-Automation/Ecom-Dashboard/.env"
+lin_env = r"/home/hari/Desktop/Ecommerce-Automation/Ecom-Dashboard/.env"
     # ---
 win_python = r"C:/Program Files/Python313/python.exe"
 lin_python = ""
 
-win_main = r"d:/Ecommerce-Automation/main.py"
-lin_main = r"/home/hari/Desktop/Ecommerce-Automation/main.py"
+win_main = r"d:/Ecommerce-Automation/Ecom-Dashboard/main.py"
+lin_main = r"/home/hari/Desktop/Ecommerce-Automation/Ecom-Dashboard/main.py"
 
 
 def function_boundary(title):
