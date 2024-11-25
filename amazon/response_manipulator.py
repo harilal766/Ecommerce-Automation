@@ -9,11 +9,12 @@ from io import StringIO
 
 
 from collections import namedtuple
-def sp_api_shipment_summary(response):
+def sp_api_shipment_summary(response,ship_by_date=None):
     try:# only for amazon api, these api contains the field -> AmazonOrderId.
         #out_list = response['payload']['Orders']
         next_shipment_date = ''
-        today_string = str(datetime.today()).split(" ")[0]
+        if ship_by_date == None:
+            ship_by_date = str(datetime.today()).split(" ")[0]
         cod_orders = []; prepaid_orders = []
         # Counter Initialization
         order_count = 0; cod_count = 0; prepaid_count = 0; field_count = 0
@@ -24,11 +25,10 @@ def sp_api_shipment_summary(response):
             last_update_date_string = str(item["LastUpdateDate"]).split("T")[0]
             #print(f"Ship date : {ship_date_string},  Today : {today_string} :- {ship_date_string == today_string}")
             order_id = item['AmazonOrderId']
-            order_count += 1
             #color_print(message=f"Order : {order_count}{'-'*40}",color='blue')
             if type(item) == dict:
-                if  today_string == ship_date_string: 
-                    field_count+=1
+                if  ship_by_date == ship_date_string: 
+                    field_count+=1; order_count += 1
                     if item['PaymentMethodDetails'] == ['CashOnDelivery']:
                         cod_orders.append(order_id)
                     elif item['PaymentMethodDetails'] == ['Standard']:
@@ -40,14 +40,14 @@ def sp_api_shipment_summary(response):
         id_and_date = f"COD :{cod_orders}\n{boundary}\nPrepaid :{prepaid_orders}\n{boundary}"
         color_text(message=id_and_date,color='blue')
 
-        orders = namedtuple("Orders",["cod","prepaid"])
-        return orders (cod_orders,prepaid_orders)
+        orders = namedtuple("Orders",["cod","prepaid","order_count"])
+        return orders (cod_orders,prepaid_orders,order_count)
         #return { "cod" :cod_orders, "prepaid" : prepaid_orders}
     
         
     except Exception as e:
         better_error_handling(e)
-    color_text(f"Total orders: {order_count}\nCOD for {today_string} : {len(cod_orders)}\nPrepaid for {today_string} : {len(prepaid_orders)}",color='blue')
+    color_text(f"Total orders: {order_count}\nCOD for {ship_by_date} : {len(cod_orders)}\nPrepaid for {ship_by_date} : {len(prepaid_orders)}",color='blue')
 
 
 
