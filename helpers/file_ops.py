@@ -159,7 +159,7 @@ def file_handler(filepath,operation,field=None,current_value=None,updated_value=
             filepath = os.path.join(filepath,filename)
 
         with open(filepath,f'{modes[operation]}') as file:
-            color_text(message=f"Filepath : {filepath}, Extension : {extension}",color='green')
+            #color_text(message=f"Filepath : {filepath}, Extension : {extension}",color='green')
             # Read Operation
             if operation == 'read':
                 if extension == 'json':

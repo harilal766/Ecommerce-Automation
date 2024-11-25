@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from helpers.messages import color_text
 from helpers.file_ops import *
 from amazon.authorization import *
+
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
 
 
@@ -24,16 +25,16 @@ class SPAPIBase:
         # make sure the endpoint have a "/" at the begining and does not end with "/"
         if endpoint[0] != '/':
             endpoint = '/'+endpoint
-        status_end = " -> "
+        status_end = " | "
         # Since majority of methods are GET,...
-        if method == None:
-            color_text(message=f"GET ⬇️ ",color='blue',end=status_end)
+        if method == None or method == 'get':
+            color_text(message=f"<-",color='blue',end=status_end)
             response = requests.get(self.base_url+endpoint, headers=self.headers,params = params)
         elif method == 'post':
-            color_text(message=f"POST ⬆️ ",color='blue',end=status_end)
+            color_text(message=f"->",color='blue',end=status_end)
             response = requests.post(self.base_url+endpoint, headers=self.headers,json = json_input)
         elif method == 'delete':
-            color_text(message=f"DELETE 🚮 ",color='red',end=status_end)
+            color_text(message=f"🚮",color='red',end=status_end)
             response = requests.delete(self.base_url+endpoint, headers=self.headers)
 
         status_color = 'red' ; 
@@ -55,7 +56,7 @@ class Orders(SPAPIBase):
         self.params.update({"CreatedAfter": CreatedAfter,
                             "OrderStatuses":OrderStatuses})  
         payload = super().response_processor(endpoint=endpoint,params=self.params,payload='payload')
-        return payload.get('Orders')
+        return payload['Orders']
 
     def getOrder(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}"
