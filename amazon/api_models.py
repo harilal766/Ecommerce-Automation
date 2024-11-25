@@ -36,9 +36,7 @@ class SPAPIBase:
             color_text(message=f"DELETE 🚮 ",color='red',end=status_end)
             response = requests.delete(self.base_url+endpoint, headers=self.headers)
 
-        success_codes = [200,202]
-        forbidden_codes = [403]
-        error_codes = [400,401,404,415,429,500,503]
+        
 
         status_color = 'red' ; 
         if response.status_code in success_codes :

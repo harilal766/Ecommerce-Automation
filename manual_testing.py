@@ -17,7 +17,6 @@ import pandas as pd
 
 def filter_query_execution(dbname,db_system,tablename,filter_rows):
     try:
-        
         fields = """amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax"""
         out_excel_path=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
 
@@ -51,3 +50,6 @@ def filter_query_execution(dbname,db_system,tablename,filter_rows):
         if 'conn' in locals() and connection:
             connection.close()
         color_text(message="Connection closed.",color='green')
+
+
+

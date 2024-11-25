@@ -5,7 +5,9 @@ from helpers.file_ops import *
 from dotenv import load_dotenv
 import os
 
-
+success_codes = [200,202]
+forbidden_codes = [403]
+error_codes = [400,401,404,415,429,500,503]
 
 load_dotenv()
 
@@ -43,27 +45,36 @@ def generate_access_token():
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
     }
+
     try:
+        # check if the env file exists...
         response = requests.post(url, headers=headers, data=data)
-        if response.status_code == 200:
+        print(response.content)
+        if response.status_code in success_codes:
             color='green'
+            #print(f"Response Content: {response.text}")  # Log server response
+            response.raise_for_status()  # Raise error if response status isn't 200
+            access_token = response.json().get("access_token")
+
+            # Store the new token in to the env file before returning it.
+            file_handler(filepath='.env',operation='update',
+                field='ACCESS_TOKEN',updated_value=access_token)
+            color_text(message="access token -> env file",color='green')
+            # request time -> json file
+            filepath = dir_switch(win=win_api_config,lin=lin_api_config)
+            field = "latest_access_token_request"
+            file_handler(filepath=filepath,field=field,
+                        operation='update',updated_value=current_time)
+            color_text(message="access token time -> json file",color='green')
+            print(access_token)
+            return access_token
+# ERRORS ------------------------------------------------------------------------------
         else:
             color='red'
         color_text(f"Response Status Code: {response.status_code}",color=color)
-        #print(f"Response Content: {response.text}")  # Log server response
-        response.raise_for_status()  # Raise error if response status isn't 200
-        access_token = response.json().get("access_token")
-        # Store the new token in to the env file before returning it.
-        file_handler(filepath='.env',operation='update',
-            field='ACCESS_TOKEN',updated_value=access_token)
-        color_text(message="access token -> env file",color='green')
-        # request time -> json file
-        filepath = dir_switch(win=win_api_config,lin=lin_api_config)
-        field = "latest_access_token_request"
-        file_handler(filepath=filepath,field=field,
-                    operation='update',updated_value=current_time)
-        color_text(message="access token time -> json file",color='green')
-        return access_token
+        
+        
+    
     except requests.exceptions.RequestException as e:
         print(f"Access Token Error: {e}")
         return None
@@ -85,14 +96,16 @@ def get_or_generate_access_token():
             color_text(message="Generating new token.",color='green')
             # generate a new one.
             new_access_token = generate_access_token()
-            color_text(message="Access token generated.",color='blue')
-            return new_access_token
+            if new_access_token:
+                color_text(message="Access token generated.",color='green')
+                return new_access_token
         elif (difference_seconds < limit):
             color_text(message="Previous Token can be used.",color='green')
             # extract the access token value from the env file and return it
             previous_access_token = os.getenv('ACCESS_TOKEN')
             # Status message for old token
             return previous_access_token
+# ERRORS --------------------------------------------------------------------------------
     except Exception as e:
         better_error_handling(e)
     

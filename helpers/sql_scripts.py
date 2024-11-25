@@ -23,15 +23,15 @@ def db_connection(dbname,db_system):
                 )
         elif db_system == "sqlite":
             connection = sqlite3.connect(f"{dbname}.db")
-    except Exception as e:
-        better_error_handling(e)
 
-    finally:
         if connection:
             success_status_msg(f"Connected to the databse : {dbname}.")
             return connection
         else:
             better_error_handling(f"Connection failed to the database : {dbname}.")
+            
+    except Exception as e:
+        better_error_handling(e)
     
 def query_backup(filename,query):
     try:
