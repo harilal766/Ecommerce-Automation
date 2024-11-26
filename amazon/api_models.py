@@ -20,34 +20,36 @@ class SPAPIBase:
         self.params = {
             "MarketplaceIds": self.marketplace_id,
         }
+        self.success_codes = {200,201}
 
     def response_processor(self,endpoint,json_input=None,params=None,payload=None,method=None):
-        # make sure the endpoint have a "/" at the begining and does not end with "/"
-        if endpoint[0] != '/':
-            endpoint = '/'+endpoint
-        status_end = " | "
-        # Since majority of methods are GET,...
-        if method == None or method == 'get':
-            color_text(message=f"<-",color='blue',end=status_end)
-            response = requests.get(self.base_url+endpoint, headers=self.headers,params = params)
-        elif method == 'post':
-            color_text(message=f"->",color='blue',end=status_end)
-            response = requests.post(self.base_url+endpoint, headers=self.headers,json = json_input)
-        elif method == 'delete':
-            color_text(message=f"🚮",color='red',end=status_end)
-            response = requests.delete(self.base_url+endpoint, headers=self.headers)
+        try:
+            # make sure the endpoint have a "/" at the begining and does not end with "/"
+            if endpoint[0] != '/':
+                endpoint = '/'+endpoint
+            status_end = " | "
+            url = self.base_url+endpoint
+            # Since majority of methods are GET,...
+            if method == None or method.lower() == 'get':
+                response = requests.get(url, headers=self.headers,params = params,timeout=10)
+            elif method.lower() == 'post':
+                response = requests.post(url, headers=self.headers,json = json_input,timeout=10)
+            elif method.lower() == 'delete':
+                response = requests.delete(url, headers=self.headers,timeout=10)
+            else:
+                raise ValueError(f"Unsupported HTTP method: {method}")
+            
+            color_text(message=method,color='red',end=status_end)
 
-        status_color = 'red' ; 
-        if response.status_code in success_codes :
-            status_color = 'green'
-            color_text(message=f"{response.status_code}",color=status_color,end=status_end)
-            response.raise_for_status()
-            response = response.json()
+            status_color = 'red' ; 
+            if response.status_code not in success_codes :
+                response.raise_for_status()
 
-        if payload == None:
-            return response
-        else :
-            return response[payload]
+            response_data = response.json()
+            return response_data.get(payload) if payload else response_data
+        except requests.exceptions.RequestException as e:
+            better_error_handling(e)
+            return None
 
 
 class Orders(SPAPIBase):
@@ -56,7 +58,7 @@ class Orders(SPAPIBase):
         self.params.update({"CreatedAfter": CreatedAfter,
                             "OrderStatuses":OrderStatuses})  
         payload = super().response_processor(endpoint=endpoint,params=self.params,payload='payload')
-        return payload['Orders']
+        return payload.get('Orders')
 
     def getOrder(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}"

@@ -132,19 +132,17 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
 
 
 
-
+# FUNCTIONS FOR DJANGO ---------------------------------------------------------
 
 def amazon_dashboard(response):
     try:
-        ship_by_dates = [] ; total_orders =0
+        ship_by_dates = [] ; order_dates = {} ;total_orders =0
         for i in response:
             if type(i) == dict:
                 total_orders+=1
-                ship_date = i['EarliestShipDate']
+                ship_date = (i['EarliestShipDate']).split("T")[0]
                 if ship_date not in ship_by_dates:
                     ship_by_dates.append(ship_date)
-                
-        
         return (total_orders,ship_by_dates)
         
             

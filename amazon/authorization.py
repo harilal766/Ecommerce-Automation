@@ -89,7 +89,7 @@ def get_or_generate_access_token():
         last_request_time_str = data["latest_access_token_request"]
         last_request_time = datetime.fromisoformat(last_request_time_str)
         difference_seconds = (current_time - last_request_time).total_seconds()
-        limit = 3600
+        limit = 3599
         color_text(message=f"{last_request_time} - {current_time} = {difference_seconds}",color='blue')
         # if the access token is expired or access token field is empty.  
         if (not last_request_time == "" ) and (difference_seconds > limit):
