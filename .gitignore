@@ -1,5 +1,6 @@
 **/__pycache__/
 .env
+venv/
 sp_api_credentials.json
 # Ignore temporary files created by Excel
 ~$*.xlsx
