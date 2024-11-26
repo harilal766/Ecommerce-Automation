@@ -47,7 +47,8 @@ class SPAPIBase:
                     raise ValueError(f"Unsupported HTTP method: {method}")
                 
                 rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
-                color_text(message=rate_limit,color="red")
+                color_text(message=f"Rate limit : {rate_limit}",color="red")
+                color_text(message=response.headers,color="red")
                 
                 if request_count == burst:
                     color_text(message="Burst Limit reached",color="red")
