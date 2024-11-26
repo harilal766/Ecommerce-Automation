@@ -26,13 +26,13 @@ class SPAPIBase:
         }
         self.success_codes = {200,201}
 
-    def execute_request(self,endpoint,method,json_input=None,params=None,payload=None):
+    def execute_request(self,endpoint,method,json_input=None,params=None,payload=None,rate_per_second=None,burst=None):
         retry = 5; delay=1
-        for attempt in range(retry):
-            try:
-                # make sure the endpoint have a "/" at the begining and does not end with "/"
-                if endpoint[0] != '/':
-                    endpoint = '/'+endpoint
+        # set the initial request count as zero,
+        try:
+            # make sure the endpoint have a "/" at the begining and does not end with "/"
+            if endpoint[0] != '/':
+                endpoint = '/'+endpoint
                 status_end = " | "
                 url = self.base_url+endpoint
                 # Since majority of methods are GET,...
@@ -53,11 +53,14 @@ class SPAPIBase:
                     response.raise_for_status()
                     response_data = response.json()
                     return response_data.get(payload) if payload else response_data
-            except requests.exceptions.RequestException as e:
-                better_error_handling(f"Error : {e}")
-                break
-        return None
+        except requests.exceptions.RequestException as e:
+            better_error_handling(f"Error : {e}")
 
+        """
+        for attempt in range(retry):
+            
+        return None
+        """
 
 class Orders(SPAPIBase):
     def getOrders(self,CreatedAfter,OrderStatuses):
