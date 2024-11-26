@@ -26,16 +26,17 @@ class SPAPIBase:
         }
         self.success_codes = {200,201}
 
-    def execute_request(self,endpoint,method,json_input=None,params=None,payload=None,rate_per_second=None,burst=None):
-        retry = 5; delay=1
-        # set the initial request count as zero,
-        try:
-            # make sure the endpoint have a "/" at the begining and does not end with "/"
-            if endpoint[0] != '/':
-                endpoint = '/'+endpoint
+    def execute_request(self,endpoint,method,json_input=None,params=None,payload=None,burst=None):
+        retry = 5; delay=1; burst = 20
+        # detecting burst limit should have top priority...
+        for request_count in range(1,burst+1):
+            try:
+                # make sure the endpoint have a "/" at the begining and does not end with "/"
+                if endpoint[0] != '/':
+                    endpoint = '/'+endpoint
                 status_end = " | "
                 url = self.base_url+endpoint
-                # Since majority of methods are GET,...
+
                 if method.lower() == 'get':
                     response = requests.get(url, headers=self.headers,params = params,timeout=10)
                 elif method.lower() == 'post':
@@ -45,22 +46,28 @@ class SPAPIBase:
                 else:
                     raise ValueError(f"Unsupported HTTP method: {method}")
                 
+                rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
+                color_text(message=rate_limit,color="red")
+                
+                if request_count == burst:
+                    color_text(message="Burst Limit reached",color="red")
+
                 if response.status_code == 429:
                     time.sleep(delay)
                     delay *=2
                     color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red')
-                else:
+                elif response.status_code >= 400:
                     response.raise_for_status()
+                else:
+                    color_text(message=request_count,color="red")
+                    request_count += 1
                     response_data = response.json()
                     return response_data.get(payload) if payload else response_data
-        except requests.exceptions.RequestException as e:
-            better_error_handling(f"Error : {e}")
-
-        """
-        for attempt in range(retry):
-            
+            except requests.exceptions.RequestException as e:
+                better_error_handling(f"Error : {e}")
+                break
         return None
-        """
+
 
 class Orders(SPAPIBase):
     def getOrders(self,CreatedAfter,OrderStatuses):
