@@ -3,6 +3,7 @@
     --nav-color:rgb(240, 232, 123);
 
     --button-color:rgb(135, 238, 135);
+
 }
 
 /* Navigation Bar */
@@ -19,8 +20,10 @@ body, h1, h2, h3, h4 {
     font-family: "Helvetica","Universa",sans-serif;
 }
 
-
-
 .body {
     background-color: var(--bg-color);
+}
+
+.dash {
+    background-color: whitesmoke;
 }

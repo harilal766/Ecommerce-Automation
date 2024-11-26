@@ -88,9 +88,9 @@ def get_or_generate_access_token():
         data = file_handler(filepath=dir_switch(win=win_api_config,lin=lin_api_config),operation='read')
         last_request_time_str = data["latest_access_token_request"]
         last_request_time = datetime.fromisoformat(last_request_time_str)
-        difference_seconds = (current_time - last_request_time).total_seconds()
+        difference_seconds = int((current_time - last_request_time).total_seconds())
         limit = 3599
-        color_text(message=f"{last_request_time} - {current_time} = {difference_seconds}",color='blue')
+        color_text(message=f"{last_request_time} - {current_time} = {difference_seconds} seconds,",color='blue',end=" ")
         # if the access token is expired or access token field is empty.  
         if (not last_request_time == "" ) and (difference_seconds > limit):
             color_text(message="New token.",color='green')

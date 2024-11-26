@@ -3,12 +3,16 @@ from datetime import datetime, timedelta, timezone
 from helpers.messages import color_text
 from helpers.file_ops import *
 from amazon.authorization import *
+import time
 
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
 
 
+normal_endpoint = "https://sellingpartnerapi-eu.amazon.com"
+sandbox_endpoint = "https://sandbox.sellingpartnerapi-eu.amazon.com"
+
 class SPAPIBase:
-    def __init__(self,base_url="https://sellingpartnerapi-eu.amazon.com",marketplace_id="A21TJRUUN4KGV"):
+    def __init__(self,base_url=normal_endpoint,marketplace_id="A21TJRUUN4KGV"):
         self.access_token = get_or_generate_access_token()
         self.base_url = base_url
         self.marketplace_id = marketplace_id
@@ -22,34 +26,37 @@ class SPAPIBase:
         }
         self.success_codes = {200,201}
 
-    def response_processor(self,endpoint,json_input=None,params=None,payload=None,method=None):
-        try:
-            # make sure the endpoint have a "/" at the begining and does not end with "/"
-            if endpoint[0] != '/':
-                endpoint = '/'+endpoint
-            status_end = " | "
-            url = self.base_url+endpoint
-            # Since majority of methods are GET,...
-            if method == None or method.lower() == 'get':
-                response = requests.get(url, headers=self.headers,params = params,timeout=10)
-            elif method.lower() == 'post':
-                response = requests.post(url, headers=self.headers,json = json_input,timeout=10)
-            elif method.lower() == 'delete':
-                response = requests.delete(url, headers=self.headers,timeout=10)
-            else:
-                raise ValueError(f"Unsupported HTTP method: {method}")
-            
-            color_text(message=method,color='red',end=status_end)
-
-            status_color = 'red' ; 
-            if response.status_code not in success_codes :
-                response.raise_for_status()
-
-            response_data = response.json()
-            return response_data.get(payload) if payload else response_data
-        except requests.exceptions.RequestException as e:
-            better_error_handling(e)
-            return None
+    def execute_request(self,endpoint,method,json_input=None,params=None,payload=None):
+        retry = 5; delay=1
+        for attempt in range(retry):
+            try:
+                # make sure the endpoint have a "/" at the begining and does not end with "/"
+                if endpoint[0] != '/':
+                    endpoint = '/'+endpoint
+                status_end = " | "
+                url = self.base_url+endpoint
+                # Since majority of methods are GET,...
+                if method.lower() == 'get':
+                    response = requests.get(url, headers=self.headers,params = params,timeout=10)
+                elif method.lower() == 'post':
+                    response = requests.post(url, headers=self.headers,json = json_input,timeout=10)
+                elif method.lower() == 'delete':
+                    response = requests.delete(url, headers=self.headers,timeout=10)
+                else:
+                    raise ValueError(f"Unsupported HTTP method: {method}")
+                
+                if response.status_code == 429:
+                    time.sleep(delay)
+                    delay *=2
+                    color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red')
+                else:
+                    response.raise_for_status()
+                    response_data = response.json()
+                    return response_data.get(payload) if payload else response_data
+            except requests.exceptions.RequestException as e:
+                better_error_handling(f"Error : {e}")
+                break
+        return None
 
 
 class Orders(SPAPIBase):
@@ -57,18 +64,18 @@ class Orders(SPAPIBase):
         endpoint = "/orders/v0/orders"
         self.params.update({"CreatedAfter": CreatedAfter,
                             "OrderStatuses":OrderStatuses})  
-        payload = super().response_processor(endpoint=endpoint,params=self.params,payload='payload')
+        payload = super().execute_request(endpoint=endpoint,params=self.params,payload='payload',method='get')
         return payload.get('Orders')
 
     def getOrder(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}"
         self.params.update ({"orderId" : orderId})
-        return super().response_processor(endpoint=endpoint,params=self.params,payload='payload')
+        return super().execute_request(endpoint=endpoint,params=self.params,payload='payload',method='get')
     
     def getOrderBuyerInfo(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}/buyerInfo"
         self.params.update ({"orderId" : orderId})
-        return super().response_processor(endpoint=endpoint,params=self.params)
+        return super().execute_request(endpoint=endpoint,params=self.params,method='get')
     
     def getOrderAddress(self,):
         pass 
@@ -101,7 +108,7 @@ class Reports(SPAPIBase):
                 "marketplaceIds" : [self.marketplace_id],
                 "dataStartTime" : dataStartTime,
                 "dataEndTime" : dataEndTime}
-        return super().response_processor(method='post',endpoint=endpoint,json_input=data)
+        return super().execute_request(method='post',endpoint=endpoint,json_input=data)
     
     def getReports(self,reportTypes=None,processingStatuses=None,marketplaceIds=None,
                    pageSize=None,createdSince=None,CreatedUntil=None,nextToken=None):
@@ -115,23 +122,23 @@ class Reports(SPAPIBase):
             "createdUntil" : CreatedUntil,
             "nextToken" : nextToken
             })
-        response = super().response_processor(endpoint=endpoint,params=self.params,payload='reports')
+        response = super().execute_request(endpoint=endpoint,params=self.params,payload='reports',method='get')
         return response
     
     def getReport(self,reportId):
         endpoint = f"/reports/2021-06-30/reports/{reportId}"
         self.params.update({"reportId" : reportId})
-        return super().response_processor(endpoint=endpoint,params=self.params)
+        return super().execute_request(endpoint=endpoint,params=self.params,method='get')
 
     def cancelReport(self,reportId):
         endpoint = f"/reports/2021-06-30/reports/{reportId}"
         self.params.update({"reportId" : reportId})
-        return super().response_processor(endpoint=endpoint,params=self.params,method='delete')
+        return super().execute_request(endpoint=endpoint,params=self.params,method='delete')
 
     def getReportSchedules(self,reportTypes):
         endpoint = "/reports/2021-06-30/schedules"
         self.params.update({"reportTypes" : reportTypes})
-        return super().response_processor(endpoint=endpoint,params=self.params)
+        return super().execute_request(endpoint=endpoint,params=self.params,method='get')
 
     def createReportSchedule(self):
         endpoint = f"/reports/2021-06-30/schedules"
@@ -145,7 +152,7 @@ class Reports(SPAPIBase):
     def getReportDocument(self,reportDocumentId):
         endpoint = f"/reports/2021-06-30/documents/{reportDocumentId}"
         self.params.update({"reportDocumentId" : reportDocumentId})
-        return super().response_processor(endpoint=endpoint,params=self.params)
+        return super().execute_request(endpoint=endpoint,params=self.params)
         
 
 
