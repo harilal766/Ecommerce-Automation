@@ -64,9 +64,12 @@ def generate_access_token():
             field = "latest_access_token_request"
             file_handler(filepath=filepath,field=field,
                         operation='update',updated_value=current_time)
+            # reading the env file 
+            env_access_token = file_handler(filepath='.env',operation='read')['ACCESS_TOKEN']
             #color_text(message="access token time -> json file",color='green')
-            if access_token != None:
-                return access_token
+            
+            if env_access_token != None:
+                return env_access_token
 # ERRORS ---------------------------------------------------------------------------------
             else:
                 color_text(message="Access Token is empty.",color='red')
@@ -89,10 +92,10 @@ def get_or_generate_access_token():
         last_request_time_str = data["latest_access_token_request"]
         last_request_time = datetime.fromisoformat(last_request_time_str)
         difference_seconds = int((current_time - last_request_time).total_seconds())
-        limit = 3599
+        limit = 3500
         color_text(message=f"{last_request_time} - {current_time} = {difference_seconds} seconds,",color='blue',end=" ")
         # if the access token is expired or access token field is empty.  
-        if (not last_request_time == "" ) and (difference_seconds > limit):
+        if (difference_seconds > limit):
             color_text(message="New token.",color='green')
             # generate a new one.
             new_access_token = generate_access_token()
@@ -103,6 +106,7 @@ def get_or_generate_access_token():
             color_text(message="Previous Token.",color='green')
             # extract the access token value from the env file and return it
             previous_access_token = os.getenv('ACCESS_TOKEN')
+            #color_text(message=f"ACCESS TOKEN :\n{previous_access_token}++++++",color='red')
             # Status message for old token
             return previous_access_token
 # ERRORS --------------------------------------------------------------------------------

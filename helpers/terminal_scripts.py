@@ -10,7 +10,7 @@ def clear_terminal():
 def recompile():
     try:
         #python_path = str(sys.executable)
-        python_path = sys.executable
+        python_path = dir_switch(win=sys.executable,lin="/bin/python3")
         script_path = dir_switch(win=win_main, lin=lin_main)
         command = f'"{python_path}" "{script_path}"'
         color_text(message=python_path,color='blue')

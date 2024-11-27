@@ -10,6 +10,8 @@ created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
 
 normal_endpoint = "https://sellingpartnerapi-eu.amazon.com"
 sandbox_endpoint = "https://sandbox.sellingpartnerapi-eu.amazon.com"
+import logging
+import requests
 
 class SPAPIBase:
     def __init__(self,base_url=normal_endpoint,marketplace_id="A21TJRUUN4KGV"):
@@ -17,9 +19,11 @@ class SPAPIBase:
         self.base_url = base_url
         self.marketplace_id = marketplace_id
         self.headers = {
+            "Authorization" : "access token",
             "x-amz-access-token": self.access_token,
             "Content-Type": "application/json",
-            "accept": "application/json"
+            "Connection" : "keep-alive",
+            "Accept": "application/json"
             }
         # Common parameters, individual ones will be added from the respective functions
         self.params = {
@@ -66,20 +70,25 @@ class SPAPIBase:
                     time.sleep(float(rate_limit)) # to delay based on the rate limit which is negligible
                     response_data = response.json()
                     return response_data.get(payload) if payload else response_data
+                
+            except AttributeError as e:
+                color_text(message=f"Attribute Error Found : {e}\n{response}\n-----------------------------------",color='red')
+                break
             except requests.exceptions.RequestException as e:
                 better_error_handling(f"Error : {e}")
                 break
         return None
-
 
 class Orders(SPAPIBase):
     def getOrders(self,CreatedAfter,OrderStatuses):
         endpoint = "/orders/v0/orders"
         self.params.update({"CreatedAfter": CreatedAfter,
                             "OrderStatuses":OrderStatuses})  
-        payload = super().execute_request(endpoint=endpoint,params=self.params,
+        response = super().execute_request(endpoint=endpoint,params=self.params,
                                           payload='payload',method='get',burst=20)
-        return payload.get('Orders')
+        
+        #color_text(message=f"{response}\n+++++++++++++++++",color="blue")
+        return response.get('Orders')
 
     def getOrder(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}"
