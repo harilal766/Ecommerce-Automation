@@ -18,7 +18,8 @@ class SPAPIBase:
         self.marketplace_id = marketplace_id
         self.headers = {
             "x-amz-access-token": self.access_token,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "accept": "application/json"
             }
         # Common parameters, individual ones will be added from the respective functions
         self.params = {
@@ -26,10 +27,10 @@ class SPAPIBase:
         }
         self.success_codes = {200,201}
 
-    def execute_request(self,endpoint,method,json_input=None,params=None,payload=None,burst=None):
-        retry = 5; delay=1; burst = 20
+    def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
+        retry = 5; delay=1
         # detecting burst limit should have top priority...
-        for request_count in range(1,burst+1):
+        for request_count in range(burst):
             try:
                 # make sure the endpoint have a "/" at the begining and does not end with "/"
                 if endpoint[0] != '/':
@@ -62,6 +63,7 @@ class SPAPIBase:
                 else:
                     color_text(message=request_count,color="red")
                     request_count += 1
+                    time.sleep(float(rate_limit)) # to delay based on the rate limit which is negligible
                     response_data = response.json()
                     return response_data.get(payload) if payload else response_data
             except requests.exceptions.RequestException as e:
@@ -75,18 +77,20 @@ class Orders(SPAPIBase):
         endpoint = "/orders/v0/orders"
         self.params.update({"CreatedAfter": CreatedAfter,
                             "OrderStatuses":OrderStatuses})  
-        payload = super().execute_request(endpoint=endpoint,params=self.params,payload='payload',method='get')
+        payload = super().execute_request(endpoint=endpoint,params=self.params,
+                                          payload='payload',method='get',burst=20)
         return payload.get('Orders')
 
     def getOrder(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}"
         self.params.update ({"orderId" : orderId})
-        return super().execute_request(endpoint=endpoint,params=self.params,payload='payload',method='get')
+        return super().execute_request(endpoint=endpoint,params=self.params,
+                                       payload='payload',method='get',burst=30)
     
     def getOrderBuyerInfo(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}/buyerInfo"
         self.params.update ({"orderId" : orderId})
-        return super().execute_request(endpoint=endpoint,params=self.params,method='get')
+        return super().execute_request(endpoint=endpoint,params=self.params,method='get',burst=30)
     
     def getOrderAddress(self,):
         pass 
@@ -119,7 +123,8 @@ class Reports(SPAPIBase):
                 "marketplaceIds" : [self.marketplace_id],
                 "dataStartTime" : dataStartTime,
                 "dataEndTime" : dataEndTime}
-        return super().execute_request(method='post',endpoint=endpoint,json_input=data)
+        return super().execute_request(method='post',endpoint=endpoint,
+                                       json_input=data,burst=15)
     
     def getReports(self,reportTypes=None,processingStatuses=None,marketplaceIds=None,
                    pageSize=None,createdSince=None,CreatedUntil=None,nextToken=None):
@@ -133,23 +138,27 @@ class Reports(SPAPIBase):
             "createdUntil" : CreatedUntil,
             "nextToken" : nextToken
             })
-        response = super().execute_request(endpoint=endpoint,params=self.params,payload='reports',method='get')
+        response = super().execute_request(endpoint=endpoint,params=self.params,
+                                           payload='reports',method='get',burst=10)
         return response
     
     def getReport(self,reportId):
         endpoint = f"/reports/2021-06-30/reports/{reportId}"
         self.params.update({"reportId" : reportId})
-        return super().execute_request(endpoint=endpoint,params=self.params,method='get')
+        return super().execute_request(endpoint=endpoint,params=self.params,
+                                       method='get',burst=15)
 
     def cancelReport(self,reportId):
         endpoint = f"/reports/2021-06-30/reports/{reportId}"
         self.params.update({"reportId" : reportId})
-        return super().execute_request(endpoint=endpoint,params=self.params,method='delete')
+        return super().execute_request(endpoint=endpoint,params=self.params,
+                                       method='delete',burst=10)
 
     def getReportSchedules(self,reportTypes):
         endpoint = "/reports/2021-06-30/schedules"
         self.params.update({"reportTypes" : reportTypes})
-        return super().execute_request(endpoint=endpoint,params=self.params,method='get')
+        return super().execute_request(endpoint=endpoint,params=self.params,
+                                       method='get',burst=10)
 
     def createReportSchedule(self):
         endpoint = f"/reports/2021-06-30/schedules"
@@ -163,7 +172,8 @@ class Reports(SPAPIBase):
     def getReportDocument(self,reportDocumentId):
         endpoint = f"/reports/2021-06-30/documents/{reportDocumentId}"
         self.params.update({"reportDocumentId" : reportDocumentId})
-        return super().execute_request(endpoint=endpoint,params=self.params)
+        return super().execute_request(endpoint=endpoint,params=self.params,
+                                       method='get',burst=15)
         
 
 

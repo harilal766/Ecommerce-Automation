@@ -67,7 +67,7 @@ def generate_access_token():
             #color_text(message="access token time -> json file",color='green')
             if access_token != None:
                 return access_token
-# ERRORS ------------------------------------------------------------------------------
+# ERRORS ---------------------------------------------------------------------------------
             else:
                 color_text(message="Access Token is empty.",color='red')
         else:

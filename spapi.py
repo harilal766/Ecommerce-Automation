@@ -8,9 +8,9 @@ get_or_generate_access_token()
 
 
 ord_ins = Orders(); created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
-ord_resp = ord_ins.getOrders(CreatedAfter=created_after,OrderStatuses="Unshipped")
+ord_resp = ord_ins.getOrders(CreatedAfter=created_after,OrderStatuses="Pending")
 summary = amazon_dashboard(response=ord_resp)
-print(summary[0])
+print(summary)
 
 
 # venv\Scripts\activate
