@@ -51,7 +51,7 @@ class SPAPIBase:
                 else:
                     raise ValueError(f"Unsupported HTTP method: {method}")
                 
-                rate_limit = response.headers.get('x-amzn-RateLimit-Limit')
+                rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
                 if rate_limit not in [0,None]  :
                     color_text(message=f"Rate limit : {rate_limit}",color="red")
                 else:
@@ -72,7 +72,7 @@ class SPAPIBase:
                     request_count += 1
                     time.sleep(float(rate_limit)) # to delay based on the rate limit which is negligible
                     response_data = response.json()
-                    return response_data.get(payload) if payload else response_data
+                    return response_data.get(payload,None) if payload else response_data
                 
             except AttributeError as e:
                 color_text(message=f"Attribute Error Found : {e}\n{response}\n-----------------------------------",color='red')
@@ -134,7 +134,7 @@ class Orders(SPAPIBase):
                                             payload='payload',method='get',burst=20)
             
             #color_text(message=f"{response}\n+++++++++++++++++",color="blue")
-            return response.get("Orders")
+            return response.get("Orders",None)
         elif CreatedAfter == None and LastUpdatedAfter == None:
             color_text(message="Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required Both cannot be empty",color="red")
             return None
