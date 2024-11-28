@@ -70,6 +70,7 @@ def generate_access_token():
             #color_text(message="access token time -> json file",color='green')
             
             if env_access_token != None:
+                color_text(message="New Access token generated.",color='green')
                 return env_access_token
 # ERRORS ---------------------------------------------------------------------------------
             else:
@@ -90,35 +91,39 @@ def get_or_generate_access_token():
         # initialization
         # Read the json file to get the time stamp
         data = file_handler(filepath=dir_switch(win=win_api_config,lin=lin_api_config),operation='read')
-        last_request_time_str = data["latest_access_token_request"]
-        last_request_time = datetime.fromisoformat(last_request_time_str)
-        difference_seconds = int((current_time - last_request_time).total_seconds())
-        limit = 3500
+        last_request_time_str = data.get("latest_access_token_request",None)
 
-        last_request_time = str(last_request_time).split(" ")[1]
-        current_time = str(current_time).split(" ")[1]
-        
+        if last_request_time_str != None:
+            last_request_time = datetime.fromisoformat(last_request_time_str)
+            difference_seconds = int((current_time - last_request_time).total_seconds())
+            limit = 3600
 
-        color_text(message=f"{last_request_time} to {current_time} = {difference_seconds} seconds,",color='blue',end=" ")
-        # if the access token is expired or access token field is empty.  
-        delay = 2
-        if (difference_seconds > limit):
-            color_text(message="Access token expired.",color='red')
-            # generate a new one.
-            new_access_token = generate_access_token()
-            if new_access_token:
-                color_text(message="New Access token generated.",color='green')
-                time.sleep(delay)
-                return new_access_token
-        elif (difference_seconds < limit):
-            color_text(message=f"Token expiring in {limit - difference_seconds} seconds.",color='green')
-            # extract the access token value from the env file and return it
-            previous_access_token = os.getenv('ACCESS_TOKEN')
-            #color_text(message=f"ACCESS TOKEN :\n{previous_access_token}++++++",color='red')
-            # Status message for old token
-            time.sleep(delay)
-            return previous_access_token
+            last_request_time = last_request_time.strftime("%H:%M:%S")
+            current_time = current_time.strftime("%H:%M:%S")
+            color_text(message=f"{last_request_time} to {current_time} = {difference_seconds} seconds,",color='blue',end=" ")
+            
+            # if the access token is expired or access token field is empty.  
+            delay = 2
+            if (difference_seconds > limit):
+                color_text(message="Access token expired.",color='red')
+                # generate a new one.
+                new_access_token = generate_access_token()
+                return generate_access_token()
+            else:
+                if difference_seconds < 0:
+                    color_text(message="-ve time difference found",color="red")
+                    return generate_access_token()
+                else:
+                    color_text(message=f"Token expiring in {limit - difference_seconds} seconds.",color='green')
+                    # extract the access token value from the env file and return it
+                    previous_access_token = os.getenv('ACCESS_TOKEN')
+                    #color_text(message=f"ACCESS TOKEN :\n{previous_access_token}++++++",color='red')
+                    # Status message for old token
+                    return previous_access_token
 # ERRORS --------------------------------------------------------------------------------
+        else:
+            color_text(message="No timestammp not found in the file.",color="red")
+            return None
     except Exception as e:
         better_error_handling(e)
     

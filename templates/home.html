@@ -6,10 +6,18 @@
 
 <div class="dash">
     <h2>Amazon Dashboard</h2>
-    <h4>Total Unshipped Orders : {{total_orders}}</h4> 
-    <h4>Upcoming Shipping Dates : {{ship_dates}}</h4>
+    <h4>Total Unshipped Orders : {{shipment_summary.total_orders}}</h4> 
+    {% for date,payment in shipment_summary.items %}
+        {% if date != 'total_orders' %}
+        <li>{{date}} : </li>
+            <ul>
+                {% for method,count in payment.items %}
+                    <li>{{method}} - {{count}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
 </div>
-
 1. API call limit handling. <br>
 2. Access token initialozation from env file.<br>
 3. wait until access token is stored in the env file amd return the value from the same env file.<br>

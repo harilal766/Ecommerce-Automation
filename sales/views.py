@@ -10,8 +10,7 @@ def home(request):
     ord_resp = ord_ins.getOrders(CreatedAfter=created_after,OrderStatuses="Unshipped")
     summary = amazon_dashboard(response=ord_resp)
     context = {
-        'total_orders' : summary[0],
-        'ship_dates' : summary[1]
+        'shipment_summary' : summary
         }
     return render(request,'home.html',context)
 
