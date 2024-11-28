@@ -93,17 +93,22 @@ def get_or_generate_access_token():
         last_request_time = datetime.fromisoformat(last_request_time_str)
         difference_seconds = int((current_time - last_request_time).total_seconds())
         limit = 3500
-        color_text(message=f"{last_request_time} - {current_time} = {difference_seconds} seconds,",color='blue',end=" ")
+
+        last_request_time = str(last_request_time).split(" ")[1]
+        current_time = str(current_time).split(" ")[1]
+        
+
+        color_text(message=f"{last_request_time} to {current_time} = {difference_seconds} seconds,",color='blue',end=" ")
         # if the access token is expired or access token field is empty.  
         if (difference_seconds > limit):
-            color_text(message="New token.",color='green')
+            color_text(message="Access token expired.",color='red')
             # generate a new one.
             new_access_token = generate_access_token()
             if new_access_token:
-                color_text(message="Access token generated.",color='green')
+                color_text(message="New Access token generated.",color='green')
                 return new_access_token
         elif (difference_seconds < limit):
-            color_text(message="Previous Token.",color='green')
+            color_text(message=f"Token expiring in {limit - difference_seconds} seconds.",color='green')
             # extract the access token value from the env file and return it
             previous_access_token = os.getenv('ACCESS_TOKEN')
             #color_text(message=f"ACCESS TOKEN :\n{previous_access_token}++++++",color='red')

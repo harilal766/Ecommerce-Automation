@@ -51,16 +51,19 @@ class SPAPIBase:
                 else:
                     raise ValueError(f"Unsupported HTTP method: {method}")
                 
-                rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
-                color_text(message=f"Rate limit : {rate_limit}",color="red")
-                color_text(message=response.headers,color="red")
+                rate_limit = response.headers.get('x-amzn-RateLimit-Limit')
+                if rate_limit not in [0,None]  :
+                    color_text(message=f"Rate limit : {rate_limit}",color="red")
+                else:
+                    color_text(message=f"Api limit reached.",color="red")
+                #color_text(message=response.headers,color="red")
                 
                 if request_count == burst:
                     color_text(message="Burst Limit reached",color="red")
 
                 if response.status_code == 429:
-                    time.sleep(delay)
                     delay *=2
+                    time.sleep(delay)
                     color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red')
                 elif response.status_code >= 400:
                     response.raise_for_status()
