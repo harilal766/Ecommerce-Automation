@@ -178,15 +178,16 @@ def filter_query_execution(dbname,db_system,tablename,filter_rows):
 
 def amazon_dashboard(response):
     try:
-        ship_by_dates = [] ; order_dates = {} ;total_orders =0
-        for i in response:
-            if type(i) == dict:
+        ship_by_dates = [] ; total_orders =0 ; 
+        summary_dict = {} ; sub_dict = {}
+        for order in response:
+            if type(order) == dict:
                 total_orders+=1
-                ship_by_date = (i['LatestShipDate']).split("T")[0]
-                if ship_by_date not in ship_by_dates:
-                    ship_by_dates.append(ship_by_date)
-        return (total_orders,ship_by_dates)
-        
-            
+                ship_by_date = (order['LatestShipDate']).split("T")[0]
+                if ship_by_date not in summary_dict.keys():
+                    summary_dict[ship_by_date] = 1
+                else:
+                    summary_dict[ship_by_date] += 1
+        return (total_orders,summary_dict)
     except Exception as e:
         better_error_handling(e)
