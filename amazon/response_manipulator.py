@@ -6,7 +6,7 @@ from amazon.response_manipulator import *
 import requests
 import pandas as pd
 from io import StringIO
-
+from helpers.sql_scripts import sql_to_excel
 
 from collections import namedtuple
 def sp_api_shipment_summary(response):
@@ -51,7 +51,7 @@ def sp_api_shipment_summary(response):
 
 
 
-def n_days_timestamp(days):
+def iso_8601_timestamp(days):
     try:
         if type(days) == int: 
             # Substract (time now - time n days back) and return the answer in iso format
@@ -129,7 +129,49 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
     except Exception as e:
         better_error_handling(e)
 
+from helpers.sql_scripts import db_connection,sql_table_CR
+from report_generator import *
+from amazon.api_models import *
+from amazon.response_manipulator import *
+import pandas as pd
 
+
+
+def filter_query_execution(dbname,db_system,tablename,filter_rows):
+    try:
+        fields = """amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax"""
+        out_excel_path=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
+
+        order_by_clause="product_name asc,quantity asc"
+        query = f"""SELECT {fields}
+          FROM {tablename} 
+          where amazon_order_id in {tuple(filter_rows)}
+          ORDER BY {order_by_clause};"""
+        print(query)
+        # connecting to the db
+        connection = db_connection(dbname=dbname,db_system=db_system)
+        if connection:
+            success_status_msg("Connection Succeeded.")
+            cursor = connection.cursor()
+            cursor.execute(query)
+            results = cursor.fetchall()
+            # converting the sql result into excel file
+            sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
+
+# Error Areas -----------------------------------------------------------------------------------
+        else:
+            color_text(message="Connection Failed",color="red")
+    except Exception as e:
+        better_error_handling(e)
+
+    finally:
+        success_status_msg(query)
+        # closing the db
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'conn' in locals() and connection:
+            connection.close()
+        color_text(message="Connection closed.",color='green')
 
 
 # FUNCTIONS FOR DJANGO ---------------------------------------------------------
@@ -140,9 +182,9 @@ def amazon_dashboard(response):
         for i in response:
             if type(i) == dict:
                 total_orders+=1
-                ship_date = (i['EarliestShipDate']).split("T")[0]
-                if ship_date not in ship_by_dates:
-                    ship_by_dates.append(ship_date)
+                ship_by_date = (i['LatestShipDate']).split("T")[0]
+                if ship_by_date not in ship_by_dates:
+                    ship_by_dates.append(ship_by_date)
         return (total_orders,ship_by_dates)
         
             
