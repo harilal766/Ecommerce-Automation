@@ -14,3 +14,13 @@ def home(request):
         'ship_dates' : summary[1]
         }
     return render(request,'home.html',context)
+
+
+
+"" "
+1.call order instance 
+2. set todays date
+3. get cod / prepaid by changing function argument and store into a list or tuple
+4. get the df and to sql
+5. execute the previously made query. 
+" "" 
