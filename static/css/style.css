@@ -9,6 +9,9 @@
 /* Navigation Bar */
 .nav {
     background-color: var(--nav-color);
+    padding-right: 50px;
+    justify-content: space-between;
+    flex-direction: row-reverse;
 }
 
 nav, li{

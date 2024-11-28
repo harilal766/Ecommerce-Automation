@@ -4,6 +4,7 @@ from helpers.messages import color_text
 from helpers.file_ops import *
 from dotenv import load_dotenv
 import os
+import time
 
 success_codes = [200,202]
 forbidden_codes = [403]
@@ -100,12 +101,14 @@ def get_or_generate_access_token():
 
         color_text(message=f"{last_request_time} to {current_time} = {difference_seconds} seconds,",color='blue',end=" ")
         # if the access token is expired or access token field is empty.  
+        delay = 2
         if (difference_seconds > limit):
             color_text(message="Access token expired.",color='red')
             # generate a new one.
             new_access_token = generate_access_token()
             if new_access_token:
                 color_text(message="New Access token generated.",color='green')
+                time.sleep(delay)
                 return new_access_token
         elif (difference_seconds < limit):
             color_text(message=f"Token expiring in {limit - difference_seconds} seconds.",color='green')
@@ -113,6 +116,7 @@ def get_or_generate_access_token():
             previous_access_token = os.getenv('ACCESS_TOKEN')
             #color_text(message=f"ACCESS TOKEN :\n{previous_access_token}++++++",color='red')
             # Status message for old token
+            time.sleep(delay)
             return previous_access_token
 # ERRORS --------------------------------------------------------------------------------
     except Exception as e:
