@@ -15,21 +15,25 @@ import requests
 
 class SPAPIBase:
     def __init__(self,base_url=normal_endpoint,marketplace_id="A21TJRUUN4KGV"):
-        self.access_token = get_or_generate_access_token()
-        self.base_url = base_url
-        self.marketplace_id = marketplace_id
-        self.headers = {
-            "Authorization" : "access token",
-            "x-amz-access-token": self.access_token,
-            "Content-Type": "application/json",
-            "Connection" : "keep-alive",
-            "Accept": "application/json"
+        if get_or_generate_access_token() != None:
+            self.access_token = get_or_generate_access_token()
+            self.base_url = base_url
+            self.marketplace_id = marketplace_id
+            self.headers = {
+                "Authorization" : "access token",
+                "x-amz-access-token": self.access_token,
+                "Content-Type": "application/json",
+                "Connection" : "keep-alive",
+                "Accept": "application/json"
+                }
+            # Common parameters, individual ones will be added from the respective functions
+            self.params = {
+                "MarketplaceIds": self.marketplace_id,
             }
-        # Common parameters, individual ones will be added from the respective functions
-        self.params = {
-            "MarketplaceIds": self.marketplace_id,
-        }
-        self.success_codes = {200,201}
+            self.success_codes = {200,201}
+        else:
+            color_text(message="Access token returned None, Pelase check",color="red")
+            color_text(message="New Access token generated.",color='green')
 
     def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
         retry = 5; delay=1
@@ -130,11 +134,12 @@ class Orders(SPAPIBase):
         Both cannot be empty. CreatedAfter or CreatedBefore cannot be set when LastUpdatedAfter is set.
         """
         if (CreatedAfter != None) or (LastUpdatedAfter != None):
+            #breakpoint()
             response = super().execute_request(endpoint=endpoint,params=self.params,
                                             payload='payload',method='get',burst=20)
             
             #color_text(message=f"{response}\n+++++++++++++++++",color="blue")
-            return response.get("Orders",None)
+            return response.get("Orders")
         elif CreatedAfter == None and LastUpdatedAfter == None:
             color_text(message="Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required Both cannot be empty",color="red")
             return None

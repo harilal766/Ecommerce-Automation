@@ -9,8 +9,8 @@
 /* Navigation Bar */
 .nav {
     background-color: var(--nav-color);
-    padding-right: 50px;
-    justify-content: space-between;
+    padding-right: 40px;
+    justify-content: space-around;
     flex-direction: row-reverse;
 }
 
