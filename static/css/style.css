@@ -5,26 +5,37 @@
     --footer-color:#B0B0B0;
 
     --primaty-text-color:#333333;
-    --secondary-text-color:#B0B0B0;
+    --secondary-text-color:#41553c;
     --accent-text-color:#5AC8FA;
     --alert-text-color:#FF3B30;
 }
-
 /* Navigation Bar */
+.nav {
+    outline: 1px black;
+    background-color: var(--nav-color);
+}
+.nav span {
+    margin-top:5px;
+    font-family: Helvetica,Arial;
+    color: whitesmoke;
+    font-weight: bolder;
+    font-size: 50px;
+    flex-direction: start;
+    align-items: center;
+}
 .nav ul {
     list-style-type: none;
     margin:0; padding:10px; 
     display:flex;
-    background-color: var(--nav-color);
     justify-content: end;
-    flex-direction: row-reverse;
+    flex-direction: row;
 }
 .nav li {
     margin-right: 1rem;
 }
 .nav a { 
-    font-family: "Helvetica";
-    font-weight: bold;
+    font-family: "Helvetica","Universa";
+    font-weight: bolder;
     color: whitesmoke;
     text-decoration: none;
 }
@@ -32,20 +43,38 @@ nav a:hover {
     color: #333333;  /* Change color on hover */
 }
 /* Body */
-.body {
+.body h1{
+    margin:7px;
     background-color: var(--bg-color);
 }
-
 .dash {
-    background-color:#FFFFFF;
+    width: 38%;
+    border-radius: 5px;
+    background-color: wheat;
     /* Swiss style font */
-    font-family: "Helvetica","Universa",sans-serif;
+    font-family: "Helvetica","Arial",sans-serif;
     color: var(--primaty-text-color);
 }
-
+/* Common properties of dash class */
+.order-summary {
+    display: flex;
+    align-items:center;
+    gap:10px;
+}
+.dash :is(ul,li,a,h2,h4,h3) {
+    margin:10px 10px 10px 10px;
+    margin-inline-start: 10px;
+}
+.dash a {
+    text-decoration: none;
+    font-family: "Helvetica";
+    color: var(--secondary-text-color)
+}
+.dash a:hover{
+    color: var(--accent-text-color);
+}
 footer {
     background-color: var(--footer-color);
-
 }
 
 /*
