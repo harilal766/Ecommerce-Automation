@@ -20,13 +20,11 @@
             {% endif %}
         {% endfor %}
     {% else %}
-        <h4>API Response unavaillable.</h4> 
+        <h4 style="color: var(--alert-text);">API Response unavaillable.</h4> 
     {% endif %}
 </div>
 1. API call limit handling. <br>
-2. Access token initialozation from env file.<br>
-3. wait until access token is stored in the env file amd return the value from the same env file.<br>
-4. burst need to be added as an must have argument for each api function.<br>
+2. Access token initialization from env file.<br>
 5. cache file.<br>
 6. auto data updation like js <br>
 {% endblock %}

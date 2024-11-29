@@ -1,32 +1,85 @@
 :root{
-    --bg-color:rgb(157, 216, 226);
-    --nav-color:rgb(240, 232, 123);
-
+    --bg-color:#F2F2F2;
+    --nav-color:#5AC8FA;
     --button-color:rgb(135, 238, 135);
+    --footer-color:#B0B0B0;
 
+    --primaty-text-color:#333333;
+    --secondary-text-color:#B0B0B0;
+    --accent-text-color:#5AC8FA;
+    --alert-text-color:#FF3B30;
 }
 
 /* Navigation Bar */
-.nav {
+.nav ul {
+    list-style-type: none;
+    margin:0; padding:10px; 
+    display:flex;
     background-color: var(--nav-color);
-    padding-right: 40px;
-    justify-content: space-around;
+    justify-content: end;
     flex-direction: row-reverse;
 }
-
-nav, li{
+.nav li {
+    margin-right: 1rem;
+}
+.nav a { 
     font-family: "Helvetica";
+    font-weight: bold;
+    color: whitesmoke;
+    text-decoration: none;
+}
+nav a:hover {
+    color: #333333;  /* Change color on hover */
 }
 /* Body */
-body, h1, h2, h3, h4 {
-    /* Swiss style font */
-    font-family: "Helvetica","Universa",sans-serif;
-}
-
 .body {
     background-color: var(--bg-color);
 }
 
 .dash {
-    background-color: whitesmoke;
+    background-color:#FFFFFF;
+    /* Swiss style font */
+    font-family: "Helvetica","Universa",sans-serif;
+    color: var(--primaty-text-color);
 }
+
+footer {
+    background-color: var(--footer-color);
+
+}
+
+/*
+    Background:
+
+    Primary Background: Light Gray (#F2F2F2)
+        Provides a soft, neutral base without being stark white.
+    Secondary Sections (like feature blocks): White (#FFFFFF)
+        Adds visual hierarchy and keeps sections distinct.
+
+Navigation Bar:
+
+    Dark Gray (#333333):
+        Creates strong contrast and draws attention to navigation links.
+        Pair with white or soft blue text (#FFFFFF or #5AC8FA) for legibility.
+    Soft Blue (#5AC8FA):
+        Use as a background for a more vibrant, inviting navigation bar.
+        Pair with white (#FFFFFF) text for crisp contrast.
+
+Footer:
+
+    Medium Gray (#B0B0B0):
+        A subdued tone that anchors the design without overwhelming the content.
+        Pair with white text for clarity.
+
+Content Boxes:
+
+    White (#FFFFFF):
+        Keeps content clean and readable.
+    Subtle Background Areas: Muted Gray-Blue (#708090)
+        Ideal for call-to-action sections or subdued highlights.
+
+Hover Effects and Highlights:
+
+    Soft Blue (#5AC8FA):
+        Use for hover effects or to highlight navigation items and buttons.
+*/

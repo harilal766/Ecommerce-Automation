@@ -138,7 +138,6 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
         better_error_handling(e)
 
 from helpers.sql_scripts import db_connection,sql_table_CR
-from report_generator import *
 from amazon.sp_api_models import *
 from amazon.response_manipulator import *
 import pandas as pd

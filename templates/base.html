@@ -8,9 +8,10 @@
     <body>
         <header>
             <nav class="nav">
+                <span style="color: #FFFFFF; margin-right: auto;">Ecom-Dashboard</span>
                 <ul>
-                    <a href="{% url 'sales:home' %}">Home</a>
-                    <a href="#home">Contact</a>
+                    <li><a href="{% url 'sales:home' %}">Home</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
 
@@ -19,7 +20,7 @@
             {% block content %}
             {% endblock %}
         </main>
-        <footer>
+        <footer class="footer">
 
         </footer>
     </body>
