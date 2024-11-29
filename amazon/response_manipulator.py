@@ -7,8 +7,8 @@ import requests
 import pandas as pd
 from io import StringIO
 from helpers.sql_scripts import sql_to_excel
-
 from collections import namedtuple
+
 def sp_api_shipment_summary(response):
     try:# only for amazon api, these api contains the field -> AmazonOrderId.
         #out_list = response['payload']['Orders']
@@ -40,6 +40,7 @@ def sp_api_shipment_summary(response):
         id_and_date = f"COD :{cod_orders}\n{boundary}\nPrepaid :{prepaid_orders}\n{boundary}"
         color_text(message=id_and_date,color='blue')
 
+        # To return the vaules in a tuple..
         orders = namedtuple("Orders",["cod","prepaid","order_count"])
         return orders (cod_orders,prepaid_orders,order_count)
         #return { "cod" :cod_orders, "prepaid" : prepaid_orders}
@@ -65,23 +66,30 @@ def iso_8601_timestamp(days):
 
 
 def rep_doc_id_generator(report_id):
-    while True:
-        R = Reports()
+    retries =0 ; max_retries = 12 ; delay = 2
+    while retries <  max_retries:
+        R = Reports(); last_status = None
         report = R.getReport(reportId=report_id)
         if report != None:
             status = report["processingStatus"]
             if status == "DONE":
                 color_text(message=status,color='green')
-                return report['reportDocumentId']
-            if status == "IN_QUEUE":
-                color_text(message=status,color='blue')
+                return report.get('reportDocumentId')
+            if status in ["IN_QUEUE", "IN_PROGRESS"]:
+                if status != last_status:
+                    color_text(message=status,color='blue')
+                    last_status = status
             elif status == "CANCELLED":
                 color_text(message=status,color='red')
+                break
             else:
-                color_text(message=status,color='green')
+                color_text(message=f"Unknown Status : {status}",color='red')
         else:
             color_text(message="Report Error",color='red')
             break
+        retries += 1
+        time.sleep(delay)
+    raise Exception("Report processing did not complete within the maximum retries.")
 
 
 def sp_api_report_df_generator(report_type,start_date,end_date):
@@ -89,7 +97,7 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
         instance = Reports()
         report_id = instance.createReport(reportType=report_type,
                                           dataStartTime=start_date,dataEndTime=end_date)
-        report_id = report_id['reportId']
+        report_id = report_id.get('reportId')
         if report_id:
             color_text(message=f"Report Id Created : {report_id}")
             # Report document id generation.
@@ -121,7 +129,7 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
                     else : 
                         color_text(message="There was an error in generating the dataframe",color='red')
                 else:
-                    color_text(message="Unable to generate report.",color='red')
+                    color_text(message="Unable to generate report, status code is not 200",color='red')
             else:
                 color_text(message="Report document Id failed,",color='red')
         else:

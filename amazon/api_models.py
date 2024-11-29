@@ -32,8 +32,7 @@ class SPAPIBase:
             }
             self.success_codes = {200,201}
         else:
-            color_text(message="Access token returned None, Pelase check",color="red")
-            color_text(message="New Access token generated.",color='green')
+            color_text(message="Access token returned None, Please check",color="red")
 
     def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
         retry = 5; delay=1
@@ -92,8 +91,6 @@ class Orders(SPAPIBase):
                   LastUpdatedAfter=None,
                   PaymentMethods=None,EasyShipShipmentStatuses=None,
                   EarliestShipDate=None,LatestShipDate=None):
-        
-
         """
         Note: Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required.
         Both cannot be empty. CreatedAfter or CreatedBefore cannot be set when LastUpdatedAfter is set.
@@ -135,11 +132,14 @@ class Orders(SPAPIBase):
         """
         if (CreatedAfter != None) or (LastUpdatedAfter != None):
             #breakpoint()
-            response = super().execute_request(endpoint=endpoint,params=self.params,
-                                            payload='payload',method='get',burst=20)
-            
-            #color_text(message=f"{response}\n+++++++++++++++++",color="blue")
-            return response.get("Orders")
+            if super().execute_request(endpoint=endpoint,params=self.params,
+                                            payload='payload',method='get',burst=20) != None:
+                response = super().execute_request(endpoint=endpoint,params=self.params,
+                                                payload='payload',method='get',burst=20)
+                #color_text(message=f"{response}\n+++++++++++++++++",color="blue")
+                return response.get("Orders")
+            else:
+                color_text(message="None issue detected for getOrders",color="red")
         elif CreatedAfter == None and LastUpdatedAfter == None:
             color_text(message="Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required Both cannot be empty",color="red")
             return None
