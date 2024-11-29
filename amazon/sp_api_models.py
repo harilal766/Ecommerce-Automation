@@ -132,16 +132,15 @@ class Orders(SPAPIBase):
         """
         if (CreatedAfter != None) or (LastUpdatedAfter != None):
             #breakpoint()
-            if super().execute_request(endpoint=endpoint,params=self.params,
-                                            payload='payload',method='get',burst=20) != None:
-                response = super().execute_request(endpoint=endpoint,params=self.params,
+            response = super().execute_request(endpoint=endpoint,params=self.params,
                                                 payload='payload',method='get',burst=20)
+            if response != None:
                 #color_text(message=f"{response}\n+++++++++++++++++",color="blue")
                 return response.get("Orders")
             else:
-                color_text(message="None issue detected for getOrders",color="red")
+                color_text(message=f"getOrders response : {response},please check",color="red")
         elif CreatedAfter == None and LastUpdatedAfter == None:
-            color_text(message="Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required Both cannot be empty",color="red")
+            color_text(message="Either the CreatedAfter or the LastUpdatedAfter parameter is required,\nBoth cannot be empty",color="red")
             return None
 
     def getOrder(self,orderId):

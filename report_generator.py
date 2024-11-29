@@ -19,17 +19,16 @@ from helpers.regex_patterns import *
 # Driver code for report generator
 # querying the sql table and finding cod and prepaid reports seperately
 
-from amazon.api_models import *
+from amazon.sp_api_models import *
 from amazon.response_manipulator import *
-
-
+from manual_testing import *
 
 
 def report_driver(report_type): 
     report_type = report_type.lower()
     ord_ins = Orders(); created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
     ord_resp = ord_ins.getOrders(CreatedAfter=created_after,OrderStatuses="Unshipped")
-    orders = sp_api_shipment_summary(response=ord_resp)
+    orders = sp_api_shipment_summary(response=ord_resp) 
     cod_order_ids = orders.cod; prepaid_order_ids = orders.prepaid
 
     tablename = "Orders"; dbname="Amazon"; db_system = "sqlite"
