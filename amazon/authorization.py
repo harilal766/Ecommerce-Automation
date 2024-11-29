@@ -122,7 +122,7 @@ def get_or_generate_access_token():
                     return previous_access_token
 # ERRORS --------------------------------------------------------------------------------
         else:
-            color_text(message="No timestammp not found in the file.",color="red")
+            color_text(message="No timestammp found in the file.",color="red")
             return None
     except Exception as e:
         better_error_handling(e)

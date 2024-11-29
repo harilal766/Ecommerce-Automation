@@ -6,17 +6,22 @@
 
 <div class="dash">
     <h2>Amazon Dashboard</h2>
-    <h4>Total Unshipped Orders : {{shipment_summary.total_orders}}</h4> 
-    {% for date,payment in shipment_summary.items %}
-        {% if date != 'total_orders' %}
-        <li>{{date}} : </li>
-            <ul>
-                {% for method,count in payment.items %}
-                    <li>{{method}} - {{count}}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endfor %}
+    {% if shipment_summary != None %}
+        <h4>Total Unscheduled Orders : {{shipment_summary.total_orders}}</h4> 
+        <a href="{% url 'sales:amazon_reports' %}">Shipment Report : {{ship_date}}</a>
+        {% for date,payment in shipment_summary.items %}
+            {% if date != 'total_orders' %}
+            <li>{{date}} : </li>
+                <ul>
+                    {% for method,count in payment.items %}
+                        <li>{{method}} - {{count}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <h4>API Response unavaillable.</h4> 
+    {% endif %}
 </div>
 1. API call limit handling. <br>
 2. Access token initialozation from env file.<br>

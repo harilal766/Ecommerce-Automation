@@ -1,14 +1,14 @@
 from helpers.messages import *
 from datetime import datetime,timedelta
-from amazon.api_models import *
+from amazon.sp_api_models import *
 from amazon.report_types import *
 from amazon.response_manipulator import *
 import requests
 import pandas as pd
 from io import StringIO
 from helpers.sql_scripts import sql_to_excel
-
 from collections import namedtuple
+
 def sp_api_shipment_summary(response):
     try:# only for amazon api, these api contains the field -> AmazonOrderId.
         #out_list = response['payload']['Orders']
@@ -40,6 +40,7 @@ def sp_api_shipment_summary(response):
         id_and_date = f"COD :{cod_orders}\n{boundary}\nPrepaid :{prepaid_orders}\n{boundary}"
         color_text(message=id_and_date,color='blue')
 
+        # To return the vaules in a tuple..
         orders = namedtuple("Orders",["cod","prepaid","order_count"])
         return orders (cod_orders,prepaid_orders,order_count)
         #return { "cod" :cod_orders, "prepaid" : prepaid_orders}
@@ -65,23 +66,30 @@ def iso_8601_timestamp(days):
 
 
 def rep_doc_id_generator(report_id):
-    while True:
-        R = Reports()
+    retries =0 ; max_retries = 12 ; delay = 2
+    while retries <  max_retries:
+        R = Reports(); last_status = None
         report = R.getReport(reportId=report_id)
         if report != None:
             status = report["processingStatus"]
             if status == "DONE":
                 color_text(message=status,color='green')
-                return report['reportDocumentId']
-            if status == "IN_QUEUE":
-                color_text(message=status,color='blue')
+                return report.get('reportDocumentId')
+            if status in ["IN_QUEUE", "IN_PROGRESS"]:
+                if status != last_status:
+                    color_text(message=status,color='blue')
+                    last_status = status
             elif status == "CANCELLED":
                 color_text(message=status,color='red')
+                break
             else:
-                color_text(message=status,color='green')
+                color_text(message=f"Unknown Status : {status}",color='red')
         else:
             color_text(message="Report Error",color='red')
             break
+        retries += 1
+        time.sleep(delay)
+    raise Exception("Report processing did not complete within the maximum retries.")
 
 
 def sp_api_report_df_generator(report_type,start_date,end_date):
@@ -89,7 +97,7 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
         instance = Reports()
         report_id = instance.createReport(reportType=report_type,
                                           dataStartTime=start_date,dataEndTime=end_date)
-        report_id = report_id['reportId']
+        report_id = report_id.get('reportId')
         if report_id:
             color_text(message=f"Report Id Created : {report_id}")
             # Report document id generation.
@@ -121,7 +129,7 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
                     else : 
                         color_text(message="There was an error in generating the dataframe",color='red')
                 else:
-                    color_text(message="Unable to generate report.",color='red')
+                    color_text(message="Unable to generate report, status code is not 200",color='red')
             else:
                 color_text(message="Report document Id failed,",color='red')
         else:
@@ -131,65 +139,35 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
 
 from helpers.sql_scripts import db_connection,sql_table_CR
 from report_generator import *
-from amazon.api_models import *
+from amazon.sp_api_models import *
 from amazon.response_manipulator import *
 import pandas as pd
 
 
 
-def filter_query_execution(dbname,db_system,tablename,filter_rows):
-    try:
-        fields = """amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax"""
-        out_excel_path=dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
 
-        order_by_clause="product_name asc,quantity asc"
-        query = f"""SELECT {fields}
-          FROM {tablename} 
-          where amazon_order_id in {tuple(filter_rows)}
-          ORDER BY {order_by_clause};"""
-        print(query)
-        # connecting to the db
-        connection = db_connection(dbname=dbname,db_system=db_system)
-        if connection:
-            success_status_msg("Connection Succeeded.")
-            cursor = connection.cursor()
-            cursor.execute(query)
-            results = cursor.fetchall()
-            # converting the sql result into excel file
-            sql_to_excel(sql_cursor=cursor,query_result=results,out_excel_path=out_excel_path)
-
-# Error Areas -----------------------------------------------------------------------------------
-        else:
-            color_text(message="Connection Failed",color="red")
-    except Exception as e:
-        better_error_handling(e)
-
-    finally:
-        success_status_msg(query)
-        # closing the db
-        if 'cursor' in locals() and cursor:
-            cursor.close()
-        if 'conn' in locals() and connection:
-            connection.close()
-        color_text(message="Connection closed.",color='green')
 
 
 # FUNCTIONS FOR DJANGO ---------------------------------------------------------
 
 def amazon_dashboard(response):
     try:
-        summary_dict = {}
-        summary_dict["total_orders"] = 0
-        for order in response:
-            if type(order) == dict:
-                summary_dict["total_orders"] += 1 
-                ship_by_date = (order['LatestShipDate']).split("T")[0]
-                payment_method = order['PaymentMethod']
-                if ship_by_date not in summary_dict.keys():
-                    summary_dict[ship_by_date] = {}
-                if payment_method not in summary_dict[ship_by_date]:
-                    summary_dict[ship_by_date][payment_method] = 0
-                summary_dict[ship_by_date][payment_method] += 1
-        return summary_dict
+        if response != None:
+            summary_dict = {}
+            summary_dict["total_orders"] = 0
+            for order in response:
+                if type(order) == dict:
+                    summary_dict["total_orders"] += 1 
+                    ship_by_date = (order['LatestShipDate']).split("T")[0]
+                    payment_method = order['PaymentMethod']
+                    if ship_by_date not in summary_dict.keys():
+                        summary_dict[ship_by_date] = {}
+                    if payment_method not in summary_dict[ship_by_date]:
+                        summary_dict[ship_by_date][payment_method] = 0
+                    summary_dict[ship_by_date][payment_method] += 1
+            return summary_dict
+        else:
+            color_text(message=f"Response : {response}, please check",color="red")
+            return None
     except Exception as e:
         better_error_handling(e)

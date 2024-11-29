@@ -68,8 +68,7 @@ def data_import(tablename,sample_filepath,input_filepath,input_filename):
     """
     print(data_import_query)
     
-def sql_to_excel(sql_cursor,query_result,out_excel_path):
-    function_boundary(title="SQL 2 EXCEL CONVERSION")
+def sql_to_excel(sql_cursor,query_result,out_excel_path,excel_filename=None):
     try:  
         success_status_msg("Excel conversion Started.")
         # excel conversion
@@ -77,18 +76,54 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path):
         column_list = [desc[0].replace("_"," ") for desc in sql_cursor.description]
         excel_sheet = pd.DataFrame(query_result,columns=column_list)
         # if the excel file already exists, a sheet should be created inside the file and the output should be stored there.
-        out_excel_file = input("Enter the name of the output excel file : ")
-        if len(out_excel_file) > 0:
+        if excel_filename == None:
+            excel_filename = input("Enter the name of the output excel file : ")
+        if len(excel_filename) > 0:
             # re initialization of the file path after getting the filename
             out_directory = out_excel_path
-            out_excel_path = os.path.join(out_directory,out_excel_file+".xlsx")
+            out_excel_path = os.path.join(out_directory,excel_filename+".xlsx")
             excel_sheet.to_excel(out_excel_path,index="False",engine='openpyxl')
-            if out_excel_file in os.listdir(out_directory):
+            if excel_filename in os.listdir(out_directory):
                 success_status_msg(f"Excel output file : {out_directory} created.")
         else:
             print("Please enter the filename..")
     except Exception as e:
         better_error_handling(e)
+
+def filter_query_execution(dbname,db_system,tablename,filter_rows):
+    try:
+        fields = """amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax"""
+
+        order_by_clause="product_name asc,quantity asc"
+        query = f"""SELECT {fields}
+          FROM {tablename} 
+          where amazon_order_id in {tuple(filter_rows)}
+          ORDER BY {order_by_clause};"""
+        print(query)
+        # connecting to the db
+        connection = db_connection(dbname=dbname,db_system=db_system)
+        if connection:
+            success_status_msg("Connection Succeeded.")
+            cursor = connection.cursor()
+            cursor.execute(query)
+            results = cursor.fetchall()
+            # converting the sql result into excel file
+            return [cursor,results]
+
+# Error Areas -----------------------------------------------------------------------------------
+        else:
+            color_text(message="Connection Failed",color="red")
+    except Exception as e:
+        better_error_handling(e)
+
+    finally:
+        success_status_msg(query)
+        # closing the db
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'conn' in locals() and connection:
+            connection.close()
+        color_text(message="Connection closed.",color='green')
 
 def sql_table_CR(dbname,tablename,replace_or_append,input_file_dir,filename=None):
     try:
