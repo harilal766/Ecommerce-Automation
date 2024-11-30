@@ -1,13 +1,22 @@
 :root{
-    --bg-color:#F2F2F2;
-    --nav-color:#5AC8FA;
-    --button-color:rgb(135, 238, 135);
-    --footer-color:#B0B0B0;
+    --bg-color:white;
+    --nav-color:white;
+    --button-color:white;
+    --footer-color:white;
+    --dash-bg-color:white;
 
-    --primaty-text-color:#333333;
-    --secondary-text-color:#41553c;
-    --accent-text-color:#5AC8FA;
-    --alert-text-color:#FF3B30;
+    /* Texts */
+    --primaty-text-color:black;
+    --secondary-text-color:black;
+    --accent-text-color:black;
+    --alert-text-color:black;
+
+    --nav-hover-color:blue;
+    --dash-hover-color:blue;
+}
+/* Debugging */
+* {
+    border:1px solid gray;
 }
 /* Navigation Bar */
 .nav {
@@ -17,7 +26,7 @@
 .nav span {
     margin-top:5px;
     font-family: Helvetica,Arial;
-    color: whitesmoke;
+    color: black;
     font-weight: bolder;
     font-size: 50px;
     flex-direction: start;
@@ -36,11 +45,11 @@
 .nav a { 
     font-family: "Helvetica","Universa";
     font-weight: bolder;
-    color: whitesmoke;
+    color: black;
     text-decoration: none;
 }
 nav a:hover {
-    color: #333333;  /* Change color on hover */
+    color: var(--nav-hover-color);  /* Change color on hover */
 }
 /* Body */
 .body h1{
@@ -48,9 +57,9 @@ nav a:hover {
     background-color: var(--bg-color);
 }
 .dash {
-    width: 38%;
+    width: 43%;
     border-radius: 5px;
-    background-color: wheat;
+    background-color: var(--dash-bg-color);
     /* Swiss style font */
     font-family: "Helvetica","Arial",sans-serif;
     color: var(--primaty-text-color);
@@ -71,7 +80,7 @@ nav a:hover {
     color: var(--secondary-text-color)
 }
 .dash a:hover{
-    color: var(--accent-text-color);
+    color: var(--dash-hover-color);
 }
 footer {
     background-color: var(--footer-color);

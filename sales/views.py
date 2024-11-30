@@ -16,14 +16,17 @@ def amzn_next_ship_date(out=None):
     
 def home(request):
     try:
+        # initializing context with none, for  
+        context = {'shipment_summary' : None, "ship_date": None}
         ord_ins = Orders(); created_after = (datetime.utcnow() - timedelta(days=4)).isoformat()
         ord_resp = ord_ins.getOrders(CreatedAfter=created_after,OrderStatuses="Unshipped")
         if ord_resp != None:
             summary = amazon_dashboard(response=ord_resp)
-            context = {'shipment_summary' : summary, "ship_date":amzn_next_ship_date().split("T")[0]}
-            return render(request,'home.html',context)
+            context["shipment_summary"] = summary
+            context["ship_date"] = amzn_next_ship_date().split("T")[0]
         else:
             color_text(message="Empty response from getOrders",color="red")
+        return render(request,'home.html',context)
     except Exception as e:
         better_error_handling(e)
 
@@ -57,7 +60,7 @@ def amazon_reports(request):
                 execution = filter_query_execution(dbname=dbname,db_system=db_system,tablename=tablename,
                                                 filter_rows=value)
                 sql_to_excel(sql_cursor=execution[0],query_result=execution[1],
-                            out_excel_path=out_excel_dir,excel_filename=f"{amzn_next_ship_date()}-{type}")
+                            out_excel_path=out_excel_dir,excel_filename=f"{amzn_next_ship_date().split("T")[0]}-{type}")
                 
                 context = {"path" : out_excel_dir}
             return render(request,'amazon_reports.html',context)
