@@ -58,8 +58,9 @@ def amazon_reports(request):
             for type,value in orders.items():
                 execution = filter_query_execution(dbname=dbname,db_system=db_system,tablename=tablename,
                                                 filter_rows=value)
+                shipdate = amzn_next_ship_date()
                 sql_to_excel(sql_cursor=execution[0],query_result=execution[1],
-                            out_excel_path=out_excel_dir,excel_filename=f"{amzn_next_ship_date().split("T")[0]}-{type}")
+                            out_excel_path=out_excel_dir,excel_filename=f"{shipdate[0]}-{type}")
                 
                 context["path"] = out_excel_dir
 # ERRORS ----------------------------------------------------------------------------------------------------------

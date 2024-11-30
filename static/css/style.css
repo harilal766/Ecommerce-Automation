@@ -19,7 +19,7 @@
     
 }
 /* Debugging */
-* {
+div {
     border:1px solid gray;
 }
 /* Navigation Bar */
@@ -27,14 +27,16 @@
     outline: 1px black;
     background-color: var(--nav-color);
 }
-.nav span {
-    margin-top:5px;
+.nav {
+    margin-top:0px;
     font-family: Helvetica,Arial;
     color: black;
     font-weight: bolder;
-    font-size: 50px;
     flex-direction: start;
     align-items: center;
+}
+.nav h1 { 
+    font-size: 50px;
 }
 .nav ul {
     list-style-type: none;
