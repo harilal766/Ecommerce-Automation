@@ -4,25 +4,31 @@
     <h1>Home</h1>
 </div>
 
-<div class="dash">
-    <h2>Amazon Dashboard</h2>
-    {% if shipment_summary != None %}
-        <h4>Total Unscheduled Orders : {{shipment_summary.total_orders}}</h4> 
-        <a href="{% url 'sales:amazon_reports' %}">Shipment Report : {{ship_date}}</a>
-        {% for date,payment in shipment_summary.items %}
-            {% if date != 'total_orders' %}
+<div class="parent-container">
+    <!-- Child items for amazon -->
+    <div class="child-container">
+        <h2>Amazon Dashboard</h2>
+        {% if shipment_summary != None %}
+            <h4>Total Unscheduled Orders : {{shipment_summary.total_orders}}</h4> 
+            <a href="{% url 'sales:amazon_reports' %}">Shipment Report : {{ship_date}}</a>
+            {% for date,payment in shipment_summary.items %}
             <div class="order-summary">
+                {% if date != 'total_orders' %}
                 <h4>{{date}} : </h3>
                 {% for method,count in payment.items %}
-                    <h4>{{method}} - {{count}}</h3>
+                <h4>{{method}} - {{count}}</h3>
                 {% endfor %}
-            </div>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <h4 style="color: var(--alert-text);">API Response unavaillable.</h4> 
-    {% endif %}
+                {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <h4 style="color: var(--alert-text);">API Response unavaillable.</h4> 
+        {% endif %}
+    </div>
+    
+
 </div>
+
 1. API call limit handling. <br>
 2. Access token initialization from env file.<br>
 5. cache file.<br>

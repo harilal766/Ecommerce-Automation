@@ -15,8 +15,9 @@ import requests
 
 class SPAPIBase:
     def __init__(self,base_url=normal_endpoint,marketplace_id="A21TJRUUN4KGV"):
-        if get_or_generate_access_token() != None:
-            self.access_token = get_or_generate_access_token()
+        access_token = get_or_generate_access_token()
+        if access_token != None:
+            self.access_token = access_token
             self.base_url = base_url
             self.marketplace_id = marketplace_id
             self.headers = {

@@ -5,7 +5,7 @@
     --footer-color:white;
     --dash-bg-color:white;
 
-    /* Texts */
+    /* Text colors */
     --primaty-text-color:black;
     --secondary-text-color:black;
     --accent-text-color:black;
@@ -13,6 +13,10 @@
 
     --nav-hover-color:blue;
     --dash-hover-color:blue;
+    
+    /* Text Fonts*/
+    --primary-text-font:"Helvetica","Arial",sans-serif;
+    
 }
 /* Debugging */
 * {
@@ -50,74 +54,39 @@
 }
 nav a:hover {
     color: var(--nav-hover-color);  /* Change color on hover */
+    font-size: 20px;
 }
 /* Body */
 .body h1{
     margin:7px;
     background-color: var(--bg-color);
 }
-.dash {
-    width: 43%;
-    border-radius: 5px;
+
+/* containers inside the body tag*/
+.parent-container {
+    margin-top: 1%;
+    display: flex; flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightgray;
+    height: 100%;
+}
+.child-container {
     background-color: var(--dash-bg-color);
-    /* Swiss style font */
-    font-family: "Helvetica","Arial",sans-serif;
+    padding: 5px; margin-left: 10px;
+    border-radius: 5px;
+    font-family: var(--primary-text-font);
     color: var(--primaty-text-color);
+    width: 30%;
+    display: flex; flex-direction: column;
+    justify-content: center;
 }
-/* Common properties of dash class */
 .order-summary {
-    display: flex;
-    align-items:center;
-    gap:10px;
+    display: flex; flex-direction: row;
+    justify-content: center;
+    gap:4px; 
 }
-.dash :is(ul,li,a,h2,h4,h3) {
-    margin:10px 10px 10px 10px;
-    margin-inline-start: 10px;
-}
-.dash a {
-    text-decoration: none;
-    font-family: "Helvetica";
-    color: var(--secondary-text-color)
-}
-.dash a:hover{
-    color: var(--dash-hover-color);
-}
+
 footer {
     background-color: var(--footer-color);
 }
-
-/*
-    Background:
-
-    Primary Background: Light Gray (#F2F2F2)
-        Provides a soft, neutral base without being stark white.
-    Secondary Sections (like feature blocks): White (#FFFFFF)
-        Adds visual hierarchy and keeps sections distinct.
-
-Navigation Bar:
-
-    Dark Gray (#333333):
-        Creates strong contrast and draws attention to navigation links.
-        Pair with white or soft blue text (#FFFFFF or #5AC8FA) for legibility.
-    Soft Blue (#5AC8FA):
-        Use as a background for a more vibrant, inviting navigation bar.
-        Pair with white (#FFFFFF) text for crisp contrast.
-
-Footer:
-
-    Medium Gray (#B0B0B0):
-        A subdued tone that anchors the design without overwhelming the content.
-        Pair with white text for clarity.
-
-Content Boxes:
-
-    White (#FFFFFF):
-        Keeps content clean and readable.
-    Subtle Background Areas: Muted Gray-Blue (#708090)
-        Ideal for call-to-action sections or subdued highlights.
-
-Hover Effects and Highlights:
-
-    Soft Blue (#5AC8FA):
-        Use for hover effects or to highlight navigation items and buttons.
-*/
