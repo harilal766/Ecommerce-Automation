@@ -15,7 +15,7 @@
     --dash-hover-color:blue;
     
     /* Text Fonts*/
-    --primary-text-font:"Helvetica","Arial",sans-serif;
+    --primary-font:"Helvetica","Arial",sans-serif;
     
 }
 /* Debugging */
@@ -77,7 +77,7 @@ nav a:hover {
     background-color: var(--dash-bg-color);
     padding: 5px; margin-left: 10px;
     border-radius: 5px;
-    font-family: var(--primary-text-font);
+    font-family: var(--primary-font);
     color: var(--primaty-text-color);
     width: 30%;
     display: flex; flex-direction: column;
