@@ -1,32 +1,94 @@
 :root{
-    --bg-color:rgb(157, 216, 226);
-    --nav-color:rgb(240, 232, 123);
+    --bg-color:white;
+    --nav-color:white;
+    --button-color:white;
+    --footer-color:white;
+    --dash-bg-color:white;
 
-    --button-color:rgb(135, 238, 135);
+    /* Text colors */
+    --primaty-text-color:black;
+    --secondary-text-color:black;
+    --accent-text-color:black;
+    --alert-text-color:black;
 
+    --nav-hover-color:blue;
+    --dash-hover-color:blue;
+    
+    /* Text Fonts*/
+    --primary-font:"Helvetica","Arial",sans-serif;
+    
 }
-
+/* Debugging */
+div {
+    border:1px solid gray;
+}
 /* Navigation Bar */
 .nav {
+    outline: 1px black;
     background-color: var(--nav-color);
-    padding-right: 40px;
-    justify-content: space-around;
-    flex-direction: row-reverse;
 }
-
-nav, li{
-    font-family: "Helvetica";
+.nav {
+    margin-top:0px;
+    font-family: Helvetica,Arial;
+    color: black;
+    font-weight: bolder;
+    flex-direction: start;
+    align-items: center;
+}
+.nav h1 { 
+    font-size: 50px;
+}
+.nav ul {
+    list-style-type: none;
+    margin:0; padding:10px; 
+    display:flex;
+    justify-content: end;
+    flex-direction: row;
+}
+.nav li {
+    margin-right: 1rem;
+}
+.nav a { 
+    font-family: "Helvetica","Universa";
+    font-weight: bolder;
+    color: black;
+    text-decoration: none;
+}
+nav a:hover {
+    color: var(--nav-hover-color);  /* Change color on hover */
+    font-size: 20px;
 }
 /* Body */
-body, h1, h2, h3, h4 {
-    /* Swiss style font */
-    font-family: "Helvetica","Universa",sans-serif;
-}
-
-.body {
+.body h1{
+    margin:7px;
     background-color: var(--bg-color);
 }
 
-.dash {
-    background-color: whitesmoke;
+/* containers inside the body tag*/
+.parent-container {
+    margin-top: 1%;
+    display: flex; flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightgray;
+    height: 100%;
+}
+.child-container {
+    background-color: var(--dash-bg-color);
+    padding: 5px; margin-left: 10px;
+    border-radius: 5px;
+    font-family: var(--primary-font);
+    color: var(--primaty-text-color);
+    width: 30%;
+    display: flex; flex-direction: column;
+    justify-content: center;
+}
+.order-summary {
+    display: flex; flex-direction: row;
+    justify-content: center;
+    gap:4px; 
+}
+
+footer {
+    background-color: var(--footer-color);
 }

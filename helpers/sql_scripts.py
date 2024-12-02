@@ -90,14 +90,14 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path,excel_filename=None):
     except Exception as e:
         better_error_handling(e)
 
-def filter_query_execution(dbname,db_system,tablename,filter_rows):
+def query_execution(dbname,db_system,tablename,filter_rows):
     try:
         fields = """amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax"""
 
         order_by_clause="product_name asc,quantity asc"
         query = f"""SELECT {fields}
           FROM {tablename} 
-          where amazon_order_id in {tuple(filter_rows)}
+          where amazon_order_id in {tuple(filter_rows)} AND order_status = "Pending - Waiting for Pick Up"
           ORDER BY {order_by_clause};"""
         print(query)
         # connecting to the db
@@ -109,7 +109,6 @@ def filter_query_execution(dbname,db_system,tablename,filter_rows):
             results = cursor.fetchall()
             # converting the sql result into excel file
             return [cursor,results]
-
 # Error Areas -----------------------------------------------------------------------------------
         else:
             color_text(message="Connection Failed",color="red")

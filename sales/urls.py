@@ -21,5 +21,5 @@ app_name = 'sales'
 
 urlpatterns = [
     path('', views.home,name='home'),
-    path('amazon_reports',views.amazon_reports,name='amazon_reports')
+    path('amazon_reports',views.amazon_shipment_report,name='amazon_reports')
 ]

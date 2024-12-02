@@ -66,11 +66,12 @@ def iso_8601_timestamp(days):
 
 
 def rep_doc_id_generator(report_id):
-    retries =0 ; max_retries = 12 ; delay = 2
+    retries =0 ; max_retries = 100 ; delay = 2
     while retries <  max_retries:
         R = Reports(); last_status = None
         report = R.getReport(reportId=report_id)
         if report != None:
+            last_status = ''
             status = report["processingStatus"]
             if status == "DONE":
                 color_text(message=status,color='green')
@@ -138,7 +139,6 @@ def sp_api_report_df_generator(report_type,start_date,end_date):
         better_error_handling(e)
 
 from helpers.sql_scripts import db_connection,sql_table_CR
-from report_generator import *
 from amazon.sp_api_models import *
 from amazon.response_manipulator import *
 import pandas as pd
