@@ -30,14 +30,15 @@ def home(request):
     except Exception as e:
         better_error_handling(e)
 
-def amazon_reports(request):
+def amazon_shipment_report(request):
     try: 
-        context = {"path":None}
+        # initializing the context
+        context = {"path":None}; cod_list = [] ; prepaid_list = []; 
         # 1. Generating the dataframe from sp api reports response
         dbname = "Amazon" ;tablename="Orders" ; db_system = "sqlite"; out_excel_dir = dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
         df = sp_api_report_df_generator(report_type=order_report_types["datewise orders data flatfile"],
-                            start_date=iso_8601_timestamp(5),end_date=iso_8601_timestamp(0))
-        
+                            start_date=iso_8601_timestamp(4),end_date=iso_8601_timestamp(0))
+        print(df) #✔️
         # 2. If the df is not empty, convert the dataframe into an sql table
         if df is not None and not df.empty:
             df.to_sql(name=tablename,con=db_connection(dbname=dbname,db_system=db_system),
@@ -45,25 +46,30 @@ def amazon_reports(request):
 
             # 3. Access the order api
             orders_instance = Orders()
-            orders = orders_instance.getOrders(CreatedAfter=iso_8601_timestamp(4),LatestShipDate=amzn_next_ship_date(),
-                                        OrderStatuses="Unshipped")
-            
+            orders = orders_instance.getOrders(CreatedAfter=iso_8601_timestamp(4),LatestShipDate=amzn_next_ship_date())
+            print(orders[0]["PaymentMethod"])
             # 4. Filter cod and prepaid orders ids form the api
-            cod_list = [] ; prepaid_list = []; 
-            for i in orders:
+            for order in orders:
+                amazon_order_id = order.get("AmazonOrderId",None)
                 next_ship_date = str(amzn_next_ship_date()).split("T")[0]
-                latest_ship_date = i['LatestShipDate'].split("T")[0]
+                latest_ship_date = order['LatestShipDate'].split("T")[0]
+                last_update_date = order['LastUpdateDate'].split("T")[0]
+                today_date = iso_8601_timestamp(0).split("T")[0]
+                order_status = order['OrderStatus'] # Pending - Waiting for Pick Up
+                payment_method = order.get('PaymentMethod',"N/A")
                 color_text(message=f"next : {next_ship_date} - latest : {latest_ship_date}",color="red")
-                if isinstance(i,dict):
-                    if next_ship_date == latest_ship_date:
+                if isinstance(order,dict):
+                    if (next_ship_date == latest_ship_date) and (last_update_date == today_date):
+                        color_text(message=f"{amazon_order_id} - {payment_method}",end="-")
+                        print(f"{latest_ship_date} & {next_ship_date}") #✔️
                         #print(f"{i["AmazonOrderId"]} - {i['LatestShipDate']}")
-                        if i["PaymentMethod"] == "COD":
-                            cod_list.append(i["AmazonOrderId"])
+                        if payment_method == 'COD':
+                            cod_list.append(amazon_order_id)
                         else:
-                            prepaid_list.append(i["AmazonOrderId"])
+                            prepaid_list.append(amazon_order_id)
                     else:
-                        color_text(message="Shippings for todays date didnt found.",color="red")
-                        break
+                        color_text(message=f"Shippings for {next_ship_date} date didn't found.",color="red")
+            print(cod_list,prepaid_list)
 
             # 5. Add the cod and prepaid lists into the orders dictionary
             if len(cod_list) > 0 or len(prepaid_list) > 0 :
@@ -71,7 +77,7 @@ def amazon_reports(request):
 
                 # 6. Loop the dict and execute sql table filtering script. 
                 for type,value in shipment_summary_dict.items():
-                        execution = filter_query_execution(dbname=dbname,db_system=db_system,tablename=tablename,
+                        execution = query_execution(dbname=dbname,db_system=db_system,tablename=tablename,
                                                                     filter_rows=value)
                         shipdate = amzn_next_ship_date()
 
@@ -86,7 +92,6 @@ def amazon_reports(request):
             color_text(message="Empty dataframe",color="red")
         
         # Return the output for the html template
-        return render(request,'amazon_reports.html',context)
+        return render(request,"amazon_reports.html",context)
     except Exception as e:
         better_error_handling(e)
-

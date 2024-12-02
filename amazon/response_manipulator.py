@@ -66,11 +66,12 @@ def iso_8601_timestamp(days):
 
 
 def rep_doc_id_generator(report_id):
-    retries =0 ; max_retries = 12 ; delay = 2
+    retries =0 ; max_retries = 100 ; delay = 2
     while retries <  max_retries:
         R = Reports(); last_status = None
         report = R.getReport(reportId=report_id)
         if report != None:
+            last_status = ''
             status = report["processingStatus"]
             if status == "DONE":
                 color_text(message=status,color='green')
