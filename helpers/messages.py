@@ -46,6 +46,8 @@ def color_text(message,color=None,end=None,bold=None):
     else:
         foregreen = Fore.GREEN
 
+				message_string = f"{foregreen}{message}{Style.RESET_ALL}"
+
    if bold == "yes":
 	       message_string = Style.BRIGHT+message_string
 
