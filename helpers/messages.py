@@ -52,8 +52,8 @@ def color_text(message,color=None,end=None,bold=None):
 	       message_string = Style.BRIGHT+message_string
 
     if end == None:
-        print(f"{foregreen}{message}{Style.RESET_ALL}")
+        print(message_string)
     elif end != None:
-        print(f"{foregreen}{message}{Style.RESET_ALL}",end=end)
+        print(message_string,end=end)
 
         
