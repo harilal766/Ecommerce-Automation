@@ -35,41 +35,51 @@ def amazon_shipment_report(request):
         # initializing the context
         context = {"path":None}; cod_list = [] ; prepaid_list = []; 
         # 1. Generating the dataframe from sp api reports response
-        dbname = "Amazon" ;tablename="Orders" ; db_system = "sqlite"; out_excel_dir = dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
+        dbname = "Amazon" ; tablename="Orders" ; db_system = "sqlite"; out_excel_dir = dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
         report_response_df = sp_api_report_df_generator(report_type=order_report_types["datewise orders data flatfile"],
                             start_date=iso_8601_timestamp(4),end_date=iso_8601_timestamp(0))
         print(report_response_df) #✔️
         # 2. If the df is not empty, convert the dataframe into an sql table
-        if report_response_df is not None and not report_response_df.empty:
+        if not report_response_df.empty:
             report_response_df.to_sql(name=tablename,con=db_connection(dbname=dbname,db_system=db_system),
             if_exists='replace',index=False)
 
-            # 3. Access the order api
-            orders_instance = Orders()
-            orders = orders_instance.getOrders(CreatedAfter=iso_8601_timestamp(4),LatestShipDate=amzn_next_ship_date())
-            print(orders[0]["PaymentMethod"])
-            # 4. Filter cod and prepaid orders ids form the api
-            for order in orders:
-                amazon_order_id = order.get("AmazonOrderId",None)
-                next_ship_date = str(amzn_next_ship_date()).split("T")[0]
-                latest_ship_date = order['LatestShipDate'].split("T")[0]
-                last_update_date = order['LastUpdateDate'].split("T")[0]
-                today_date = iso_8601_timestamp(0).split("T")[0]
-                order_status = order['OrderStatus'] # Pending - Waiting for Pick Up
-                payment_method = order.get('PaymentMethod',"N/A")
-                color_text(message=f"next : {next_ship_date} - latest : {latest_ship_date}",color="red")
-                if isinstance(order,dict):
-                    if (next_ship_date == latest_ship_date) and (last_update_date == today_date):
-                        color_text(message=f"{amazon_order_id} - {payment_method}",end="-")
-                        print(f"{latest_ship_date} & {next_ship_date}") #✔️
-                        #print(f"{i["AmazonOrderId"]} - {i['LatestShipDate']}")
-                        if payment_method == 'COD':
-                            cod_list.append(amazon_order_id)
-                        else:
-                            prepaid_list.append(amazon_order_id)
-            shipment_summary_dict = {"cod":cod_list,"prepaid" : prepaid_list}
+            # 3. make a list of types needed
+            order_types = ["COD","Other"]
+            for type in order_types:
+                color_text(message=f"Report generation for {type}")
+                ord = Orders()
+                orders = ord.getOrders(CreatedAfter=iso_8601_timestamp(2),OrderStatuses="Unshipped",
+                                    PaymentMethods=type)
 
-            context["path"] = shipment_summary_dict
+                order_ids = []; 
+                next_shipping = amzn_next_ship_date().split("T")[0]
+                print(next_shipping)
+                count = 0
+                for order in orders:
+                    latest_ship_date = order["LatestShipDate"].split("T")[0]
+                    order_id = order["AmazonOrderId"]
+                    if latest_ship_date == next_shipping:
+                        count += 1 
+                        print(f"{count} - {order_id} - {latest_ship_date}")
+                        order_ids.append(order_id)
+                        color_text(message="+++++++")
+
+                # 4. Execute the filter query
+                execution = query_execution(dbname=dbname,db_system=db_system,
+                                tablename=tablename,filter_rows=order_ids)
+                connection = execution["connection"] ; cursor = execution["cursor"]
+                
+                # 5. Convert the result into excel file
+                color_text(message=f"Result : \n{cursor}")
+
+                filename = f"{next_shipping} - {type}"
+                sql_to_excel(sql_cursor=cursor,query_result=cursor.fetchall(),out_excel_path=out_excel_dir,excel_filename=filename)
+
+                context["path"] = out_excel_dir
+                
+                db_closer(connection=connection,cursor=cursor)
+                
         else:
             color_text(message="Empty dataframe",color="red")
         

@@ -157,9 +157,12 @@ def amazon_dashboard(response):
             summary_dict["total_orders"] = 0
             for order in response:
                 if type(order) == dict:
+                    # taking orders count
                     summary_dict["total_orders"] += 1 
+
                     ship_by_date = (order['LatestShipDate']).split("T")[0]
                     payment_method = order['PaymentMethod']
+
                     if ship_by_date not in summary_dict.keys():
                         summary_dict[ship_by_date] = {}
                     if payment_method not in summary_dict[ship_by_date]:

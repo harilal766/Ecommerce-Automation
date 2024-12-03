@@ -41,19 +41,19 @@ def color_text(message,color=None,end=None,bold=None):
             foregreen = Fore.GREEN
         elif color.lower() == "blue":
             foregreen = Fore.BLUE
+
         if type(message) == str:
             message = message.capitalize()
     else:
         foregreen = Fore.GREEN
 
-				message_string = f"{foregreen}{message}{Style.RESET_ALL}"
+    message_string = f"{foregreen}{message}{Style.RESET_ALL}"
 
-   if bold == "yes":
-	       message_string = Style.BRIGHT+message_string
+    if bold == "yes":
+	    message_string = Style.BRIGHT+message_string
 
-    if end == None:
-        print(message_string)
-    elif end != None:
-        print(message_string,end=end)
+    print(message_string,end=end or '\n')
+
+
 
         

@@ -52,9 +52,6 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path,excel_filename=None):
         #  PSEUDOCODE
         # replace underscore with space
         # convert to excel only if excel file name is not none
-
-
-
         success_status_msg("Excel conversion Started.")
         # excel conversion
         # replacing underscores with empty spaces in columns
@@ -95,10 +92,10 @@ def query_execution(dbname,db_system,tablename,filter_rows):
     try:
         fields = """amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax"""
 
-        order_by_clause="product_name asc,quantity asc"
+        order_by_clause="amazon_order_id asc, product_name asc, quantity asc"
         query = f"""SELECT {fields}
           FROM {tablename} 
-          where amazon_order_id in {tuple(filter_rows)} AND order_status = "Pending - Waiting for Pick Up"
+          where amazon_order_id in {tuple(filter_rows)}
           ORDER BY {order_by_clause};"""
         print(query)
         # connecting to the db
@@ -106,23 +103,14 @@ def query_execution(dbname,db_system,tablename,filter_rows):
         if connection:
             success_status_msg("Connection Succeeded.")
             cursor = connection.cursor()
-            cursor.execute(query)
-            results = cursor.fetchall()
+            cursor = cursor.execute(query)
             # converting the sql result into excel file
-            return [cursor,results]
+            return {"connection":connection,"cursor":cursor}
 # Error Areas -----------------------------------------------------------------------------------
         else:
             color_text(message="Connection Failed",color="red")
     except Exception as e:
         better_error_handling(e)
-
-    finally:
-        # closing the db
-        if 'cursor' in locals() and cursor:
-            cursor.close()
-        if 'conn' in locals() and connection:
-            connection.close()
-        color_text(message="Connection closed.",color='green')
 
 def sql_table_CR(dbname,tablename,replace_or_append,input_file_dir,filename=None):
     try:
