@@ -42,43 +42,27 @@ def query_backup(filename,query):
     finally:
         success_status_msg("Query Backed Up.")
 
-
-
 def line_limit_checker(word_count,line_limit):
     if word_count % line_limit == 0:
         return True
     return False
-
-def data_import(tablename,sample_filepath,input_filepath,input_filename):
-    delimiters = {
-        "txt": "E'\t'"
-    }
-         
-    # importing only while needed so that circular impoprt error can be avoided.
-    from .excel_to_sql_scripts import sql_columns_constructor
-    columns = sql_columns_constructor(filepath=sample_filepath)
-    data_import_query = f"""COPY {tablename} {tuple(columns)}
-    FROM '{os.path.join(input_filepath,input_filename)}'
-    WITH (
-    FORMAT TEXT,
-    DELIMITER E'\t',
-    ENCODING 'UTF8',
-    NULL ''
-        );
-    """
-    print(data_import_query)
     
 def sql_to_excel(sql_cursor,query_result,out_excel_path,excel_filename=None):
-    try:  
+    try: 
+        #  PSEUDOCODE
+        # replace underscore with space
+        # convert to excel only if excel file name is not none
         success_status_msg("Excel conversion Started.")
         # excel conversion
         # replacing underscores with empty spaces in columns
         column_list = [desc[0].replace("_"," ") for desc in sql_cursor.description]
+        if column_list:
+            color_text(message="_ replaced with empty space")
         excel_sheet = pd.DataFrame(query_result,columns=column_list)
         # if the excel file already exists, a sheet should be created inside the file and the output should be stored there.
         if excel_filename == None:
-            excel_filename = input("Enter the name of the output excel file : ")
-        if len(excel_filename) > 0:
+            excel_filename = input_checker(display_message="Enter the filename.")
+        if excel_filename:
             # re initialization of the file path after getting the filename
             out_directory = out_excel_path
             out_excel_path = os.path.join(out_directory,excel_filename+".xlsx")
@@ -90,14 +74,28 @@ def sql_to_excel(sql_cursor,query_result,out_excel_path,excel_filename=None):
     except Exception as e:
         better_error_handling(e)
 
+def db_closer(connection,cursor):
+    try:
+        if connection and cursor:
+            # closing the db
+            if 'cursor' in locals() and cursor:
+                cursor.close()
+            if 'conn' in locals() and connection:
+                connection.close()
+            color_text(message="Connection closed.",color='green')
+        else:
+            color_text(message="Error with db closilng",color="red")
+    except Exception as e:
+        better_error_handling(e)
+
 def query_execution(dbname,db_system,tablename,filter_rows):
     try:
         fields = """amazon_order_id, purchase_date, last_updated_date, order_status, product_name,item_status, quantity, item_price, item_tax, shipping_price, shipping_tax"""
 
-        order_by_clause="product_name asc,quantity asc"
+        order_by_clause="amazon_order_id asc, product_name asc, quantity asc"
         query = f"""SELECT {fields}
           FROM {tablename} 
-          where amazon_order_id in {tuple(filter_rows)} AND order_status = "Pending - Waiting for Pick Up"
+          where amazon_order_id in {tuple(filter_rows)}
           ORDER BY {order_by_clause};"""
         print(query)
         # connecting to the db
@@ -105,24 +103,14 @@ def query_execution(dbname,db_system,tablename,filter_rows):
         if connection:
             success_status_msg("Connection Succeeded.")
             cursor = connection.cursor()
-            cursor.execute(query)
-            results = cursor.fetchall()
+            cursor = cursor.execute(query)
             # converting the sql result into excel file
-            return [cursor,results]
+            return {"connection":connection,"cursor":cursor}
 # Error Areas -----------------------------------------------------------------------------------
         else:
             color_text(message="Connection Failed",color="red")
     except Exception as e:
         better_error_handling(e)
-
-    finally:
-        success_status_msg(query)
-        # closing the db
-        if 'cursor' in locals() and cursor:
-            cursor.close()
-        if 'conn' in locals() and connection:
-            connection.close()
-        color_text(message="Connection closed.",color='green')
 
 def sql_table_CR(dbname,tablename,replace_or_append,input_file_dir,filename=None):
     try:
