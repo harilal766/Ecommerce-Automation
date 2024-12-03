@@ -3,18 +3,18 @@ from helpers.file_ops import *
 from sales.views import *
 
 
-"""
-sql_table_CR(dbname="shopify",tablename="Orders",replace_or_append='replace',
-             input_file_dir=win_shopify_fulfilled,filename="april.csv")
-             """
-
-
-
-
 
 """
-orders_instance = Orders()
-orders = orders_instance.getOrders(CreatedAfter=iso_8601_timestamp(4),LatestShipDate=amzn_next_ship_date())
-print(orders)
+
+
+report_response_df = sp_api_report_df_generator(report_type=order_report_types["datewise orders data flatfile"],
+                            start_date=iso_8601_timestamp(5),end_date=iso_8601_timestamp(0))
+print(report_response_df) #✔️
+
 """
 
+
+ord = Orders()
+rep = ord.getOrders(CreatedAfter=iso_8601_timestamp(2),OrderStatuses="Unshipped")
+
+print(rep)

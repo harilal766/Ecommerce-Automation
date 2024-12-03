@@ -8,13 +8,13 @@ import time
 created_after = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
 
 
-normal_endpoint = "https://sellingpartnerapi-eu.amazon.com"
+production_endpoint = "https://sellingpartnerapi-eu.amazon.com"
 sandbox_endpoint = "https://sandbox.sellingpartnerapi-eu.amazon.com"
 import logging
 import requests
 
 class SPAPIBase:
-    def __init__(self,base_url=normal_endpoint,marketplace_id="A21TJRUUN4KGV"):
+    def __init__(self,base_url=sandbox_endpoint,marketplace_id="A21TJRUUN4KGV"):
         access_token = get_or_generate_access_token()
         if access_token != None:
             self.access_token = access_token
@@ -44,6 +44,13 @@ class SPAPIBase:
                 if endpoint[0] != '/':
                     endpoint = '/'+endpoint
                 status_end = " | "
+
+                
+                if self.base_url == sandbox_endpoint:
+                    color_text(message="Endpoint : sandbox endpoint",color="blue")
+                else:
+                    color_text(message="Endpoint : production endpoint",color="blue")
+
                 url = self.base_url+endpoint
 
                 if method.lower() == 'get':
