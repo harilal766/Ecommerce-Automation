@@ -96,6 +96,7 @@ def query_execution(dbname,db_system,tablename,filter_rows):
         query = f"""SELECT {fields}
           FROM {tablename} 
           where amazon_order_id in {tuple(filter_rows)}
+          AND (order_status == "Pending" OR order_status == "Pending-Waiting for Pickup")
           ORDER BY {order_by_clause};"""
         print(query)
         # connecting to the db
