@@ -34,11 +34,11 @@ class SPAPIBase:
         else:
             color_text(message="Access token returned None, Please check",color="red")
 
-
     def dynamic_request_delay():
         pass
 
-    def make_request(self,url,method,params=None,json_input=None):
+    def make_request(self,endpoint,method,params=None,json_input=None):
+        url = self.base_url + endpoint 
         try: 
             if method.lower() == 'get':
                     response = requests.get(url, headers=self.headers,params = params,timeout=10)
@@ -52,8 +52,56 @@ class SPAPIBase:
             return response
         except Exception as e:
             better_error_handling(e)
-            
+    
     def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
+        retry = 5; delay=1
+        
+        if self.base_url == sandbox_endpoint:
+            color_text(message="Endpoint : sandbox endpoint",color="blue")
+        else:
+            color_text(message="Endpoint : production endpoint",color="blue")
+        url = self.base_url+endpoint
+        # detecting burst limit should have top priority...
+        try:
+            response = self.make_request(endpoint=endpoint,method=method,params=params,json_input=json_input)
+            
+            rate_limit = response.headers.get('x-amzn-RateLimit-Limit')
+
+            color_text(message=f"""Burst : {burst} - Rate limit : {rate_limit}\n
+                HEADERS : \n
+                {response.headers}""")
+
+            # Read the data in the json file
+            json_file = file_handler(filepath=dir_switch(win=win_sp_api_config,lin=lin_sp_api_config),
+                         operation="read")
+            
+            json_file["request_count"] = 1
+        
+            if response.status_code == 200:
+                # Delay response based on the waiting time
+                response_data = response.json()
+                if payload == None:
+                    return response_data
+                else:
+                    return response_data.get(payload)
+                
+            elif response.status_code == 429:
+                color_text(message="API limit reached.\nWaiting....",color="red")
+                time.sleep(10)
+                return self.execute_request(self,endpoint,method,burst,
+                                       json_input=None,params=None,payload=None)
+
+
+        except Exception as e:
+            better_error_handling(e)
+            
+        
+            
+
+
+
+
+    def execurrte_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
         retry = 5; delay=1
         
         if self.base_url == sandbox_endpoint:
