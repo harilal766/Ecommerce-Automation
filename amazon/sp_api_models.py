@@ -28,13 +28,15 @@ class SPAPIBase:
                 "Accept": "application/json"
                 }
             # Common parameters, individual ones will be added from the respective functions
-            self.params = {
-                "MarketplaceIds": self.marketplace_id,
-            }
+            self.params = {"MarketplaceIds": self.marketplace_id}
             self.success_codes = {200,201}
             self.rate_limit = {}
         else:
             color_text(message="Access token returned None, Please check",color="red")
+
+
+    def dynamic_request_delay():
+        pass
 
     def make_request(self,url,method,params=None,json_input=None):
         try: 
@@ -51,7 +53,6 @@ class SPAPIBase:
         except Exception as e:
             better_error_handling(e)
             
-
     def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
         retry = 5; delay=1
         
@@ -69,26 +70,24 @@ class SPAPIBase:
                 status_end = " | "
 
                 url = self.base_url+endpoint
-
-                dynamic_request_delay = 60
-
-                time.sleep(dynamic_request_delay)
                 
                 # making requests is converted to a seperate function
-                response = self.make_request(url=url,method=method,params=params,
-                                             json_input=json_input) 
+                if method.lower() == 'get':
+                    response = requests.get(url, headers=self.headers,params = params,timeout=10)
+                elif method.lower() == 'post':
+                        response = requests.post(url, headers=self.headers,json = json_input,timeout=10)
+                elif method.lower() == 'delete':
+                    response = requests.delete(url, headers=self.headers,timeout=10)
+                else:
+                    raise ValueError(f"Unsupported HTTP method: {method}")
 
-                color_text(message=response.headers,color="red")
+                color_text(message=f"Headers : \n{response.headers}",color="red")
 
                 rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
+                remaining_late_limit = response.headers.get('x-amzn-RateLimit-Remaining',None)
 
-                rate_limit_remaining = response.headers.get('x-amzn-RateLimit-Remaining',None)
+                color_text(message=f"Limit : {rate_limit}, Remaining Limit : {remaining_late_limit}, Continuous request limit : {burst}")
                 
-                if rate_limit != None:
-
-                    color_text(message=f"Rate limit : {rate_limit} requests/second",color="red")
-                else:
-                    color_text(message=f"Api limit reached.",color="red")
                 #color_text(message=response.headers,color="red")
                 
                 if request_count == burst:
@@ -103,7 +102,7 @@ class SPAPIBase:
                 else:
                     color_text(message=request_count,color="red")
                     request_count += 1
-                    time.sleep(float(rate_limit)) # to delay based on the rate limit which is negligible
+                    time.sleep(10) # to delay based on the rate limit which is negligible
                     response_data = response.json()
                     return response_data.get(payload,None) if payload else response_data
                 
