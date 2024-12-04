@@ -32,8 +32,25 @@ class SPAPIBase:
                 "MarketplaceIds": self.marketplace_id,
             }
             self.success_codes = {200,201}
+            self.rate_limit = {}
         else:
             color_text(message="Access token returned None, Please check",color="red")
+
+    def make_request(self,url,method,params=None,json_input=None):
+        try: 
+            if method.lower() == 'get':
+                    response = requests.get(url, headers=self.headers,params = params,timeout=10)
+            elif method.lower() == 'post':
+                    response = requests.post(url, headers=self.headers,json = json_input,timeout=10)
+            elif method.lower() == 'delete':
+                response = requests.delete(url, headers=self.headers,timeout=10)
+            else:
+                raise ValueError(f"Unsupported HTTP method: {method}")
+            
+            return response
+        except Exception as e:
+            better_error_handling(e)
+            
 
     def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
         retry = 5; delay=1
@@ -51,23 +68,25 @@ class SPAPIBase:
                     endpoint = '/'+endpoint
                 status_end = " | "
 
-                
-                
-
                 url = self.base_url+endpoint
 
-                if method.lower() == 'get':
-                    response = requests.get(url, headers=self.headers,params = params,timeout=10)
-                elif method.lower() == 'post':
-                    response = requests.post(url, headers=self.headers,json = json_input,timeout=10)
-                elif method.lower() == 'delete':
-                    response = requests.delete(url, headers=self.headers,timeout=10)
-                else:
-                    raise ValueError(f"Unsupported HTTP method: {method}")
+                dynamic_request_delay = 60
+
+                time.sleep(dynamic_request_delay)
                 
+                # making requests is converted to a seperate function
+                response = self.make_request(url=url,method=method,params=params,
+                                             json_input=json_input) 
+
+                color_text(message=response.headers,color="red")
+
                 rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
-                if rate_limit not in [0,None]  :
-                    color_text(message=f"Rate limit : {rate_limit}",color="red")
+
+                rate_limit_remaining = response.headers.get('x-amzn-RateLimit-Remaining',None)
+                
+                if rate_limit != None:
+
+                    color_text(message=f"Rate limit : {rate_limit} requests/second",color="red")
                 else:
                     color_text(message=f"Api limit reached.",color="red")
                 #color_text(message=response.headers,color="red")
