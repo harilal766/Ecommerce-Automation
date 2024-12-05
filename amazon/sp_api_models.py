@@ -15,6 +15,7 @@ import requests
 
 class SPAPIBase:
     def __init__(self,base_url=production_endpoint,marketplace_id="A21TJRUUN4KGV"):
+        color_text(message="Initializing SPAPIBase")
         access_token = get_or_generate_access_token()
         if access_token != None:
             self.access_token = access_token
@@ -38,11 +39,7 @@ class SPAPIBase:
         pass
 
     def make_request(self,endpoint,method,params=None,json_input=None):
-<<<<<<< HEAD
-        url = self.base_url + endpoint
-=======
         url = self.base_url + endpoint 
->>>>>>> 160d3f38c2e29c0d336552cf8e8e80f2b200dd46
         try: 
             if method.lower() == 'get':
                     response = requests.get(url, headers=self.headers,params = params,timeout=10)
@@ -63,7 +60,6 @@ class SPAPIBase:
             better_error_handling(e)
     
 
-
     def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
         retry = 5; delay=1
         
@@ -83,12 +79,8 @@ class SPAPIBase:
                 url = self.base_url+endpoint
                 
                 # making requests is converted to a seperate function
-<<<<<<< HEAD
                 response = self.make_request(endpoint=endpoint,method=method,params=params,
                                              json_input=json_input)
-=======
-                response = self.make_request(endpoint=endpoint,method=method,params=params,json_input=json_input)
->>>>>>> 160d3f38c2e29c0d336552cf8e8e80f2b200dd46
 
                 color_text(message=f"Headers {request_count}: \n{response.headers}",color="red")
 
@@ -111,11 +103,7 @@ class SPAPIBase:
                 else:
                     color_text(message=request_count,color="red")
                     request_count += 1
-<<<<<<< HEAD
                     time.sleep(5) # to delay based on the rate limit which is negligible
-=======
-                    time.sleep(1) # to delay based on the rate limit which is negligible
->>>>>>> 160d3f38c2e29c0d336552cf8e8e80f2b200dd46
                     response_data = response.json()
                     return response_data.get(payload,None) if payload else response_data
                 
