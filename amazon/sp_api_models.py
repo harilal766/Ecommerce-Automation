@@ -100,6 +100,7 @@ class SPAPIBase:
                     color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red')
                 elif response.status_code >= 400:
                     response.raise_for_status()
+                    break
                 else:
                     color_text(message=request_count,color="red")
                     request_count += 1
