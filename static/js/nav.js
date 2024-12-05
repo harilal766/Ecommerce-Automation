@@ -6,28 +6,38 @@ function html_injector(element_id,content){
 }
 
 
+function dom_verifier() {
+    pass
+}
+
 function navbar() {
-    const navbar_links = {
-        "Home" : "www.google.com",
-        "About us" : "/about"
+    const navbar_contents = {
+        "Home" : " ",
+        "About us" : "/about",
+        "Amazon" : "",
+        "Shopify" : "",
+        "Logout" : ""
     }
-    const nav = Object.keys(navbar_links);
-    navbar_links_length = 2;
+    const navbar_options = Object.keys(navbar_contents);
+    const navbar_links = Object.values(navbar_contents);
 
-    let nav_code = `<nav> \n<ul>\n`;
+    const navbar_length = Object.keys(navbar_contents).length;
 
-    for (let i = 0; i<navbar_links_length; i++) {
-        var list = `<li class="nav-item"><a class="nav-link" href="${nav[i]}">${i}</a></li>\n`;
-        nav_code += list;
+    var nav_html_code = `<ul class = "nav_list">\n`;
+
+    for (let i = 0; i < navbar_length; i++) {
+        
+        var list = `<li class="nav-item">
+                        <a class="nav-link" href="${navbar_links[i]}">${navbar_options[i]}</a>
+                    </li>`;
+        nav_html_code += list;
     }
-    nav_code += "</ul>\n</nav>";
+    
+    nav_html_code += "</ul>";
 
     //return nav_code;
-    console.log(nav_code);
-    const html_footer = document.getElementById("navigation");
-    if (html_footer) {
-        html_footer.innerHTML = nav_code;
-    }
+    console.log(nav_html_code)
+    html_injector(element_id="navigation",content=nav_html_code)
 }
 
 navbar();
