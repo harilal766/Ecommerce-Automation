@@ -22,6 +22,8 @@ lin_shopify_cod = r"/home/hari/Desktop/Ecom-Dashboard/Test documents/Return Repo
 
 win_shopify_fulfilled = r"D:/3.Shopify/fulfilled report"
 
+win_po_data = r"D:/6.SPEED POST/2.Post office data - pudukkad"
+lin_po_data = r"D:/home/hari/Desktop/Ecom-Dashboard/Test documents/PO Data"
 
     #AMAZON
 win_amazon_order_txt = r"D:/5.Amazon/Mathew global/Scheduled report"
@@ -45,6 +47,8 @@ lin_python = ""
 
 win_main = r"d:/Ecom-Dashboard/main.py"
 lin_main = r"/home/hari/Desktop/Ecom-Dashboard/main.py"
+
+
 
 
 def function_boundary(title):

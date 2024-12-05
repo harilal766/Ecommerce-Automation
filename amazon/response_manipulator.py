@@ -9,46 +9,53 @@ from io import StringIO
 from helpers.sql_scripts import sql_to_excel
 from collections import namedtuple
 
+today = datetime.today()
+today_start_time = today.replace(hour=0,minute=0,second=0,microsecond=0).isoformat()+"Z"
+today_end_time = today.replace(hour=23,minute=59,second=59,microsecond=99999).isoformat()+"Z"
+
+def amzn_next_ship_date(out=None):
+    if datetime.now().time().hour >= 11:
+    # if the time is past 11:00 AM and todays scheduling is done, return tomorrows date if not a holiday
+        return iso_8601_timestamp(-1)
+    else:
+        return iso_8601_timestamp(0)
+
+
 def sp_api_shipment_summary(response):
     try:# only for amazon api, these api contains the field -> AmazonOrderId.
         #out_list = response['payload']['Orders']
         next_shipment_date = ''
-
-        ship_by_date = str(datetime.today()).split(" ")[0]
+        
         cod_orders = []; prepaid_orders = []
         # Counter Initialization
         order_count = 0; cod_count = 0; prepaid_count = 0; field_count = 0
-        for item in response:
-            #print(item); color_print(message=f"{'-'*80}",color='green')
-            ship_date_string = str(item['EarliestShipDate']).split("T")[0]
-            #ship_date_string = today_string
-            last_update_date_string = str(item["LastUpdateDate"]).split("T")[0]
-            #print(f"Ship date : {ship_date_string},  Today : {today_string} :- {ship_date_string == today_string}")
-            order_id = item['AmazonOrderId']
-            #color_print(message=f"Order : {order_count}{'-'*40}",color='blue')
-            if type(item) == dict:
-                if  ship_by_date == ship_date_string: 
-                    field_count+=1; order_count += 1
-                    if item['PaymentMethodDetails'] == ['CashOnDelivery']:
-                        cod_orders.append(order_id)
-                    elif item['PaymentMethodDetails'] == ['Standard']:
-                        prepaid_orders.append(order_id)
-                print(f"{order_count}. {item['AmazonOrderId']}, Ship by date : {ship_date_string}")
-        
-                
-        boundary = " "
-        id_and_date = f"COD :{cod_orders}\n{boundary}\nPrepaid :{prepaid_orders}\n{boundary}"
-        color_text(message=id_and_date,color='blue')
-
-        # To return the vaules in a tuple..
-        orders = namedtuple("Orders",["cod","prepaid","order_count"])
-        return orders (cod_orders,prepaid_orders,order_count)
-        #return { "cod" :cod_orders, "prepaid" : prepaid_orders}
+        if response != None:
+            for item in response:
+                ship_by_date = item["LatestShipDate"].split("T")[0]
+                last_update_date_string = str(item["LastUpdateDate"]).split("T")[0]
+                #print(f"Ship date : {ship_date_string},  Today : {today_string} :- {ship_date_string == today_string}")
+                order_id = item['AmazonOrderId']
+                payment_method = item["PaymentMethod"]
+                #color_print(message=f"Order : {order_count}{'-'*40}",color='blue')
+                if type(item) == dict:
+                    if  ship_by_date == iso_8601_timestamp(0).split("T")[0]: 
+                        field_count+=1; order_count += 1
+                        if item['PaymentMethodDetails'] == ['CashOnDelivery']:
+                            cod_orders.append(order_id)
+                        elif item['PaymentMethodDetails'] == ['Standard']:
+                            prepaid_orders.append(order_id)
+                    print(f"{order_count}. {item['AmazonOrderId']}, Ship by date : {ship_by_date}, Payment : {payment_method}")
+            # To return the vaules in a tuple..
+            orders = namedtuple("Orders",["cod","prepaid","order_count"])
+            return orders (cod_orders,prepaid_orders,order_count)
     
-        
+        else:
+            color_text(message="Empty Response Received",color="red")
+            return None
+
+    
     except Exception as e:
         better_error_handling(e)
-    color_text(f"Total orders: {order_count}\nCOD for {ship_by_date} : {len(cod_orders)}\nPrepaid for {ship_by_date} : {len(prepaid_orders)}",color='blue')
 
 
 

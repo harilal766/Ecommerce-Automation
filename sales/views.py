@@ -7,12 +7,6 @@ from helpers.sql_scripts import *
 from django.http import HttpResponse
 
 # Create your views here.
-def amzn_next_ship_date(out=None):
-    if datetime.now().time().hour >= 11:
-    # if the time is past 11:00 AM and todays scheduling is done, return tomorrows date if not a holiday
-        return iso_8601_timestamp(-1)
-    else:
-        return iso_8601_timestamp(0)
     
 def home(request):
     try:

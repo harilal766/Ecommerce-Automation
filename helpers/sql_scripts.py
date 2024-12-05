@@ -94,9 +94,12 @@ def query_execution(dbname,db_system,tablename,filter_rows):
 
         order_by_clause="amazon_order_id asc, product_name asc, quantity asc"
         query = f"""SELECT {fields}
-          FROM {tablename} 
-          where amazon_order_id in {tuple(filter_rows)}
-          ORDER BY {order_by_clause};"""
+        FROM {tablename} 
+        WHERE
+            order_status = "Pending - Waiting for Pick Up" 
+            AND 
+            amazon_order_id in {tuple(filter_rows)} 
+        ORDER BY {order_by_clause};"""
         print(query)
         # connecting to the db
         connection = db_connection(dbname=dbname,db_system=db_system)
