@@ -2,7 +2,7 @@
     --bg-color:white;
     --nav-color:white;
     --button-color:white;
-    --footer-color:white;
+    --footer-bg-color:gray;
     --dash-bg-color:white;
 
     /* Text colors */
@@ -38,8 +38,11 @@ div {
 .nav h1 { 
     font-size: 50px;
 }
-.nav ul {
+
+.nav_list {
     list-style-type: none;
+    color: black;
+    font-size: 30px;
     margin:0; padding:10px; 
     display:flex;
     justify-content: end;
@@ -51,12 +54,12 @@ div {
 .nav a { 
     font-family: "Helvetica","Universa";
     font-weight: bolder;
+    font-size: 2px;
     color: black;
     text-decoration: none;
 }
 nav a:hover {
     color: var(--nav-hover-color);  /* Change color on hover */
-    font-size: 20px;
 }
 /* Body */
 .body h1{
@@ -89,6 +92,7 @@ nav a:hover {
     gap:4px; 
 }
 
-footer {
-    background-color: var(--footer-color);
+.footer {
+    height:90px;
+    background-color: var(--footer-bg-color);
 }

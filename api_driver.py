@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta, timezone
 from amazon.sp_api_models import SPAPIBase,Orders,Reports
-from amazon.response_manipulator import sp_api_shipment_summary
+from amazon.response_manipulator import *
 import requests,json
 from helpers.messages import better_error_handling,color_text,success_status_msg
 from helpers.regex_patterns import amazon_order_id_pattern
 from helpers.file_ops import *
 from amazon.report_types import *
+
 
 
 
@@ -21,8 +22,7 @@ def api_driver(option):
             # For getOrders
             if "orders" in option:
                 # go to api docs and find other order statueses like waiting for pickup
-                response = instance.getOrders(CreatedAfter=created_after,
-                                              OrderStatuses="Unshipped")
+                response = instance.getOrders(CreatedAfter=today_start_time,CreatedBefore=today_end_time)
                 response = sp_api_shipment_summary(response=response)
                 
             # For a single order details
