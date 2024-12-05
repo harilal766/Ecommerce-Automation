@@ -34,12 +34,15 @@ class SPAPIBase:
         else:
             color_text(message="Access token returned None, Please check",color="red")
 
-
     def dynamic_request_delay():
         pass
 
     def make_request(self,endpoint,method,params=None,json_input=None):
+<<<<<<< HEAD
         url = self.base_url + endpoint
+=======
+        url = self.base_url + endpoint 
+>>>>>>> 160d3f38c2e29c0d336552cf8e8e80f2b200dd46
         try: 
             if method.lower() == 'get':
                     response = requests.get(url, headers=self.headers,params = params,timeout=10)
@@ -58,7 +61,9 @@ class SPAPIBase:
             
         except Exception as e:
             better_error_handling(e)
-            
+    
+
+
     def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
         retry = 5; delay=1
         
@@ -78,10 +83,14 @@ class SPAPIBase:
                 url = self.base_url+endpoint
                 
                 # making requests is converted to a seperate function
+<<<<<<< HEAD
                 response = self.make_request(endpoint=endpoint,method=method,params=params,
                                              json_input=json_input)
+=======
+                response = self.make_request(endpoint=endpoint,method=method,params=params,json_input=json_input)
+>>>>>>> 160d3f38c2e29c0d336552cf8e8e80f2b200dd46
 
-                color_text(message=f"Headers : \n{response.headers}",color="red")
+                color_text(message=f"Headers {request_count}: \n{response.headers}",color="red")
 
                 rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
                 remaining_rate_limit = response.headers.get('x-amzn-RateLimit-Remaining',None)
@@ -102,7 +111,11 @@ class SPAPIBase:
                 else:
                     color_text(message=request_count,color="red")
                     request_count += 1
+<<<<<<< HEAD
                     time.sleep(5) # to delay based on the rate limit which is negligible
+=======
+                    time.sleep(1) # to delay based on the rate limit which is negligible
+>>>>>>> 160d3f38c2e29c0d336552cf8e8e80f2b200dd46
                     response_data = response.json()
                     return response_data.get(payload,None) if payload else response_data
                 
@@ -176,12 +189,14 @@ class Orders(SPAPIBase):
         endpoint = f"/orders/v0/orders/{orderId}"
         self.params.update ({"orderId" : orderId})
         return super().execute_request(endpoint=endpoint,params=self.params,
-                                       payload='payload',method='get',burst=30)
+                                       payload='payload',method='get',burst=30
+                                       ,retry=5,delay=1)
     
     def getOrderBuyerInfo(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}/buyerInfo"
         self.params.update ({"orderId" : orderId})
-        return super().execute_request(endpoint=endpoint,params=self.params,method='get',burst=30)
+        return super().execute_request(endpoint=endpoint,params=self.params,method='get',burst=30
+                                       ,retry=5,delay=1)
     
     def getOrderAddress(self,):
         pass 

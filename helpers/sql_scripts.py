@@ -94,12 +94,19 @@ def query_execution(dbname,db_system,tablename,filter_rows):
 
         order_by_clause="amazon_order_id asc, product_name asc, quantity asc"
         query = f"""SELECT {fields}
+<<<<<<< HEAD
         FROM {tablename} 
         WHERE
             order_status = "Pending - Waiting for Pick Up" 
             AND 
             amazon_order_id in {tuple(filter_rows)} 
         ORDER BY {order_by_clause};"""
+=======
+          FROM {tablename} 
+          where amazon_order_id in {tuple(filter_rows)}
+          AND (order_status == "Pending" OR order_status == "Pending-Waiting for Pickup")
+          ORDER BY {order_by_clause};"""
+>>>>>>> 160d3f38c2e29c0d336552cf8e8e80f2b200dd46
         print(query)
         # connecting to the db
         connection = db_connection(dbname=dbname,db_system=db_system)

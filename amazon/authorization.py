@@ -61,7 +61,7 @@ def generate_access_token():
                 field='ACCESS_TOKEN',updated_value=access_token)
             #color_text(message="access token -> env file",color='green')
             # request time -> json file
-            filepath = dir_switch(win=win_api_config,lin=lin_api_config)
+            filepath = dir_switch(win=win_sp_api_config,lin=lin_sp_api_config)
             field = "latest_access_token_request"
             file_handler(filepath=filepath,field=field,
                         operation='update',updated_value=current_time)
@@ -90,7 +90,7 @@ def get_or_generate_access_token():
     try:
         # initialization
         # Read the json file to get the time stamp
-        data = file_handler(filepath=dir_switch(win=win_api_config,lin=lin_api_config),operation='read')
+        data = file_handler(filepath=dir_switch(win=win_sp_api_config,lin=lin_sp_api_config),operation='read')
         last_request_time_str = data.get("latest_access_token_request",None)
 
         if last_request_time_str != None:
