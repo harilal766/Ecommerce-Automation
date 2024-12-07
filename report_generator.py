@@ -36,7 +36,7 @@ def report_driver(report_type):
 
     if "report" in report_type:
                 # converting the data to sql for querying
-        df = sp_api_report_df_generator(report_type=order_report_types["datewise orders data flatfile"],
+        df = sp_api_report_df(report_type=order_report_types["datewise orders data flatfile"],
                                 start_date=iso_8601_timestamp(5),end_date=iso_8601_timestamp(0))
         df.to_sql(name=tablename,con=db_connection(dbname=dbname,db_system=db_system),
                   if_exists='replace',index=False)

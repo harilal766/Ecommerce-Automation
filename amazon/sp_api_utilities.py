@@ -4,10 +4,16 @@ from amazon.sp_api_models import *
 
 
 # SP API Utilities needed for several needs
-today = datetime.today()
 
-today_start_time = today.replace(hour=0,minute=0,second=0,microsecond=0).isoformat()+"Z"
-today_end_time = today.replace(hour=23,minute=59,second=59,microsecond=99999).isoformat()+"Z"
+def from_timestamp(days):
+    date = (datetime.utcnow() - timedelta(days=days))
+    today_start_time = date.replace(hour=0,minute=0,second=0,microsecond=0).isoformat()+"Z"
+    return today_start_time
+
+def to_timestamp(days):
+    date = (datetime.utcnow() - timedelta(days=days))
+    today_end_time = date.replace(hour=23,minute=59,second=59,microsecond=99999).isoformat()+"Z"
+    return today_end_time
 
 def iso_8601_timestamp(days):
     try:

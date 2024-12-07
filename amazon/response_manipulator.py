@@ -42,7 +42,7 @@ def rep_doc_id_generator(report_id):
     raise Exception("Report processing did not complete within the maximum retries.")
 
 
-def sp_api_report_df_generator(report_type,start_date,end_date):
+def sp_api_report_df(report_type,start_date,end_date):
     try:
         instance = Reports()
         report_id = instance.createReport(reportType=report_type,
