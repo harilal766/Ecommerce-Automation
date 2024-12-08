@@ -45,10 +45,12 @@ def orders_fetcher():
                     order_id = i["AmazonOrderId"]; 
                     purchase_date = i["PurchaseDate"]; ship_date = i["LatestShipDate"]
                     payment_method = i["PaymentMethod"]
+                    # verify again to get orders for today only
                     if payment_method == "COD":
                         cod_orders.append(order_id)
                     else:
                         prepaid_orders.append(order_id)
+
                     order_info = f"{order_count}.{order_id} : {purchase_date} - {ship_date} - {payment_method}"
                     print(order_info)
                 else:
@@ -65,6 +67,8 @@ def orders_fetcher():
             # if the output is available, convert it to excel
             if not scheduled_df.empty :
                 color_text(message=f"COD : {cod_orders}\n{"+++++"}\nPrepaid : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
+                # after that, make a loop to convert to convert cod and prepaid orders to excel sheet
+
             else:
                 color_text("There are no scheduled orders",color="red")
         else:
