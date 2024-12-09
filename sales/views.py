@@ -30,8 +30,10 @@ def amazon_shipment_report(request):
         # fetch the order api and check if there are any orders for todays shipdate
         order_instance = Orders()
         orders = order_instance.getOrders(CreatedAfter=from_timestamp(5),OrderStatuses="Unshipped",LatestShipDate=iso_8601_timestamp(0).split("T")[0])
+# ERRORS ----------------------------------------------------------------------------        
         if orders == None:
             color_text(message="There are no orders scheduled for today",color="red")
+# Operation to perform if there are no errors ------------------------------------------------
         else:
             pass 
 

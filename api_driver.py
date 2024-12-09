@@ -31,49 +31,56 @@ def orders_fetcher():
     try:
         # context initialization for Django...
         context = {"path" : None, "status" : None}
+        todays_timestamp = from_timestamp(0)
         orders_details = order_instance.getOrders(CreatedAfter=from_timestamp(5),
-                                                        OrderStatuses="Unshipped",LatestShipDate=from_timestamp(0))
+                                                        OrderStatuses="Unshipped",
+                                                        LatestShipDate=todays_timestamp,EasyShipShipmentStatuses="PendingSchedule")
         space = " "*14
         cod_orders = []; prepaid_orders = []; order_count = 0
-        if orders_details != None:
-            color_text(message=f"Orders scheduled for {from_timestamp(0)}")
-            color_text(message="Order id"+space+"Purchase date"+space+"Ship date"+space+"Payment method",color="blue",bold=True)
+        if isinstance(orders_details,list) and len(orders_details) != 0:
+            color_text(message=f"Orders scheduled for {todays_timestamp}")
+            color_text(message="Order id"+(len("order id")-19)+"Purchase date"+space+"Ship date"+space+"Payment method",color="blue",bold=True)
             for i in orders_details:
                 if isinstance(i,dict):
                     order_count += 1
                     # order fields
                     order_id = i["AmazonOrderId"]; 
-                    purchase_date = i["PurchaseDate"]; ship_date = i["LatestShipDate"]
+                    purchase_date = i["PurchaseDate"]; ship_date = i["LatestShipDate"].split("T")[0]
                     payment_method = i["PaymentMethod"]
                     # verify again to get orders for today only
+                    if ship_date == todays_timestamp.split("T")[0]:
+                        pass
                     if payment_method == "COD":
                         cod_orders.append(order_id)
                     else:
                         prepaid_orders.append(order_id)
-
                     order_info = f"{order_count}.{order_id} : {purchase_date} - {ship_date} - {payment_method}"
                     print(order_info)
                 else:
                     color_text(message=f"Not a dictionary but of type : {type(i)} ",color="red")
-            # Generate reports
-            shipment_report_df = sp_api_report_df(report_type="GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL",
-                                                       start_date=from_timestamp(5),end_date=from_timestamp(0))
-            # Filtering based on required columns.
-            fields = ["amazon_order_id","purchase_date","last_updated_date","order_status","product_name","item_status",
-                  "quantity","item_price","item_tax","shipping_price","shipping_tax"]
-            column_filtered_df = (shipment_report_df.filter(fields))
-            scheduled_df = column_filtered_df[column_filtered_df.order_status == "Pending - Waiting for Pickup"]
-        
-            # if the output is available, convert it to excel
-            if not scheduled_df.empty :
-                color_text(message=f"COD : {cod_orders}\n{"+++++"}\nPrepaid : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
-                # after that, make a loop to convert to convert cod and prepaid orders to excel sheet
-
-            else:
-                color_text("There are no scheduled orders",color="red")
+            # Generate reports only if there are cod or prepaid orders
+            if len(cod_orders) >0 or len(prepaid_orders)>0:
+                shipment_report_df = sp_api_report_df(report_type="GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_GENERAL",
+                                                        start_date=from_timestamp(5),end_date=todays_timestamp)
+                # Filtering based on required columns.
+                fields = ["amazon_order_id","purchase_date","last_updated_date","order_status","product_name","item_status",
+                    "quantity","item_price","item_tax","shipping_price","shipping_tax"]
+                column_filtered_df = (shipment_report_df.filter(fields))
+                scheduled_df = column_filtered_df[column_filtered_df.order_status == "Pending - Waiting for Pickup"]
+            
+                # if the output is available, convert it to excel
+                if not scheduled_df.empty :
+                    color_text(message=f"COD : {cod_orders}\n{"+++++"}\nPrepaid : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
+                    scheduled_df.to_excel()
+                    # after that, make a loop to convert to convert cod and prepaid orders to excel sheet
+                    for type in (cod_orders,prepaid_orders):
+                        type_filtered_orders_df = scheduled_df[scheduled_df['amazon_order_id'].isin(type)]
+                        print(type_filtered_orders_df)
+                        type_filtered_orders_df.to_excel(excel_writer="",sheet_name="Sheet{}")
+                else:
+                    color_text("There are no scheduled orders",color="red")
         else:
-            color_text(message=f"No orders scheduled for {from_timestamp(0)}",color="red")
-
+            color_text(message=f"No pending schedules for {todays_timestamp.split("t")[0]}",color="red")
     except Exception as e:
         better_error_handling(e)
 
