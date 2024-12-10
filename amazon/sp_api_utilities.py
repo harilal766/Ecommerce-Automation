@@ -2,6 +2,9 @@ from datetime import datetime,timedelta
 from helpers.messages import *
 from amazon.sp_api_models import *
 
+from datetime import datetime
+from pytz import timezone
+
 
 # SP API Utilities needed for several needs
 
@@ -19,7 +22,8 @@ def iso_8601_timestamp(days):
     try:
         if type(days) == int: 
             # Substract (time now - time n days back) and return the answer in iso format
-            return (datetime.utcnow() - timedelta(days=days)).isoformat()
+            ind_timestamp = (datetime.now(timezone("Asia/Kolkata"))-timedelta(days=days))
+            return ind_timestamp.isoformat()
         else:
             color_text(message="Enter a number.",color='red')
     except Exception as e:

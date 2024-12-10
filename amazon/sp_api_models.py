@@ -121,7 +121,8 @@ class Orders(SPAPIBase):
                   OrderStatuses=None,
                   LastUpdatedAfter=None,
                   PaymentMethods=None,EasyShipShipmentStatuses=None,
-                  EarliestShipDate=None,LatestShipDate=None):
+                  EarliestShipDate=None,LatestShipDate=None,
+                  FulfillmentChannels=None):
         """
         Note: Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required.
         Both cannot be empty. CreatedAfter or CreatedBefore cannot be set when LastUpdatedAfter is set.
@@ -146,14 +147,13 @@ class Orders(SPAPIBase):
         - Lost (The package is lost.)
         - OutForDelivery (The package is out for delivery.)
         - Damaged (The package was damaged by the carrier.)
-        
         """
         endpoint = "/orders/v0/orders"
         self.params.update({"CreatedAfter" : CreatedAfter,
                             "CreatedBefore" : CreatedBefore,
                             "OrderStatuses": OrderStatuses,
                             "LastUpdatedAfter" : LastUpdatedAfter,
-                            "PaymentMethods" : PaymentMethods,
+                            "PaymentMethods" : PaymentMethods,"FulfillmentChannels":FulfillmentChannels,
                             "EarliestShipDate" : EarliestShipDate, "LatestShipDate" : LatestShipDate,
                             "EasyShipShipmentStatuses" : EasyShipShipmentStatuses}) 
          
