@@ -1,6 +1,3 @@
-import my_module
-import importlib
-importlib.reload(my_module)
 from datetime import datetime, timedelta, timezone
 from amazon.sp_api_models import SPAPIBase,Orders,Reports
 from amazon.response_manipulator import *
@@ -38,7 +35,7 @@ def orders_fetcher():
         # context initialization for Django...
         context = {"path" : None, "status" : None}
         orders_details = order_instance.getOrders(LastUpdatedAfter=from_timestamp(0),
-                                OrderStatuses="Shipped",LatestShipDate=from_timestamp(0),
+                                OrderStatuses="Shipped",LatestShipDate=amzn_next_ship_date(),
                                 EasyShipShipmentStatuses="PendingPickUp")
         space = " "*14
         cod_orders = []; prepaid_orders = []; order_count = 0
@@ -69,21 +66,27 @@ def orders_fetcher():
                 fields = ["amazon_order_id","purchase_date","last_updated_date","order_status","product_name","item_status",
                     "quantity","item_price","item_tax","shipping_price","shipping_tax"]
                 column_filtered_df = (shipment_report_df.filter(fields))
-                scheduled_df = column_filtered_df[column_filtered_df.order_status == "Pending"]
+                scheduled_df = column_filtered_df # "Pending - Waiting for Pickup"
                 # "Pending - Waiting for Pickup"
                 # if the output is available, convert it to excel
+                color_text(message=f"COD : {cod_orders}\n{"+++++"}\nPrepaid : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
                 color_text(message=scheduled_df)
+                
                 if not scheduled_df.empty :
-                    color_text(message=f"COD : {cod_orders}\n{"+++++"}\nPrepaid : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
                     # after that, make a loop to convert to convert cod and prepaid orders to excel sheet
-                    for type in (cod_orders,prepaid_orders):
-                        type_filtered_orders_df = scheduled_df[scheduled_df['amazon_order_id'].isin(type)]
+                    types = {"COD" : cod_orders,"Prepaid":prepaid_orders}
+                    for type_key,type_value in types.items():
+                        type_filtered_orders_df = scheduled_df[scheduled_df['amazon_order_id'].isin(type_value)]
                         print(type_filtered_orders_df)
-                        type_filtered_orders_df.to_excel(excel_writer=f"Scheduled for {todays_ind_date}.xlsx",index="False",
-                                                         sheet_name=f"Sheet{type[0]}")
-
+                        # Excel path should be changed to dynamic for django.
+                        excel_path = dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
+                        excel_name = f"Scheduled for {todays_ind_date} - {type_key}.xlsx"
+                        
+                        type_filtered_orders_df.to_excel(excel_writer=os.path.join(excel_path,excel_name),index="False",
+                                                         sheet_name=f"Sheet 1")
                 else:
                     color_text("There are no scheduled orders",color="red")
+                    
         else:
             color_text(message=f"No pending schedules for {todays_timestamp.split("t")[0]}",color="red")
     except Exception as e:

@@ -178,14 +178,13 @@ class Orders(SPAPIBase):
         endpoint = f"/orders/v0/orders/{orderId}"
         self.params.update ({"orderId" : orderId})
         return super().execute_request(endpoint=endpoint,params=self.params,
-                                       payload='payload',method='get',burst=30
-                                       ,retry=5,delay=1)
+                                       payload='payload',method='get',burst=30)
     
     def getOrderBuyerInfo(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}/buyerInfo"
         self.params.update ({"orderId" : orderId})
         return super().execute_request(endpoint=endpoint,params=self.params,method='get',burst=30
-                                       ,retry=5,delay=1)
+                                       ,delay=1)
     
     def getOrderAddress(self,):
         pass 
