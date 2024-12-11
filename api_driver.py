@@ -6,39 +6,51 @@ from helpers.messages import better_error_handling,color_text,success_status_msg
 from helpers.regex_patterns import amazon_order_id_pattern
 from helpers.file_ops import *
 from amazon.report_types import *
+from amazon.sp_api_utilities import *
+def response_checker(response):
+    if not response == None:
+        return response
+    else:
+        return None
+        color_text(message="Empty response from api driver.",color="red")
+
+
+
+order_instance = Orders()
+
+# One function to get order details
 
 
 
 
 
-created_after = (datetime.utcnow() - timedelta(days=7)).isoformat()
-
-        
-def api_driver(option):
+# This function is to handle the api menu options, 
+def api_menus_driver(option):
     try:
         # Assigining the instance and response based on the selection.
         if 'amazon' in option:
-            instance = Orders()
             # For getOrders
             if "orders" in option:
-                # go to api docs and find other order statueses like waiting for pickup
-                response = instance.getOrders(CreatedAfter=today_start_time,CreatedBefore=today_end_time)
-                response = sp_api_shipment_summary(response=response)
+                summary = shipment_report_creator()
+                print(summary)
+                
                 
             # For a single order details
             elif not "orders" in option and "order" in option:
-                response = instance.getOrder(orderId=
+                response = order_instance.getOrder(orderId=
                                                 text_input_checker(display_message="Enter the order id : ",
                                                                     input_pattern=amazon_order_id_pattern))
             elif "buyer info" in option:
-                response = instance.getOrderBuyerInfo(orderId=
+                response = order_instance.getOrderBuyerInfo(orderId=
                                                       text_input_checker(display_message="Enter the order id : ",
                                                                     input_pattern=amazon_order_id_pattern))
 
 
     
         # Print the data.
-        print(response)
+        
+        
+        
         # find the dict in which orders are found
         
     except Exception as e:

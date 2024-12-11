@@ -5,7 +5,6 @@ function html_injector(element_id,content){
     }
 }
 
-
 function dom_verifier() {
     pass
 }
@@ -32,12 +31,25 @@ function navbar() {
                     </li>`;
         nav_html_code += list;
     }
-    
     nav_html_code += "</ul>";
 
     //return nav_code;
-    console.log(nav_html_code)
-    html_injector(element_id="navigation",content=nav_html_code)
+    if (nav_html_code){
+        console.log(nav_html_code)
+    }
+    else {
+        console.log("Error with navbar");
+    }
+    html_injector(element_id="navbar",content=nav_html_code)
 }
 
-navbar();
+function django_url_caller(){
+    pass
+}
+
+const toggleBtn = document.getElementById("toggle-button");
+const navbar = document.getElementById("navbar");
+
+toggleBtn.addEventListener("click",()=>{
+    console.log("Toggle button working");
+});

@@ -100,6 +100,7 @@ class SPAPIBase:
                     color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red')
                 elif response.status_code >= 400:
                     response.raise_for_status()
+                    break
                 else:
                     color_text(message=request_count,color="red")
                     request_count += 1
@@ -120,7 +121,8 @@ class Orders(SPAPIBase):
                   OrderStatuses=None,
                   LastUpdatedAfter=None,
                   PaymentMethods=None,EasyShipShipmentStatuses=None,
-                  EarliestShipDate=None,LatestShipDate=None):
+                  EarliestShipDate=None,LatestShipDate=None,
+                  FulfillmentChannels=None):
         """
         Note: Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required.
         Both cannot be empty. CreatedAfter or CreatedBefore cannot be set when LastUpdatedAfter is set.
@@ -145,14 +147,13 @@ class Orders(SPAPIBase):
         - Lost (The package is lost.)
         - OutForDelivery (The package is out for delivery.)
         - Damaged (The package was damaged by the carrier.)
-        
         """
         endpoint = "/orders/v0/orders"
         self.params.update({"CreatedAfter" : CreatedAfter,
                             "CreatedBefore" : CreatedBefore,
                             "OrderStatuses": OrderStatuses,
                             "LastUpdatedAfter" : LastUpdatedAfter,
-                            "PaymentMethods" : PaymentMethods,
+                            "PaymentMethods" : PaymentMethods,"FulfillmentChannels":FulfillmentChannels,
                             "EarliestShipDate" : EarliestShipDate, "LatestShipDate" : LatestShipDate,
                             "EasyShipShipmentStatuses" : EasyShipShipmentStatuses}) 
          
@@ -177,14 +178,13 @@ class Orders(SPAPIBase):
         endpoint = f"/orders/v0/orders/{orderId}"
         self.params.update ({"orderId" : orderId})
         return super().execute_request(endpoint=endpoint,params=self.params,
-                                       payload='payload',method='get',burst=30
-                                       ,retry=5,delay=1)
+                                       payload='payload',method='get',burst=30)
     
     def getOrderBuyerInfo(self,orderId):
         endpoint = f"/orders/v0/orders/{orderId}/buyerInfo"
         self.params.update ({"orderId" : orderId})
         return super().execute_request(endpoint=endpoint,params=self.params,method='get',burst=30
-                                       ,retry=5,delay=1)
+                                       ,delay=1)
     
     def getOrderAddress(self,):
         pass 

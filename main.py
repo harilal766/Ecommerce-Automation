@@ -3,7 +3,7 @@ from helpers.terminal_scripts import clear_terminal,recompile
 from helpers.file_ops import function_boundary
 from helpers.messages import *
 from post_tracking import post_tracking
-from api_driver import api_driver
+from api_driver import api_menus_driver
 
 
 # Menu4
@@ -12,8 +12,8 @@ feature_menu = {
     1:("Amazon shipment report", report_driver),
     2:("Shopify shipment report",report_driver),
     3:("Post Tracking",post_tracking),
-    4:("Amazon Todays Orders API",api_driver),
-    5:("Amazon Order API",api_driver),
+    4:("Amazon Todays Orders API",api_menus_driver),
+    5:("Amazon Order API",api_menus_driver),
     6:("Amazon shipment report API",report_driver)
 }
 # Split into 2 menu dictionaries
