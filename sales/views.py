@@ -5,10 +5,10 @@ from datetime import datetime,timedelta
 from amazon.response_manipulator import *
 from amazon.sp_api_utilities import *
 from helpers.sql_scripts import *
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
-    
+# Create your views here.    
 def home(request):
     try:
         # initializing context with none, for handling errors 
@@ -25,6 +25,7 @@ def home(request):
     except Exception as e:
         better_error_handling(e)
 
+
 def amazon_shipment_report(request):
     """"
     Step 1 - Order API access
@@ -38,15 +39,14 @@ def amazon_shipment_report(request):
             filter the df again based on the previous cod and prepaid lists and convert it to an excel sheet 
             the sheet names need to be dynamic in future.
     """
-    context = {"path" : None}
+    context = {"path" : None, "status":None }
     # go to api docs and find other order statueses like waiting for pickup
     order_instance = Orders()
     todays_timestamp = iso_8601_timestamp(0); todays_ind_date = iso_8601_timestamp(0).split("T")[0]
     try:
         # since amazon's time limit for daily orders is 11 am , make \\
-
         # context initialization for Django...
-        context = {"path" : None, "status" : None}
+        context = {"path" : None}
         orders_details = order_instance.getOrders(LastUpdatedAfter=from_timestamp(0),
                                 OrderStatuses="Shipped",LatestShipDate=amzn_next_ship_date(),
                                 EasyShipShipmentStatuses="PendingPickUp")

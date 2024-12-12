@@ -5,7 +5,7 @@ import re
 from helpers.messages import *
 # Create your views here.
 
-username_pattern = r"^[a-z]{6-12}$"
+username_pattern = r"^[a-zA-Z]{6-12}$"
 password_pattern = r"\d{8-15}"
 
 def register(request):

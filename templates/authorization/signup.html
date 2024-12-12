@@ -5,9 +5,9 @@
 <form class="container" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% if status == None %}
-        <h1>Register Account</h1>
+        <h1>Signup</h1>
     {% else %}
-        <h1>Register Account - {{status}}</h1>
+        <h1>Signup - {{status}}</h1>
     {% endif %}
     
     <div class="mb-4">
