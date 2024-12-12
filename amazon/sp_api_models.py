@@ -14,23 +14,22 @@ import logging
 import requests
 
 class SPAPIBase:
-    def __init__(self,base_url=production_endpoint,marketplace_id="A21TJRUUN4KGV"):
+    def __init__(self):
         color_text(message="Initializing SPAPIBase")
         access_token = get_or_generate_access_token()
+        self.params = {}
         if access_token != None:
-            self.access_token = access_token
-            self.base_url = base_url
-            self.marketplace_id = marketplace_id
+            self.base_url = production_endpoint
+            self.marketplace_id = "A21TJRUUN4KGV"
             self.headers = {
                 "Authorization" : "access token",
-                "x-amz-access-token": self.access_token,
+                "x-amz-access-token": access_token,
                 "Content-Type": "application/json",
                 "Connection" : "keep-alive",
                 "Accept": "application/json"
                 }
             # Common parameters, individual ones will be added from the respective functions
             self.params = {"MarketplaceIds": self.marketplace_id}
-            color_text(message=f"Params before update : {getattr(self,'params','Not Initialized')}")
             self.success_codes = {200,201}
             self.rate_limit = {}
         else:
@@ -64,10 +63,14 @@ class SPAPIBase:
     def execute_request(self,endpoint,method,burst,json_input=None,params=None,payload=None):
         retry = 5; delay=1
         
+        """
+        end = ""
         if self.base_url == sandbox_endpoint:
-            color_text(message="Endpoint : sandbox endpoint",color="blue")
+            end = "Sandbox endpoint."
         else:
-            color_text(message="Endpoint : production endpoint",color="blue")
+            end = "Production endpoint."
+        color_text(message=f"Endpoint : {end}",color="blue",end="\r")
+        """
 
         # detecting burst limit should have top priority...
         for request_count in range(burst):
@@ -83,27 +86,27 @@ class SPAPIBase:
                 response = self.make_request(endpoint=endpoint,method=method,params=params,
                                              json_input=json_input)
 
-                color_text(message=f"Headers {request_count}: \n{response.headers}",color="red")
+                color_text(message=f"Headers {request_count}: \n{response.headers}",color="red",end="\r")
 
                 rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
                 remaining_rate_limit = response.headers.get('x-amzn-RateLimit-Remaining',None)
 
-                color_text(message=f"Limit : {rate_limit}, Remaining Limit : {remaining_rate_limit}, Request Count : {request_count}/{burst}")
+                color_text(message=f"Limit : {rate_limit}, Remaining Limit : {remaining_rate_limit}, Request Count : {request_count}/{burst}",end="\r")
                 
                 #color_text(message=response.headers,color="red")
                 
                 if request_count == burst:
-                    color_text(message="Burst Limit reached",color="red")
+                    color_text(message="Burst Limit reached",color="red",end="\r")
 
                 if response.status_code == 429:
                     delay *=2
                     time.sleep(delay)
-                    color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red')
+                    color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red',end="\r")
                 elif response.status_code >= 400:
                     response.raise_for_status()
                     break
                 else:
-                    color_text(message=request_count,color="red")
+                    color_text(message=request_count,color="red",end="\r")
                     request_count += 1
                     time.sleep(5) # to delay based on the rate limit which is negligible
                     response_data = response.json()
@@ -118,6 +121,9 @@ class SPAPIBase:
         return None
 
 class Orders(SPAPIBase):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        color_text(message=f"Params : {getattr(self,'params','Not Initialized')}")
     def getOrders(self,CreatedAfter=None,CreatedBefore=None,
                   OrderStatuses=None,
                   LastUpdatedAfter=None,
@@ -210,7 +216,11 @@ class Orders(SPAPIBase):
     
 
 class Reports(SPAPIBase):
-    # https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference        
+    # https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        color_text(message=f"Reports initialized with params : {getattr(self,'params','Not Initialized')}",end="\r")   
+
     def createReport(self,reportType,reportOptions=None,dataStartTime=None,dataEndTime=None):
         endpoint = '/reports/2021-06-30/reports'
         data = {"reportType":reportType,

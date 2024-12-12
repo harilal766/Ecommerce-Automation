@@ -14,7 +14,7 @@ def home(request):
         # initializing context with none, for handling errors 
         context = {'shipment_summary' : None, "ship_date": None}
         orders_instance = Orders(); created_after = (datetime.utcnow() - timedelta(days=4)).isoformat()
-        ord_resp = orders_instance.getOrders(CreatedAfter=created_after,OrderStatuses="Unshipped")
+        ord_resp = orders_instance.getOrders(CreatedAfter=from_timestamp(4),OrderStatuses="Unshipped")
         if ord_resp != None:
             summary = amazon_dashboard(response=ord_resp)
             context["shipment_summary"] = summary
@@ -24,6 +24,8 @@ def home(request):
         return render(request,'home.html',context)
     except Exception as e:
         better_error_handling(e)
+    except ValueError:
+        print(f"Error : {context} ")
 
 
 def amazon_shipment_report(request):
