@@ -18,24 +18,12 @@ def home(request):
         if ord_resp != None:
             summary = amazon_dashboard(response=ord_resp)
             context["shipment_summary"] = summary
-            context["ship_date"] = amzn_next_ship_date().split("T")[0]
+            context["ship_date"] = iso_8601_timestamp(0).split("T")[0]
         else:
             color_text(message="Empty response from getOrders",color="red")
         return render(request,'home.html',context)
     except Exception as e:
         better_error_handling(e)
-
-def amazon_shipment_report(request):
-    context = {"path" : None}
-    try:
-        shipment_report_creator()
-        
-        
-    
-    # if not , stop the program
-    except Exception as e:
-        better_error_handling(e)
-
 
 def amazon_shipment_report(request):
     """"

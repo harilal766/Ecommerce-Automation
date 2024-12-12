@@ -11,44 +11,33 @@
     --primary-font:"Helvetica","Arial",sans-serif;
 }
 /* Debugging */
-div,nav,ul,li,a{
-    border:1px solid red;
-}
+/* div,nav,ul,li,a{border:1px solid red;} */
 /* Navigation Bar --------------------------------------------------------------------------------*/
 .toggle-button {
     margin: 3px;
     color: var(--nav-text-hover-color);
     border-radius: 2px;
 }
-nav {
-    margin-top:0px;
-    background-color: lightgrey;
-    font-family: Helvetica,Arial;
-    align-items: center;
-    width: 12%;
-    border-radius: 3px;
-}
 nav ul {
-    list-style-type: none; 
-    display:flex;
-    justify-content: start;
-    flex-direction: column;
+    list-style-type: none;
+    flex-direction: row-reverse;
+
 }
 nav li {
-    list-style: none;
-    margin-left:-25px;
+    font-weight: bold;
 }
 nav a {
-    font-family: "Helvetica","Universa";
-    font-weight: bolder;
-    font-size: 22px;
-    color: var(--nav-text-color);
     text-decoration: none;
 }
 nav a:hover {
     color: var(--nav-test-hover-color);  /* Change color on hover */
 }
 /* BODY-------------------------------------------------------------------------------------------- */
+.icon-style {
+    color: black !important;
+    border: 1px solid red;
+}
+
 .body h1{
     margin:7px;
     background-color: var(--bg-color);

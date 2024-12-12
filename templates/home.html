@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 {% block content %}
 
 <div class="parent-container">
@@ -7,7 +7,9 @@
         <h2>Amazon Dashboard</h2>
         {% if shipment_summary %}
             <h4>Total Unscheduled Orders : {{shipment_summary.total_orders}}</h4> 
-            <a href="{% url 'sales:amazon_reports' %}">Shipment Report : {{ship_date}}</a>
+            <a href="{% url 'sales:amazon_reports' %}">
+                 <i style="color: black;" class="fa-brands fa-amazon"></i>
+                 Shipment Report : {{ship_date}} </a>
             {% for date,payment in shipment_summary.items %}
             <div class="order-summary">
                 {% if date != 'total_orders' %}
@@ -24,12 +26,14 @@
     </div>
 
 </div>
-
-
-
 </section>
+
 1. API call limit handling. <br>
 2. Access token initialization from env file.<br>
 5. cache file.<br>
 6. auto data updation like js <br>
+7. Sandbox switching in developer options <br>
+8 . OTP login, email confirmation
+
+
 {% endblock %}
