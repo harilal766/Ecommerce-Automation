@@ -5,10 +5,10 @@ from datetime import datetime,timedelta
 from amazon.response_manipulator import *
 from amazon.sp_api_utilities import *
 from helpers.sql_scripts import *
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
-    
+# Create your views here.    
 def home(request):
     try:
         # initializing context with none, for handling errors 
@@ -18,21 +18,10 @@ def home(request):
         if ord_resp != None:
             summary = amazon_dashboard(response=ord_resp)
             context["shipment_summary"] = summary
-            context["ship_date"] = amzn_next_ship_date().split("T")[0]
+            context["ship_date"] = iso_8601_timestamp(0).split("T")[0]
         else:
             color_text(message="Empty response from getOrders",color="red")
         return render(request,'home.html',context)
-    except Exception as e:
-        better_error_handling(e)
-
-def amazon_shipment_report(request):
-    context = {"path" : None}
-    try:
-        shipment_report_creator()
-        
-        
-    
-    # if not , stop the program
     except Exception as e:
         better_error_handling(e)
 
@@ -50,36 +39,37 @@ def amazon_shipment_report(request):
             filter the df again based on the previous cod and prepaid lists and convert it to an excel sheet 
             the sheet names need to be dynamic in future.
     """
-    context = {"path" : None}
+    context = {"path" : None, "status":None }
     # go to api docs and find other order statueses like waiting for pickup
     order_instance = Orders()
     todays_timestamp = iso_8601_timestamp(0); todays_ind_date = iso_8601_timestamp(0).split("T")[0]
     try:
         # since amazon's time limit for daily orders is 11 am , make \\
-
         # context initialization for Django...
-        context = {"path" : None, "status" : None}
-        orders_details = order_instance.getOrders(LastUpdatedAfter=from_timestamp(0),
-                                OrderStatuses="Shipped",LatestShipDate=amzn_next_ship_date(),
-                                EasyShipShipmentStatuses="PendingPickUp")
+        context = {"path" : None}
+        next_ship = amzn_next_ship_date().split("T")[0]
+        orders_details = order_instance.getOrders(CreatedAfter=from_timestamp(4),OrderStatuses="Shipped",
+                                EasyShipShipmentStatuses="PendingPickUp",LatestShipDate=next_ship)
         space = " "*14
         cod_orders = []; prepaid_orders = []; order_count = 0
         if isinstance(orders_details,list) and len(orders_details) != 0:
             color_text(message=f"Orders scheduled for {todays_ind_date}")
+            heading = f"Order Id {"-"*10} Purchase Date     Ship date    Payment Method    Today"
+            color_text(message=heading,color="blue",bold=True)
             for i in orders_details:
                 if isinstance(i,dict):
-                    order_count += 1
                     # order fields
                     order_id = i["AmazonOrderId"]; 
                     purchase_date = i["PurchaseDate"]; ship_date = i["LatestShipDate"]
                     payment_method = i["PaymentMethod"]
                     # verify again to get orders for today only
-                    if ship_date.split("T")[0] == todays_ind_date:
+                    if ship_date.split("T")[0] == next_ship:
+                        order_count += 1
                         if payment_method == "COD":
                             cod_orders.append(order_id)
                         else:
                             prepaid_orders.append(order_id)
-                        order_info = f"{order_count}.{order_id} : {purchase_date} - {ship_date} - {payment_method} - {todays_ind_date}"
+                        order_info = f"{order_count}.{order_id} : {purchase_date} - {ship_date} - {payment_method} - {next_ship}"
                         print(order_info)
                 else:
                     color_text(message=f"Not a dictionary but of type : {type(i)} ",color="red")
@@ -105,7 +95,8 @@ def amazon_shipment_report(request):
                         print(type_filtered_orders_df)
                         # Excel path should be changed to dynamic for django.
                         excel_path = dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
-                        excel_name = f"Scheduled for {todays_ind_date} - {type_key}.xlsx"
+                        excel_name = f"Scheduled for {amzn_next_ship_date().split("T")[0]} - {type_key}.xlsx"
+                        color_text(message=f"Ship date : {amzn_next_ship_date().split("T")[0]}")
                         excel_path = os.path.join(excel_path,excel_name)
                         type_filtered_orders_df.to_excel(excel_writer=excel_path,index="False",
                                                          sheet_name=f"Sheet 1")

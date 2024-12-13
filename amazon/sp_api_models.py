@@ -30,6 +30,7 @@ class SPAPIBase:
                 }
             # Common parameters, individual ones will be added from the respective functions
             self.params = {"MarketplaceIds": self.marketplace_id}
+            color_text(message=f"Params before update : {getattr(self,'params','Not Initialized')}")
             self.success_codes = {200,201}
             self.rate_limit = {}
         else:
