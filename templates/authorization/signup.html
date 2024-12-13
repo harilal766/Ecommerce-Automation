@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<form class="container" method="POST" enctype="multipart/form-data">
+<form class="container" method="POST" enctype="multipart/form-data" action="">
     {% csrf_token %}
     {% if status == None %}
         <h1>Signup</h1>
@@ -15,7 +15,7 @@
         <br>
         <input class="form-control" id="password" type="password" name = "password" placeholder="Password">
         <br>
-        <button>Register Account</button>
+        <button type="button" class="btn btn-primary">Register Account</button>
     </div>
 </form>
 {% endblock %}

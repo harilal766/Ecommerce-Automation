@@ -15,7 +15,7 @@
                 {% if date != 'total_orders' %}
                 <h4>{{date}} : </h3>
                 {% for method,count in payment.items %}
-                <h4>{{method}} - {{count}}</h3>
+                <h4>{{method}} - {{count}},</h3>
                 {% endfor %}
                 {% endif %}
                 </div>

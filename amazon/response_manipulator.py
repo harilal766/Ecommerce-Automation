@@ -11,9 +11,6 @@ from collections import namedtuple
 from amazon.sp_api_utilities import *
 
 
-
-
-
 def rep_doc_id_generator(report_id):
     retries =0 ; max_retries = 100 ; delay = 2
     report_status_json = {"status":None}

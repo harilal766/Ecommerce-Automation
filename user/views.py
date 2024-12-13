@@ -24,8 +24,9 @@ def register(request):
                     return home(request)
             else:
                 context["status"] = "Invalid credentials"
-        else:
+        elif len(client_username) == 0 or len(client_password) == 0:
             context["status"] = "Empty credentials!"
+    color_text(message=f"Signup Status : {context['status']}")
     return render(request,"authorization/signup.html",context)
 
 
