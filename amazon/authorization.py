@@ -108,7 +108,6 @@ def get_or_generate_access_token():
                 color_text(message="Access token expired.",color='red')
                 # generate a new one.
                 new_access_token = generate_access_token()
-                time.delay(2) # to avoid errors on the 1st execution after access token expiry.
                 return new_access_token
             else:
                 if difference_seconds < 0:
