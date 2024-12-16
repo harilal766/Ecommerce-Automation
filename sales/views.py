@@ -48,6 +48,13 @@ def amazon_shipment_report(request):
         # context initialization for Django...
         context = {"path" : None}
         next_ship = amzn_next_ship_date().split("T")[0]
+        #next_ship = todays_ind_date
+
+        """
+        last ship date needed to be stored in the database to avoid logical errors 
+        if the scheduling report taking is being done after 11 am. 
+        """
+
         orders_details = order_instance.getOrders(CreatedAfter=from_timestamp(4),OrderStatuses="Shipped",
                                 EasyShipShipmentStatuses="PendingPickUp",LatestShipDate=next_ship)
         space = " "*14
