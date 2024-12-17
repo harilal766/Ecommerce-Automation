@@ -209,6 +209,17 @@ class Orders(SPAPIBase):
     def confirmShipment(self,):
         pass
     
+class EasyShip(SPAPIBase):
+    """
+    Operations
+
+    listHandoverSlots
+    getScheduledPackage
+    createScheduledPackage
+    updateScheduledPackages
+    createScheduledPackageBulk
+    """
+    pass
 
 class Reports(SPAPIBase):
     # https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference        

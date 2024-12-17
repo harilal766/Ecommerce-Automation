@@ -29,7 +29,7 @@ def iso_8601_timestamp(days):
     except Exception as e:
         better_error_handling(e)
 
-
+# '2024-12-18T18:30:00Z
 
 def amzn_next_ship_date(out=None):
     if datetime.now().time().hour >= 11:

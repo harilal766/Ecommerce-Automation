@@ -25,6 +25,9 @@ def home(request):
     except Exception as e:
         better_error_handling(e)
 
+def amazon_page(request):
+    context = {}
+    return render(request,"amazon_reports.html",context)
 
 def amazon_shipment_report(request):
     """"
@@ -42,41 +45,39 @@ def amazon_shipment_report(request):
     context = {"path" : None, "status":None }
     # go to api docs and find other order statueses like waiting for pickup
     order_instance = Orders()
-    todays_timestamp = iso_8601_timestamp(0); todays_ind_date = iso_8601_timestamp(0).split("T")[0]
+    todays_timestamp = iso_8601_timestamp(0); todays_ind_date = iso_8601_timestamp(0)
     try:
         # since amazon's time limit for daily orders is 11 am , make \\
         # context initialization for Django...
         context = {"path" : None}
-        next_ship = amzn_next_ship_date().split("T")[0]
-        #next_ship = todays_ind_date
+        #next_ship = amzn_next_ship_date().split("T")[0]
+        next_ship = todays_ind_date
 
         """
         last ship date needed to be stored in the database to avoid logical errors 
         if the scheduling report taking is being done after 11 am. 
         """
-
-        orders_details = order_instance.getOrders(CreatedAfter=from_timestamp(4),OrderStatuses="Shipped",
+        orders_details = order_instance.getOrders(CreatedAfter=from_timestamp(7),OrderStatuses="Shipped",
                                 EasyShipShipmentStatuses="PendingPickUp",LatestShipDate=next_ship)
         space = " "*14
+        color_text(message=f"Orders  Count : {len(orders_details)}")
         cod_orders = []; prepaid_orders = []; order_count = 0
         if isinstance(orders_details,list) and len(orders_details) != 0:
             color_text(message=f"Orders scheduled for {todays_ind_date}")
-            heading = f"Order Id {"-"*10} Purchase Date     Ship date    Payment Method    Today"
-            color_text(message=heading,color="blue",bold=True)
             for i in orders_details:
                 if isinstance(i,dict):
                     # order fields
                     order_id = i["AmazonOrderId"]; 
                     purchase_date = i["PurchaseDate"]; ship_date = i["LatestShipDate"]
-                    payment_method = i["PaymentMethod"]
+                    payment_method = i["PaymentMethod"]; status = i["EasyShipShipmentStatus"]
                     # verify again to get orders for today only
-                    if ship_date.split("T")[0] == next_ship:
+                    if ship_date.split("T")[0] == next_ship.split("T")[0]:
                         order_count += 1
                         if payment_method == "COD":
                             cod_orders.append(order_id)
                         else:
                             prepaid_orders.append(order_id)
-                        order_info = f"{order_count}.{order_id} : {purchase_date} - {ship_date} - {payment_method} - {next_ship}"
+                        order_info = f"{order_count}.{order_id} : Status - {status}, puchased on - {purchase_date}, shipping on - {ship_date}, type - {payment_method} date : {next_ship}"
                         print(order_info)
                 else:
                     color_text(message=f"Not a dictionary but of type : {type(i)} ",color="red")
@@ -91,7 +92,7 @@ def amazon_shipment_report(request):
                 scheduled_df = column_filtered_df # "Pending - Waiting for Pickup"
                 # "Pending - Waiting for Pickup"
                 # if the output is available, convert it to excel
-                color_text(message=f"COD : {cod_orders}\n{"+++++"}\nPrepaid : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
+                color_text(message=f"COD {len(cod_orders)} No.s : {cod_orders}\n{"+++++"}\nPrepaid {len(prepaid_orders)} No.s : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
                 color_text(message=scheduled_df)
                 
                 if not scheduled_df.empty :
