@@ -218,7 +218,7 @@ class EasyShip(SPAPIBase):
     createScheduledPackage
     updateScheduledPackages
     createScheduledPackageBulk
-    """
+    """ 
     pass
 
 class Reports(SPAPIBase):
