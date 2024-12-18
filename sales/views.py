@@ -61,7 +61,7 @@ def amazon_shipment_report(request):
                                 EasyShipShipmentStatuses="PendingPickUp",LatestShipDate=next_ship)
         space = " "*14
         color_text(message=f"Orders  Count : {len(orders_details)}")
-        cod_orders = []; prepaid_orders = []; order_count = 0
+        cod_orders = []; prepaid_orders = []; order_count = 0; products_list = []
         if isinstance(orders_details,list) and len(orders_details) != 0:
             color_text(message=f"Orders scheduled for {todays_ind_date}")
             for i in orders_details:
@@ -89,7 +89,18 @@ def amazon_shipment_report(request):
                 fields = ["amazon_order_id","purchase_date","last_updated_date","order_status","product_name","item_status",
                     "quantity","item_price","item_tax","shipping_price","shipping_tax"]
                 column_filtered_df = (shipment_report_df.filter(fields))
+                # find the product names and add it on a list, for adding to an excel sheet
+                products = column_filtered_df["product_name"]
+                
+                for product in products.values:
+                    print(product)
+                    if not product in products_list:
+                        products_list.append(product)
+                    
+                
+
                 scheduled_df = column_filtered_df # "Pending - Waiting for Pickup"
+
                 # "Pending - Waiting for Pickup"
                 # if the output is available, convert it to excel
                 color_text(message=f"COD {len(cod_orders)} No.s : {cod_orders}\n{"+++++"}\nPrepaid {len(prepaid_orders)} No.s : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
@@ -109,6 +120,9 @@ def amazon_shipment_report(request):
                         type_filtered_orders_df.to_excel(excel_writer=excel_path,index="False",
                                                          sheet_name=f"Sheet 1")
                         context["path"] = excel_path
+
+
+                        color_text(message=products_list)
                     
                 else:
                     color_text("There are no scheduled orders",color="red")

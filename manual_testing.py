@@ -15,9 +15,3 @@ def timestamp(days,type=None,split=None):
     elif type == "utc":
         return ind_timestamp.utcnow()
     # if the split is none, return the full time stamp
-
-
-
-
-
-print(Orders())
