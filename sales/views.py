@@ -90,12 +90,7 @@ def amazon_shipment_report(request):
                     "quantity","item_price","item_tax","shipping_price","shipping_tax"]
                 column_filtered_df = (shipment_report_df.filter(fields))
                 # find the product names and add it on a list, for adding to an excel sheet
-                products = column_filtered_df["product_name"]
                 
-                for product in products.values:
-                    print(product)
-                    if not product in products_list:
-                        products_list.append(product)
                     
                 
 
@@ -110,19 +105,29 @@ def amazon_shipment_report(request):
                     # after that, make a loop to convert to convert cod and prepaid orders to excel sheet
                     types = {"COD" : cod_orders,"Prepaid":prepaid_orders}
                     for type_key,type_value in types.items():
-                        type_filtered_orders_df = scheduled_df[scheduled_df['amazon_order_id'].isin(type_value)]
-                        print(type_filtered_orders_df)
+
+                        payment_type_filtered_orders_df = scheduled_df[scheduled_df['amazon_order_id'].isin(type_value)]
+
+                        products = payment_type_filtered_orders_df["product_name"]
+                        products_set = set(products)
+                        
+                        """
+                            to make an excel sheet for manually verifying the orders, 
+                            filename : manual report {date}.xlsx
+                            should contain sheets inside for cod and prepaid
+                        """
+
+                        print(payment_type_filtered_orders_df)
                         # Excel path should be changed to dynamic for django.
                         excel_path = dir_switch(win=win_amazon_scheduled_report,lin=lin_amazon_scheduled_report)
                         excel_name = f"Scheduled for {amzn_next_ship_date().split("T")[0]} - {type_key}.xlsx"
                         color_text(message=f"Ship date : {amzn_next_ship_date().split("T")[0]}")
                         excel_path = os.path.join(excel_path,excel_name)
-                        type_filtered_orders_df.to_excel(excel_writer=excel_path,index="False",
+                        payment_type_filtered_orders_df.to_excel(excel_writer=excel_path,index="False",
                                                          sheet_name=f"Sheet 1")
                         context["path"] = excel_path
 
-
-                        color_text(message=products_list)
+                        color_text(message=products)
                     
                 else:
                     color_text("There are no scheduled orders",color="red")
@@ -132,3 +137,13 @@ def amazon_shipment_report(request):
         return render(request,"amazon_reports.html",context)
     except Exception as e:
         better_error_handling(e)
+
+
+def manual_report():
+    pass
+
+
+"""
+added the product list into the correct area,\n a function added for reuse and better readability in future.
+"""
+
