@@ -38,4 +38,19 @@ def amzn_next_ship_date(out=None):
     else:
         return iso_8601_timestamp(0)
     
-
+import pandas as pd
+def manual_report_maker(template_filepath,product_name_column,input_array,out_filepath):
+    """
+    read an excel sheet and print the contents
+    locate the prodcut name and count
+    populate it with the input array only if target column is empty.
+    """
+    try:
+        # read data from template excel file 
+        df = pd.read_excel(template_filepath)
+        df[product_name_column] = input_array
+        print(df)
+        # save to a new file
+        df.to_excel(excel_writer=out_filepath,index=False)
+    except Exception as e:
+        better_error_handling(e)
