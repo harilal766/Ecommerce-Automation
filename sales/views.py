@@ -61,7 +61,9 @@ def amazon_shipment_report(request):
                                 EasyShipShipmentStatuses="PendingPickUp",LatestShipDate=next_ship)
         space = " "*14
         color_text(message=f"Orders  Count : {len(orders_details)}")
+        # Primary Initializations
         cod_orders = []; prepaid_orders = []; order_count = 0; products_list = []
+
         if isinstance(orders_details,list) and len(orders_details) != 0:
             color_text(message=f"Orders scheduled for {todays_ind_date}")
             for i in orders_details:
@@ -91,28 +93,26 @@ def amazon_shipment_report(request):
                 column_filtered_df = (shipment_report_df.filter(fields))
                 # find the product names and add it on a list, for adding to an excel sheet
                 
-                    
-                
-
-                scheduled_df = column_filtered_df # "Pending - Waiting for Pickup"
 
                 # "Pending - Waiting for Pickup"
                 # if the output is available, convert it to excel
-                color_text(message=f"COD {len(cod_orders)} No.s : {cod_orders}\n{"+++++"}\nPrepaid {len(prepaid_orders)} No.s : {prepaid_orders} \n Dataframe : \n {scheduled_df}")
-                color_text(message=scheduled_df)
+                color_text(message=f"COD {len(cod_orders)} No.s : {cod_orders}\n{"+++++"}\nPrepaid {len(prepaid_orders)} No.s : {prepaid_orders} \n Dataframe : \n {column_filtered_df}")
+                color_text(message=column_filtered_df)
                 
-                if not scheduled_df.empty :
+                if not column_filtered_df.empty :
                     # after that, make a loop to convert to convert cod and prepaid orders to excel sheet
                     types = {"COD" : cod_orders,"Prepaid":prepaid_orders}
                     for type_key,type_value in types.items():
 
-                        payment_type_filtered_orders_df = scheduled_df[scheduled_df['amazon_order_id'].isin(type_value)]
+                        payment_type_filtered_orders_df = column_filtered_df[column_filtered_df['amazon_order_id'].isin(type_value)]
 
                         products = payment_type_filtered_orders_df["product_name"]
                         products_set = set(products)
                         
                         """
-                            to make an excel sheet for manually verifying the orders, 
+                            to make an excel sheet for manually verifying the orders, customers can upload their own custom excel sheet and 
+                            specify the column heading on to which the products list should be added.
+                            
                             filename : manual report {date}.xlsx
                             should contain sheets inside for cod and prepaid
                         """
@@ -139,11 +139,8 @@ def amazon_shipment_report(request):
         better_error_handling(e)
 
 
-def manual_report():
+
+
+def df_filter(df,column_or_columns):
     pass
-
-
-"""
-added the product list into the correct area,\n a function added for reuse and better readability in future.
-"""
 
