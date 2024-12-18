@@ -110,18 +110,14 @@ def amazon_shipment_report(request):
                         products_set = set(products)
                         product_list = list(products_set)
 
-
+                        # Manual report maker
                         out_filename = f"Amazon report - {type_key}.xlsx"
-
                         out_path = os.path.join(
                             dir_switch(win=win_amazon_manual_report_out,lin=lin_amazon_manual_report_out),
                             out_filename)
-
                         manual_report_maker(template_filepath=dir_switch(win=win_amzn_manual_report,lin=lin_amzn_manual_report),
                         product_name_column="Name of Product",input_array=product_list,
                         out_filepath=out_path)
-
-                        
 
                         print(payment_type_filtered_orders_df)
                         # Excel path should be changed to dynamic for django.

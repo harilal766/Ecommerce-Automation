@@ -17,10 +17,15 @@ def timestamp(days,type=None,split=None):
     # if the split is none, return the full time stamp
 
 
-
+"""
 
 manual_report_maker(template_filepath=dir_switch(win=win_amzn_manual_report,lin=lin_amzn_manual_report),
                     product_name_column="Name of Product",input_array=["a","b"],
                     out_filepath=dir_switch(win=win_amazon_manual_report_out,lin=lin_amazon_manual_report_out))
 
 
+"""
+
+
+print(Orders())
+ 

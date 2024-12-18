@@ -111,7 +111,7 @@ def get_or_generate_access_token():
                 return new_access_token
             else:
                 if difference_seconds < 0:
-                    color_text(message="-ve time difference found",color="red")
+                    color_text(message="-ve time difference found, refreshing access token",color="red")
                     return generate_access_token()
                 else:
                     color_text(message=f"Token expiring in {limit - difference_seconds} seconds.",color='green')

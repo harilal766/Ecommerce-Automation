@@ -151,6 +151,7 @@ class Orders(SPAPIBase):
         - Damaged (The package was damaged by the carrier.)
         """
         endpoint = "/orders/v0/orders"
+        color_text(message=f"Before update : {self.params}",color="red")
         self.params.update({"CreatedAfter" : CreatedAfter,
                             "CreatedBefore" : CreatedBefore,
                             "OrderStatuses": OrderStatuses,
@@ -159,6 +160,7 @@ class Orders(SPAPIBase):
                             "EarliestShipDate" : EarliestShipDate, "LatestShipDate" : LatestShipDate,
                             "EasyShipShipmentStatuses" : EasyShipShipmentStatuses}) 
          
+        color_text(message=f"After update : {self.params}")
         """
         Note: Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required.
         Both cannot be empty. CreatedAfter or CreatedBefore cannot be set when LastUpdatedAfter is set.
