@@ -46,11 +46,15 @@ def manual_report_maker(template_filepath,product_name_column,input_array,out_fi
     populate it with the input array only if target column is empty.
     """
     try:
-        # read data from template excel file 
+        # read data from template excel file only if the file exists..
+        # after saving the file to out path , add a print statement for verification.
+        input_path = os.listdir(path=template_filepath)
         df = pd.read_excel(template_filepath)
         df[product_name_column] = input_array
         print(df)
         # save to a new file
         df.to_excel(excel_writer=out_filepath,index=False)
+        out = os.listdir(path=out_filepath)
+        color_text(message=f"Manual report saved to : {out_filepath}")
     except Exception as e:
         better_error_handling(e)
