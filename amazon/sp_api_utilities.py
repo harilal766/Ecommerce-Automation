@@ -39,7 +39,9 @@ def amzn_next_ship_date(out=None):
         return iso_8601_timestamp(0)
     
 import pandas as pd
-def manual_report_maker(template_filepath,product_name_column,input_array,out_filepath):
+def manual_report_maker(template_file,template_filepath,
+                        product_name_column,input_array,
+                        out_filename,out_filepath):
     """
     read an excel sheet and print the contents
     locate the prodcut name and count
@@ -47,14 +49,29 @@ def manual_report_maker(template_filepath,product_name_column,input_array,out_fi
     """
     try:
         # read data from template excel file only if the file exists..
-        # after saving the file to out path , add a print statement for verification.
+
         input_path = os.listdir(path=template_filepath)
-        df = pd.read_excel(template_filepath)
-        df[product_name_column] = input_array
-        print(df)
-        # save to a new file
-        df.to_excel(excel_writer=out_filepath,index=False)
-        out = os.listdir(path=out_filepath)
-        color_text(message=f"Manual report saved to : {out_filepath}")
+        if template_file in input_path:
+            # join the file and filepath
+            template_filepath = os.path.join(template_filepath,template_file)
+            # read the excel file
+            df = pd.read_excel(template_filepath)
+            # make changes to the file
+            df[product_name_column] = input_array\
+            # print for confirmation
+            print(df)
+
+            # save to a new file
+            df.to_excel(excel_writer=os.path.join(out_filepath,out_filename),
+                        index=False)
+            # make sure outout is saved 
+            out = os.listdir(path=out_filepath)
+            if out_filename in out:
+                color_text(message=f"Manual report saved to : {out_filepath}")
+            else:
+                color_text(message="Out excel sheet not saved.",color="red")
+        else:
+            color_text(message="Input directory does not exist",color="red")
+        
     except Exception as e:
         better_error_handling(e)
