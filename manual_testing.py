@@ -19,13 +19,12 @@ def timestamp(days,type=None,split=None):
 
 
 
+import pandas as pd
+
+excel = pd.read_excel(r"D:\5.Amazon\Mathew global\Scheduled report\Scheduled for 2024-12-20 - COD.xlsx",
+                      sheet_name="Sheet 1")
 
 
 
-manual_report_maker(template_file="amazon manual report template.xlsx",
-                    template_filepath=dir_switch(win=win_amazon_manual_report,lin=lin_amazon_manual_report),
-                    product_name_column="Name of Product",
-                    input_array=["a","b"],
-                    out_filename=f"Amazon manual report COD.xlsx",
-                    out_filepath=dir_switch(win=win_amazon_manual_report_out,lin=lin_amazon_manual_report_out)
-                    )    
+
+

@@ -151,7 +151,7 @@ class Orders(SPAPIBase):
         - Damaged (The package was damaged by the carrier.)
         """
         endpoint = "/orders/v0/orders"
-        color_text(message=f"Before update : {self.params}",color="red",end="\r")
+        color_text(message=f"Before update : {self.params}",color="red")
         self.params.update({"CreatedAfter" : CreatedAfter,
                             "CreatedBefore" : CreatedBefore,
                             "OrderStatuses": OrderStatuses,
@@ -160,7 +160,7 @@ class Orders(SPAPIBase):
                             "EarliestShipDate" : EarliestShipDate, "LatestShipDate" : LatestShipDate,
                             "EasyShipShipmentStatuses" : EasyShipShipmentStatuses}) 
          
-        color_text(message=f"After update : {self.params}",end="\r")
+        color_text(message=f"After update : {self.params}")
         """
         Note: Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required.
         Both cannot be empty. CreatedAfter or CreatedBefore cannot be set when LastUpdatedAfter is set.
@@ -173,9 +173,9 @@ class Orders(SPAPIBase):
                 #color_text(message=f"{response}\n+++++++++++++++++",color="blue")
                 return response.get("Orders")
             else:
-                color_text(message=f"getOrders response : {response},please check",color="red",end="\r")
+                color_text(message=f"getOrders response : {response},please check",color="red")
         elif CreatedAfter == None and LastUpdatedAfter == None:
-            color_text(message="Either the CreatedAfter or the LastUpdatedAfter parameter is required,\nBoth cannot be empty",color="red",end="\r")
+            color_text(message="Either the CreatedAfter or the LastUpdatedAfter parameter is required,\nBoth cannot be empty",color="red")
             return None
 
     def getOrder(self,orderId):
