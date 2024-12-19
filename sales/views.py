@@ -12,9 +12,16 @@ from django.views.decorators.csrf import csrf_exempt
 def home(request):
     try:
         # initializing context with none, for handling errors 
-        context = {'shipment_summary' : None, "ship_date": None}
+        context = {'shipment_summary' : None, "ship_date": None, "scheduled_orders":False}
         orders_instance = Orders(); created_after = (datetime.utcnow() - timedelta(days=4)).isoformat()
         ord_resp = orders_instance.getOrders(CreatedAfter=created_after,OrderStatuses="Unshipped")
+
+        scheduled_orders = orders_instance.getOrders(CreatedAfter=from_timestamp(7),OrderStatuses="Shipped",
+                                EasyShipShipmentStatuses="PendingPickUp",LatestShipDate=from_timestamp(0))
+        
+        if not scheduled_orders == None:
+            context["scheduled_orders"] = True
+        
         if ord_resp != None:
             summary = amazon_dashboard(response=ord_resp)
             context["shipment_summary"] = summary
@@ -33,7 +40,7 @@ def amazon_shipment_report(request):
     """"
     Step 1 - Order API access
         1. Access the order api and access the shipped (scheduled) and pending pickup orders.
-        2. append the cod and prepaid orders in to seperate lists.
+        2. append the cod and prepaid order ids in to seperate lists.
 
     Step 2 - Report API Access
         1. Request the report api based on the scheduled orders type,starting from 5 days ago to today.
@@ -133,7 +140,6 @@ def amazon_shipment_report(request):
         return render(request,"amazon_reports.html",context)
     except Exception as e:
         better_error_handling(e)
-
 
 
 
