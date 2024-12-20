@@ -21,21 +21,21 @@ def rep_doc_id_generator(report_id):
             last_status = ''
             status = report["processingStatus"]
             report_status_json["status"] = status
-            color_text(message=f"Status :\n{report_status_json}")
+            color_text(message=f"Status :\n{report_status_json}",end="\r")
             if status == "DONE":
-                color_text(message=status,color='green')
+                color_text(message=status,color='green',end="\r")
                 return report.get('reportDocumentId')
             if status in ["IN_QUEUE", "IN_PROGRESS"]:
                 if status != last_status:
-                    color_text(message=status,color='blue')
+                    color_text(message=status,color='blue',end="\r")
                     last_status = status
             elif status == "CANCELLED":
-                color_text(message=status,color='red')
+                color_text(message=status,color='red',end="\r")
                 break
             else:
-                color_text(message=f"Unknown Status : {status}",color='red')
+                color_text(message=f"Unknown Status : {status}",color='red',end="\r")
         else:
-            color_text(message="Report Error",color='red')
+            color_text(message="Report Error",color='red',end="\r")
             break
         retries += 1
         time.sleep(delay)

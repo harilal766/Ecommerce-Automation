@@ -8,8 +8,10 @@
         {% if shipment_summary %}
             <h4>Total Unscheduled Orders : {{shipment_summary.total_orders}}</h4> 
             <a href="{% url 'sales:amazon_reports' %}">
-                 <i style="color: black;" class="fa-brands fa-amazon"></i>
-                 Shipment Report : {{ship_date}} </a>
+                <i style="color: black;" class="fa-brands fa-amazon"></i>
+                {% if scheduled_orders %}
+                    Shipment Report : {{ship_date}} </a>
+                {% endif %}
             {% for date,payment in shipment_summary.items %}
             <div class="order-summary">
                 {% if date != 'total_orders' %}

@@ -30,7 +30,8 @@ class SPAPIBase:
                 }
             # Common parameters, individual ones will be added from the respective functions
             self.params = {"MarketplaceIds": self.marketplace_id}
-            color_text(message=f"Params before update : {getattr(self,'params','Not Initialized')}")
+            status = f"Params : {getattr(self,'params','Not Initialized')}"
+            color_text(message=status)
             self.success_codes = {200,201}
             self.rate_limit = {}
         else:
@@ -54,7 +55,7 @@ class SPAPIBase:
             if response != None :
                 return response
             else:
-                color_text(message="Response Error",color="red")
+                color_text(message="Response Error",color="red",end="\r")
                 return None
             
         except Exception as e:
@@ -65,9 +66,9 @@ class SPAPIBase:
         retry = 5; delay=1
         
         if self.base_url == sandbox_endpoint:
-            color_text(message="Endpoint : sandbox endpoint",color="blue")
+            color_text(message="Endpoint : sandbox endpoint",color="blue",end="\r")
         else:
-            color_text(message="Endpoint : production endpoint",color="blue")
+            color_text(message="Endpoint : production endpoint",color="blue",end="\r")
 
         # detecting burst limit should have top priority...
         for request_count in range(burst):
@@ -83,34 +84,34 @@ class SPAPIBase:
                 response = self.make_request(endpoint=endpoint,method=method,params=params,
                                              json_input=json_input)
 
-                color_text(message=f"Headers {request_count}: \n{response.headers}",color="red")
+                color_text(message=f"Headers {request_count}: \n{response.headers}",color="red",end="\r")
 
                 rate_limit = response.headers.get('x-amzn-RateLimit-Limit',None)
                 remaining_rate_limit = response.headers.get('x-amzn-RateLimit-Remaining',None)
 
-                color_text(message=f"Limit : {rate_limit}, Remaining Limit : {remaining_rate_limit}, Request Count : {request_count}/{burst}")
+                color_text(message=f"Limit : {rate_limit}, Remaining Limit : {remaining_rate_limit}, Request Count : {request_count}/{burst}",end="\r")
                 
                 #color_text(message=response.headers,color="red")
                 
                 if request_count == burst:
-                    color_text(message="Burst Limit reached",color="red")
+                    color_text(message="Burst Limit reached",color="red",end="\r")
 
                 if response.status_code == 429:
                     delay *=2
                     time.sleep(delay)
-                    color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red')
+                    color_text(message=f"Rate limit reached, retrying in {delay} seconds.",color='red',end="\r")
                 elif response.status_code >= 400:
                     response.raise_for_status()
                     break
                 else:
-                    color_text(message=request_count,color="red")
+                    color_text(message=request_count,color="red",end="\r")
                     request_count += 1
                     time.sleep(5) # to delay based on the rate limit which is negligible
                     response_data = response.json()
                     return response_data.get(payload,None) if payload else response_data
                 
             except AttributeError as e:
-                color_text(message=f"Attribute Error Found : {e}\n{response}\n-----------------------------------",color='red')
+                color_text(message=f"Attribute Error Found : {e}\n{response}\n-----------------------------------",color='red',end="\r")
                 break
             except requests.exceptions.RequestException as e:
                 better_error_handling(f"Error : {e}")
@@ -150,6 +151,7 @@ class Orders(SPAPIBase):
         - Damaged (The package was damaged by the carrier.)
         """
         endpoint = "/orders/v0/orders"
+        color_text(message=f"Before update : {self.params}",color="red")
         self.params.update({"CreatedAfter" : CreatedAfter,
                             "CreatedBefore" : CreatedBefore,
                             "OrderStatuses": OrderStatuses,
@@ -158,6 +160,7 @@ class Orders(SPAPIBase):
                             "EarliestShipDate" : EarliestShipDate, "LatestShipDate" : LatestShipDate,
                             "EasyShipShipmentStatuses" : EasyShipShipmentStatuses}) 
          
+        color_text(message=f"After update : {self.params}")
         """
         Note: Either the CreatedAfter parameter or the LastUpdatedAfter parameter is required.
         Both cannot be empty. CreatedAfter or CreatedBefore cannot be set when LastUpdatedAfter is set.
@@ -208,6 +211,17 @@ class Orders(SPAPIBase):
     def confirmShipment(self,):
         pass
     
+class EasyShip(SPAPIBase):
+    """
+    Operations
+
+    listHandoverSlots
+    getScheduledPackage
+    createScheduledPackage
+    updateScheduledPackages
+    createScheduledPackageBulk
+    """ 
+    pass
 
 class Reports(SPAPIBase):
     # https://developer-docs.amazon.com/sp-api/docs/reports-api-v2021-06-30-reference        

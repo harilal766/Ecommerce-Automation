@@ -39,6 +39,12 @@ lin_sp_api_config = r"/home/hari/Desktop/Ecom-Dashboard/amazon/time_limits.json"
 
 win_amazon_return = r"D:/5.Amazon/Mathew global/Return"
 
+win_amazon_manual_report = r"D:/Ecom-Dashboard/Test documents/manual reports"
+lin_amazon_manual_report = r"/home/hari/Desktop/Ecom-Dashboard/Test documents/manual reports" 
+
+win_amazon_manual_report_out = r"C:\Users\USER\Desktop"
+lin_amazon_manual_report_out = r"/home/hari/Desktop/Desktop"
+
 win_env = r"D/Ecom-Dashboard/.env"
 lin_env = r"/home/hari/Desktop/Ecom-Dashboard/.env"
     # ---
