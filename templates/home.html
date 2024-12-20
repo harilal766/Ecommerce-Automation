@@ -9,6 +9,7 @@
             <h4>Total Unscheduled Orders : {{shipment_summary.total_orders}}</h4> 
             <a href="{% url 'sales:amazon_reports' %}">
                 <i style="color: black;" class="fa-brands fa-amazon"></i>
+                <!--Display shipment report option only when available-->
                 {% if scheduled_orders %}
                     Shipment Report : {{ship_date}} </a>
                 {% endif %}
@@ -30,12 +31,7 @@
 </div>
 </section>
 
-1. API call limit handling. <br>
-2. Access token initialization from env file.<br>
-5. cache file.<br>
-6. auto data updation like js <br>
-7. Sandbox switching in developer options <br>
-8 . OTP login, email confirmation
+
 
 
 {% endblock %}

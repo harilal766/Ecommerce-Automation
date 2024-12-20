@@ -8,11 +8,12 @@ from helpers.sql_scripts import *
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+
 # Create your views here.    
 def home(request):
     try:
         # initializing context with none, for handling errors 
-        context = {'shipment_summary' : None, "ship_date": None, "scheduled_orders":False}
+        context = {'shipment_summary' : None, "ship_date": None, "scheduled_orders":None}
         orders_instance = Orders(); created_after = (datetime.utcnow() - timedelta(days=4)).isoformat()
         ord_resp = orders_instance.getOrders(CreatedAfter=created_after,OrderStatuses="Unshipped")
 
@@ -32,9 +33,9 @@ def home(request):
     except Exception as e:
         better_error_handling(e)
 
-def amazon_page(request):
+def amazon_detail_page(request):
     context = {}
-    return render(request,"amazon_reports.html",context)
+    return render(request,"amazon_detail_page.html",context)
 
 def amazon_shipment_report(request):
     """"
