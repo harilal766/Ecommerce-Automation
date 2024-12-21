@@ -24,24 +24,36 @@ import pandas as pd
 excel = pd.read_excel(r"D:\5.Amazon\Mathew global\Scheduled report\Scheduled for 2024-12-20 - COD.xlsx",
                       sheet_name="Sheet 1")
 
-"""
-Index(['amazon_order_id', 'purchase_date', 'last_updated_date', 'order_status',
-       'product_name', 'item_status', 'quantity', 'item_price', 'item_tax',
-       'shipping_price', 'shipping_tax'],
-      dtype='object')
-"""
-df = excel
-duplicates = df.index[df.index.duplicated()]
-print(duplicates)
+columns = ["quantity","item_price",'item_tax','shipping_price', 'shipping_tax']
 
-pivot = pd.pivot_table(data=excel,index="product_name",
-                       values=["quantity","item_price",'item_tax','shipping_price', 'shipping_tax'],
-                       aggfunc="sum"
-    )
-print(pivot)
+def shipment_report_pivot_table(df,grouping_column,columns):
+    try:
+        """
+        Index(['amazon_order_id', 'purchase_date', 'last_updated_date', 'order_status',
+            'product_name', 'item_status', 'quantity', 'item_price', 'item_tax',
+            'shipping_price', 'shipping_tax'],
+            dtype='object')
 
+        """
+        pivot = pd.pivot_table(data=excel,index=grouping_column,
+                            values= columns,aggfunc="sum"
+            )
+        """
+            Select the column you want to group : Product name
+            Selct the operation you want on the pivot table : sum
+            select the 
+        """
+        pivot.to_excel(excel_writer="D:\Ecom-Dashboard\Test documents\pivot\pivot.xlsx")
+        # index names sorting should be changed to descending order
+        sum_row_list = ["None"]
 
-pivot.to_excel(excel_writer="D:\Ecom-Dashboard\Test documents\pivot\pivot.xlsx")
+        for column in columns:
+            sum_row_list.append(sum(pivot[column]))
 
-# index names sorting should be changed to descending order
+        print(pivot)
+        print(sum_row_list)
+    except Exception as e:
+        better_error_handling(e)
+    
 
+shipment_report_pivot_table(df=excel,grouping_column="product_name",columns=columns)
