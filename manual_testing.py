@@ -45,17 +45,20 @@ def shipment_report_pivot_table(df,grouping_column,pivot_columns):
             """
             pivot.to_excel(excel_writer="D:\Ecom-Dashboard\Test documents\pivot\pivot.xlsx")
             # index names sorting should be changed to descending order
-            sum_row_list = ["None"]
+            
 
-            for column in pivot_columns:
-                sum_row_list.append(sum(pivot[column]))
+            # SORTING the pivot table 
+            pivot = pivot[pivot_columns] # column sorting
 
-            pivot = pivot[pivot_columns]
+            # Creating the sum row and adding to the pivot
 
-            #pivot.loc[len(pivot)] = [sum_row_list]
+            sum_row = pivot.sum(axis=0).to_frame().T
+            sum_row.index = ["Total"]
+            pivot = pd.concat(objs=[pivot,sum_row])
 
-            print(pivot)
-            print(sum_row_list)
+            # Final out
+            color_text(message=pivot)
+            
         else:
             color_text(message="The excel file is empty",color="red")
 
