@@ -20,6 +20,7 @@ def timestamp(days,type=None,split=None):
 
 
 import pandas as pd
+from helpers.excel_ops import *
 """
     Index(['amazon_order_id', 'purchase_date', 'last_updated_date', 'order_status',
         'product_name', 'item_status', 'quantity', 'item_price', 'item_tax',
@@ -27,43 +28,40 @@ import pandas as pd
 
 """
 
-excel = pd.read_excel(r"D:\5.Amazon\Mathew global\Scheduled report\Scheduled for 2024-12-20 - COD.xlsx",
-                      sheet_name="Sheet 1")
+excel = pd.read_excel(r"D:/5.Amazon/Mathew global/Scheduled report/Scheduled for 2024-12-20 - COD.xlsx",
+                      sheet_name="Sheet1")
+
+pivot = pd.read_excel(r"D:/Ecom-Dashboard/Test documents/pivot/pivot.xlsx",sheet_name="Sheet1")
+
+out = r"D:/Ecom-Dashboard/Test documents/combined.xlsx"
+
+excel_appending(dataframes=[excel,pivot],out_path=out)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 columns = ["quantity","item_price",'item_tax','shipping_price', 'shipping_tax']
-
-def shipment_report_pivot_table(df,grouping_column,pivot_columns):
-    try:
-        if not df.empty:
-            pivot = pd.pivot_table(data=df,index=grouping_column,
-                                values= pivot_columns,aggfunc="sum")
-            """
-                Select the column you want to group : Product name
-                Selct the operation you want on the pivot table : sum
-                select the 
-            """
-            pivot.to_excel(excel_writer="D:\Ecom-Dashboard\Test documents\pivot\pivot.xlsx")
-            # index names sorting should be changed to descending order
-            
-
-            # SORTING the pivot table 
-            pivot = pivot[pivot_columns] # column sorting
-
-            # Creating the sum row and adding to the pivot
-
-            sum_row = pivot.sum(axis=0).to_frame().T
-            sum_row.index = ["Total"]
-            pivot = pd.concat(objs=[pivot,sum_row])
-
-            # Final out
-            color_text(message=pivot)
-            
-        else:
-            color_text(message="The excel file is empty",color="red")
-
-    except Exception as e:
-        better_error_handling(e)
-    
-
 shipment_report_pivot_table(df=excel,grouping_column="product_name",pivot_columns=columns)
+"""
